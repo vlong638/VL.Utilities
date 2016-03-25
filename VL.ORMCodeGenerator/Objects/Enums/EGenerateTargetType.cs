@@ -19,7 +19,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
     }
     public static class EGenerateTargetTypeEx
     {
-        public static string GetDirectoryPath(this EGenerateTargetType targetType, string rootPath)
+        public static string GetDirectoryPath(this EGenerateTargetType targetType, string rootPath, string tableName)
         {
             switch (targetType)
             {
@@ -28,7 +28,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Entities.ToString());
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Entities.ToString(), tableName);
                 case EGenerateTargetType.Enums:
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Enums.ToString());
                 default:

@@ -78,7 +78,7 @@ namespace VL.ORMCodeGenerator.Generators
             if (hasReference)
             {
                 //代码生成
-                string targetDirectoryPath = EGenerateTargetType.References.GetDirectoryPath(config.RootPath);
+                string targetDirectoryPath = EGenerateTargetType.References.GetDirectoryPath(config.RootPath, tableName);
                 string targetFilePath = EGenerateTargetType.References.GetFilePath(targetDirectoryPath, tableName);
                 string targetNamespace = EGenerateTargetType.References.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
@@ -161,7 +161,7 @@ namespace VL.ORMCodeGenerator.Generators
             if (hasReference)
             {
                 //代码生成
-                string targetDirectoryPath = EGenerateTargetType.ReferenceFetchers.GetDirectoryPath(config.RootPath);
+                string targetDirectoryPath = EGenerateTargetType.ReferenceFetchers.GetDirectoryPath(config.RootPath, tableName);
                 string targetFilePath = EGenerateTargetType.ReferenceFetchers.GetFilePath(targetDirectoryPath, tableName);
                 string targetNamespace = EGenerateTargetType.ReferenceFetchers.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
@@ -419,7 +419,7 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntity(GenerateConfig config, Table table)
         {
             //代码生成
-            string targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath);
+            string targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath, table.Name);
             string targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
@@ -571,7 +571,7 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntityOperator(GenerateConfig config, Table table, OperatorType operatorType)
         {
             //代码生成
-            string targetDirectoryPath = EGenerateTargetType.EntityOperators.GetDirectoryPath(config.RootPath);
+            string targetDirectoryPath = EGenerateTargetType.EntityOperators.GetDirectoryPath(config.RootPath, table.Name);
             string targetFilePath = EGenerateTargetType.EntityOperators.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.EntityOperators.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
@@ -805,7 +805,7 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntityProperties(GenerateConfig config, Table table)
         {
             //代码生成
-            string targetDirectoryPath = EGenerateTargetType.EntityProperties.GetDirectoryPath(config.RootPath);
+            string targetDirectoryPath = EGenerateTargetType.EntityProperties.GetDirectoryPath(config.RootPath, table.Name);
             string targetFilePath = EGenerateTargetType.EntityProperties.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.EntityProperties.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
@@ -851,7 +851,7 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEnum(GenerateConfig config, Table table)
         {
             //代码生成
-            string targetDirectoryPath = EGenerateTargetType.Enums.GetDirectoryPath(config.RootPath);
+            string targetDirectoryPath = EGenerateTargetType.Enums.GetDirectoryPath(config.RootPath, table.Name);
             string targetFilePath = EGenerateTargetType.Enums.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.Enums.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
