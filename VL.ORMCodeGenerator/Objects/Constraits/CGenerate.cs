@@ -35,10 +35,6 @@
         /// </summary>
         public static string FileNameSuffixOfFetcher = "Fetcher";
         /// <summary>
-        /// ORM模型Entity的基类命名空间
-        /// </summary>
-        public static string NamespaceOfEntitiesBase = "VL.Common.ORM.Objects";
-        /// <summary>
         /// 输出类名称
         /// </summary>
         public static string ClassNameOfEntityOperator = "EntityOperator";

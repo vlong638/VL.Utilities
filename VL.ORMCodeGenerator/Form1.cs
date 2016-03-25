@@ -43,10 +43,10 @@ namespace VL.ORMCodeGenerator
         {
             //获取Config
             ctlSourcePdmFile.Text = Config.PDMFilePath;
-            ctlCSharpEntityOutputFile.Text = Config.TargetDirectoryPath;
-            ctlCSharpEntityNameSpace.Text = Config.TargetNamespace;
+            ctlCSharpEntityOutputFile.Text = Config.RootPath;
+            ctlCSharpEntityNameSpace.Text = Config.RootNamespace;
             ctlCSharpEntityWcfEnabled.Checked = Config.IsSupportWCF;
-            ctlDbType.Text = Config.TargetDatabaseType.ToString();
+            ctlDbType.Text = Config.DatabaseType.ToString();
         }
         /// <summary>
         /// 获取pdm文件路径
@@ -75,7 +75,7 @@ namespace VL.ORMCodeGenerator
             if (f.ShowDialog() == DialogResult.OK)
             {
                 this.ctlCSharpEntityOutputFile.Text = f.SelectedPath;
-                Config.TargetDirectoryPath = this.ctlCSharpEntityOutputFile.Text;
+                Config.RootPath = this.ctlCSharpEntityOutputFile.Text;
             }
         }
         /// <summary>
@@ -100,10 +100,10 @@ namespace VL.ORMCodeGenerator
         {
             //获取Config
             Config.PDMFilePath = ctlSourcePdmFile.Text;
-            Config.TargetDirectoryPath = ctlCSharpEntityOutputFile.Text;
-            Config.TargetNamespace = ctlCSharpEntityNameSpace.Text;
+            Config.RootPath = ctlCSharpEntityOutputFile.Text;
+            Config.RootNamespace = ctlCSharpEntityNameSpace.Text;
             Config.IsSupportWCF = ctlCSharpEntityWcfEnabled.Checked;
-            Config.TargetDatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), ctlDbType.Text);
+            Config.DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), ctlDbType.Text);
         }
 
         /// <summary>

@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using VL.Common.ORM.Objects;
 using VL.Common.ORM.Utilities.QueryBuilders;
 using VL.ORM.DbOperateLib.Utilities.QueryOperators;
 using VL.ORMCodeGenerator.Objects.Constraits;
 using VL.ORMCodeGenerator.Objects.Entities;
+using VL.ORMCodeGenerator.Objects.Enums;
 using VL.ORMCodeGenerator.Utilities;
 
 namespace VL.ORMCodeGenerator.Generators
@@ -79,13 +78,13 @@ namespace VL.ORMCodeGenerator.Generators
             if (hasReference)
             {
                 //代码生成
-                string entityDirectoryPath = config.GetEntityDirectoryPath();
-                string entityFilePath = config.GetEntityFilePath(tableName + CGenerate.FileNameSuffixOfReference);
-                string entityNamespace = config.GetEntityNamespace();
+                string targetDirectoryPath = EGenerateTargetType.References.GetDirectoryPath(config.RootPath);
+                string targetFilePath = EGenerateTargetType.References.GetFilePath(targetDirectoryPath, tableName);
+                string targetNamespace = EGenerateTargetType.References.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
-                sb.AppendUsings(new List<string>() { "System", "System.Collections.Generic", CGenerate.NamespaceOfEntitiesBase });
+                sb.AppendUsings(EGenerateTargetType.References.GetReferences());
                 sb.AppendLine();
-                sb.AppendNameSpace(entityNamespace, () =>
+                sb.AppendNameSpace(targetNamespace, () =>
                 {
                     sb.AppendClass(false, "public partial", tableName, " : " + nameof(IPDMTBase), () =>
                     {
@@ -131,11 +130,11 @@ namespace VL.ORMCodeGenerator.Generators
                     });
                 });
                 //输出代码
-                if (!Directory.Exists(entityDirectoryPath))
+                if (!Directory.Exists(targetDirectoryPath))
                 {
-                    Directory.CreateDirectory(entityDirectoryPath);
+                    Directory.CreateDirectory(targetDirectoryPath);
                 }
-                File.WriteAllText(entityFilePath, sb.ToString());
+                File.WriteAllText(targetFilePath, sb.ToString());
             }
             return result;
         }
@@ -162,13 +161,13 @@ namespace VL.ORMCodeGenerator.Generators
             if (hasReference)
             {
                 //代码生成
-                string entityDirectoryPath = config.GetEntityDirectoryPath();
-                string entityFilePath = config.GetEntityFilePath(tableName + CGenerate.FileNameSuffixOfFetcher);
-                string entityNamespace = config.GetEntityNamespace();
+                string targetDirectoryPath = EGenerateTargetType.ReferenceFetchers.GetDirectoryPath(config.RootPath);
+                string targetFilePath = EGenerateTargetType.ReferenceFetchers.GetFilePath(targetDirectoryPath, tableName);
+                string targetNamespace = EGenerateTargetType.ReferenceFetchers.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
-                sb.AppendUsings(new List<string>() { "System.Collections.Generic", "VL.Common.DbSession.Objects", "VL.ORM.DbOperateLib.Utilities.QueryBuilders", "VL.ORM.DbOperateLib.Utilities.QueryOperators" });
+                sb.AppendUsings(EGenerateTargetType.ReferenceFetchers.GetReferences());
                 sb.AppendLine();
-                sb.AppendNameSpace(entityNamespace, () =>
+                sb.AppendNameSpace(targetNamespace, () =>
                 {
                     sb.AppendClass(false, "public static partial", CGenerate.ClassNameOfEntityFetcher, "", () =>
                     {
@@ -365,11 +364,11 @@ namespace VL.ORMCodeGenerator.Generators
                     });
                 });
                 //输出代码
-                if (!Directory.Exists(entityDirectoryPath))
+                if (!Directory.Exists(targetDirectoryPath))
                 {
-                    Directory.CreateDirectory(entityDirectoryPath);
+                    Directory.CreateDirectory(targetDirectoryPath);
                 }
-                File.WriteAllText(entityFilePath, sb.ToString());
+                File.WriteAllText(targetFilePath, sb.ToString());
             }
             return result;
         }
@@ -420,16 +419,11 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntity(GenerateConfig config, Table table)
         {
             //代码生成
-            string targetDirectoryPath = config.GetEntityDirectoryPath();
-            string targetFilePath = config.GetEntityFilePath(table.Name);
-            string targetNamespace = config.GetEntityNamespace();
+            string targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath);
+            string targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
+            string targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            var usings = new List<string>() { "System", "System.Collections.Generic", "System.Data", CGenerate.NamespaceOfEntitiesBase };// "System.Linq", "System.Reflection", 
-            if (config.IsSupportWCF)
-            {
-                usings.Add("System.Runtime.Serialization");
-            }
-            sb.AppendUsings(usings);
+            sb.AppendUsings(EGenerateTargetType.Entities.GetReferences());
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {
@@ -501,15 +495,17 @@ namespace VL.ORMCodeGenerator.Generators
                                 {
                                     if (column.Mandatory)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = Convert.To" + DataTypeHelper.GetCSharpDataType(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision)
-                                        + "(reader[nameof(this." + column.Name + ")]);");
+                                        sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = "
+                                            + DataTypeHelper.GetCSharpDataTypeConvertString(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                            + ";");
                                     }
                                     else
                                     {
                                         sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
                                         sb.AppendLine(CGenerate.ContentLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = Convert.To" + DataTypeHelper.GetCSharpDataType(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision)
-                                        + "(reader[nameof(this." + column.Name + ")]);");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                            + DataTypeHelper.GetCSharpDataTypeConvertString(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                            + ";");
                                         sb.AppendLine(CGenerate.ContentLS + "}");
                                     }
                                 }
@@ -540,15 +536,17 @@ namespace VL.ORMCodeGenerator.Generators
                                 {
                                     if (column.Mandatory)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = Convert.To" + DataTypeHelper.GetCSharpDataType(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision)
-                                        + "(reader[nameof(this." + column.Name + ")]);");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                            + DataTypeHelper.GetCSharpDataTypeConvertString(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                            + ";");
                                     }
                                     else
                                     {
                                         sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
                                         sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = Convert.To" + DataTypeHelper.GetCSharpDataType(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision)
-                                        + "(reader[nameof(this." + column.Name + ")]);");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                            + DataTypeHelper.GetCSharpDataTypeConvertString(DataTypeHelper.GetPDMDataType(column.DataType), column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                            + ";");
                                         sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     }
                                 }
@@ -573,12 +571,11 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntityOperator(GenerateConfig config, Table table, OperatorType operatorType)
         {
             //代码生成
-            string targetDirectoryPath = config.GetEntityDirectoryPath();
-            string targetFilePath = config.GetEntityFilePath(table.Name + CGenerate.FileNameSuffixOfOperator);
-            string targetNamespace = config.GetEntityNamespace();
+            string targetDirectoryPath = EGenerateTargetType.EntityOperators.GetDirectoryPath(config.RootPath);
+            string targetFilePath = EGenerateTargetType.EntityOperators.GetFilePath(targetDirectoryPath, table.Name);
+            string targetNamespace = EGenerateTargetType.EntityOperators.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            var usings = new List<string>() { "System.Collections.Generic", "System.Linq", "VL.Common.DbSession.Objects", "VL.ORM.DbOperateLib.Utilities.QueryBuilders", "VL.ORM.DbOperateLib.Utilities.QueryOperators" };
-            sb.AppendUsings(usings);
+            sb.AppendUsings(EGenerateTargetType.EntityOperators.GetReferences());
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {
@@ -808,12 +805,11 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEntityProperties(GenerateConfig config, Table table)
         {
             //代码生成
-            string targetDirectoryPath = config.GetEntityDirectoryPath();
-            string targetFilePath = config.GetEntityFilePath(table.Name + CGenerate.FileNameSuffixOfProperties);
-            string targetNamespace = config.GetEntityNamespace();
+            string targetDirectoryPath = EGenerateTargetType.EntityProperties.GetDirectoryPath(config.RootPath);
+            string targetFilePath = EGenerateTargetType.EntityProperties.GetFilePath(targetDirectoryPath, table.Name);
+            string targetNamespace = EGenerateTargetType.EntityProperties.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            var usings = new List<string>() { CGenerate.NamespaceOfEntitiesBase };// "System.Linq", "System.Reflection", 
-            sb.AppendUsings(usings);
+            sb.AppendUsings(EGenerateTargetType.EntityProperties.GetReferences());
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {
@@ -855,13 +851,13 @@ namespace VL.ORMCodeGenerator.Generators
         bool GenerateEnum(GenerateConfig config, Table table)
         {
             //代码生成
-            string enumDirectoryPath = config.GetEnumDirectoryPath();
-            string enumFilePath = config.GetEnumFilePath(table.Name);
-            string enumNamespace = config.GetEnumNamespace();
+            string targetDirectoryPath = EGenerateTargetType.Enums.GetDirectoryPath(config.RootPath);
+            string targetFilePath = EGenerateTargetType.Enums.GetFilePath(targetDirectoryPath, table.Name);
+            string targetNamespace = EGenerateTargetType.Enums.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            sb.AppendUsings(new List<string>() { "System.Runtime.Serialization" });
+            sb.AppendUsings(EGenerateTargetType.Enums.GetReferences());
             sb.AppendLine();
-            sb.AppendNameSpace(enumNamespace, () =>
+            sb.AppendNameSpace(targetNamespace, () =>
             {
                 sb.AppendEnum(config.IsSupportWCF, table.Name, () =>
                 {
@@ -869,11 +865,11 @@ namespace VL.ORMCodeGenerator.Generators
                 });
             });
             //输出代码
-            if (!Directory.Exists(enumDirectoryPath))
+            if (!Directory.Exists(targetDirectoryPath))
             {
-                Directory.CreateDirectory(enumDirectoryPath);
+                Directory.CreateDirectory(targetDirectoryPath);
             }
-            File.WriteAllText(enumFilePath, sb.ToString());
+            File.WriteAllText(targetFilePath, sb.ToString());
             return true;
         }
         #endregion

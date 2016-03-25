@@ -60,5 +60,19 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
             }
         }
+        public static string GetCSharpDataTypeConvertString(PDMDataType pdmDataType, int length, int precision,string value)
+        {
+            switch (pdmDataType)
+            {
+                case PDMDataType.varchar:
+                case PDMDataType.numeric:
+                case PDMDataType.datetime:
+                    return string.Format("Convert.To{0}({1})", GetCSharpDataType(pdmDataType, length, precision), value);
+                case PDMDataType.uniqueidentifier:
+                    return string.Format("new Guid({0}.ToString())", value);
+                default:
+                    throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+            }
+        }
     }
 }

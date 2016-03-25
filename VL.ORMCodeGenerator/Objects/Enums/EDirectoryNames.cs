@@ -1,6 +1,6 @@
 ﻿namespace VL.ORMCodeGenerator.Objects.Enums
 {
-    public enum EGeneratePath
+    public enum EDirectoryNames
     {
         Objects,
         Entities,

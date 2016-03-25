@@ -17,7 +17,7 @@ namespace VL.ORMCodeGenerator.Generators
             //打开模型,并获取模型基类
             Model model = (Model)pd.OpenModel(config.PDMFilePath, OpenModelFlags.omf_Hidden);
             //根据模型生成
-            switch (config.TargetDatabaseType)
+            switch (config.DatabaseType)
             {
                 case EDatabaseType.MSSQL:
                 case EDatabaseType.Oracle:

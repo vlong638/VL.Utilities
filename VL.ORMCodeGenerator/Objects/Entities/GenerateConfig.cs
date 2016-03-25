@@ -17,15 +17,15 @@ namespace VL.ORMCodeGenerator.Objects.Entities
         /// <summary>
         /// 目标文件夹目录
         /// </summary>
-        public string TargetDirectoryPath { set; get; }
+        public string RootPath { set; get; }
         /// <summary>
         /// 目标命名空间
         /// </summary>
-        public string TargetNamespace { set; get; }
+        public string RootNamespace { set; get; }
         /// <summary>
         /// 目标数据库类型
         /// </summary>
-        public EDatabaseType TargetDatabaseType { set; get; }
+        public EDatabaseType DatabaseType { set; get; }
         /// <summary>
         /// 是否支持WCF
         /// </summary>
@@ -42,9 +42,9 @@ namespace VL.ORMCodeGenerator.Objects.Entities
         public void Init(GenerateConfig generateConfig)
         {
             this.PDMFilePath = generateConfig.PDMFilePath;
-            this.TargetDirectoryPath = generateConfig.TargetDirectoryPath;
-            this.TargetNamespace = generateConfig.TargetNamespace;
-            this.TargetDatabaseType = generateConfig.TargetDatabaseType;
+            this.RootPath = generateConfig.RootPath;
+            this.RootNamespace = generateConfig.RootNamespace;
+            this.DatabaseType = generateConfig.DatabaseType;
             this.IsSupportWCF = generateConfig.IsSupportWCF;
         }
 
@@ -55,35 +55,35 @@ namespace VL.ORMCodeGenerator.Objects.Entities
 
         #region Constraits
 
-        #region Entity
-        public string GetEntityDirectoryPath()
-        {
-            return Path.Combine(TargetDirectoryPath, EGeneratePath.Objects.ToString(), EGeneratePath.Entities.ToString());
-        }
-        public string GetEntityFilePath(string entityName)
-        {
-            return Path.Combine(GetEntityDirectoryPath(), entityName + ".cs");
-        }
-        public string GetEntityNamespace()
-        {
-            return TargetNamespace + "." + EGeneratePath.Objects.ToString();// + "." + GeneratePaths.Entities.ToString();
-        }
-        #endregion
+        //#region Entity
+        //public string GetDirectoryPath()
+        //{
+        //    return Path.Combine(RootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Entities.ToString());
+        //}
+        //public string GetEntityFilePath(string entityName)
+        //{
+        //    return Path.Combine(GetDirectoryPath(), entityName + ".cs");
+        //}
+        //public string GetEntityNamespace()
+        //{
+        //    return RootNamespace + "." + EDirectoryNames.Objects.ToString();// + "." + GeneratePaths.Entities.ToString();
+        //}
+        //#endregion
 
-        #region Enum
-        public string GetEnumDirectoryPath()
-        {
-            return Path.Combine(TargetDirectoryPath, EGeneratePath.Objects.ToString(), EGeneratePath.Enums.ToString());
-        }
-        public string GetEnumFilePath(string enumName)
-        {
-            return Path.Combine(GetEnumDirectoryPath(), enumName + ".cs");
-        }
-        public string GetEnumNamespace()
-        {
-            return TargetNamespace + "." + EGeneratePath.Objects.ToString();// + "." + GeneratePaths.Enums.ToString();
-        }
-        #endregion
+        //#region Enum
+        //public string GetEnumDirectoryPath()
+        //{
+        //    return Path.Combine(RootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Enums.ToString());
+        //}
+        //public string GetEnumFilePath(string enumName)
+        //{
+        //    return Path.Combine(GetEnumDirectoryPath(), enumName + ".cs");
+        //}
+        //public string GetEnumNamespace()
+        //{
+        //    return RootNamespace + "." + EDirectoryNames.Objects.ToString();// + "." + GeneratePaths.Enums.ToString();
+        //}
+        //#endregion
 
         #endregion
     }

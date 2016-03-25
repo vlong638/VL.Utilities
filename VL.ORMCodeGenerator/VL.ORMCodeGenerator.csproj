@@ -90,7 +90,8 @@
     </Compile>
     <Compile Include="Objects\Constraits\CGenerate.cs" />
     <Compile Include="Objects\Entities\GenerateConfig.cs" />
-    <Compile Include="Objects\Enums\EGeneratePath.cs" />
+    <Compile Include="Objects\Enums\EDirectoryNames.cs" />
+    <Compile Include="Objects\Enums\EGenerateTargetType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\CodeBuilder.cs" />
