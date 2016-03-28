@@ -4,7 +4,7 @@ using VL.Common.ORM.Objects;
 
 namespace VL.ORMCodeGenerator.Utilities
 {
-    public class DataTypeHelper
+    public static class DataTypeHelper
     {
         public static PDMDataType GetPDMDataType(string pdmDataTypeString)
         {
@@ -25,7 +25,7 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException();
             }
         }
-        public static string GetCSharpDataType(PDMDataType pdmDataType, int length, int precision)
+        public static string GetCSharpDataType(this PDMDataType pdmDataType, int length, int precision)
         {
             switch (pdmDataType)
             {
@@ -60,18 +60,32 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
             }
         }
-        public static string GetCSharpDataTypeConvertString(PDMDataType pdmDataType, int length, int precision,string value)
+        public static string GetCSharpDataTypeConvertString(this PDMDataType pdmDataType, int length, int precision, string value)
         {
             switch (pdmDataType)
             {
                 case PDMDataType.varchar:
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
-                    return string.Format("Convert.To{0}({1})", GetCSharpDataType(pdmDataType, length, precision), value);
+                    return string.Format("Convert.To{0}({1})", pdmDataType.GetCSharpDataType(length, precision), value);
                 case PDMDataType.uniqueidentifier:
                     return string.Format("new Guid({0}.ToString())", value);
                 default:
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+            }
+        }
+        public static bool IsNullableType(this PDMDataType dataType)
+        {
+            switch (dataType)
+            {
+                case PDMDataType.varchar:
+                    return false;
+                case PDMDataType.numeric:
+                case PDMDataType.datetime:
+                case PDMDataType.uniqueidentifier:
+                    return true;
+                default:
+                    throw new NotImplementedException("未实现该类型的空类型检测" + dataType.ToString());
             }
         }
     }

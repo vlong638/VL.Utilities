@@ -72,9 +72,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return rootNamespace + EGenerateTargetType.Entities.ToString();
+                    return rootNamespace + "." + EGenerateTargetType.Entities.ToString();
                 case EGenerateTargetType.Enums:
-                    return rootNamespace + EGenerateTargetType.Enums.ToString();
+                    return rootNamespace + "." + EGenerateTargetType.Enums.ToString();
                 default:
                     throw new NotImplementedException();
             }
@@ -82,10 +82,11 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         /// <summary>
         /// ORM模型Entity的基类命名空间
         /// </summary>
-        public static string NamespaceOfDbSessionObjects = "VL.Common.DbSession.Objects";
+        public static string NamespaceOfDASObjects = "VL.Common.DAS.Objects";
         public static string NamespaceOfORMObjects = "VL.Common.ORM.Objects";
-        public static string NamespaceOfORMQueryBuilders = "VL.ORM.DbOperateLib.Utilities.QueryBuilders";
-        public static string NamespaceOfORMQueryOperators = "VL.ORM.DbOperateLib.Utilities.QueryOperators";
+        public static string NamespaceOfORMQueryBuilders = "VL.Common.ORM.Utilities.QueryBuilders";
+        public static string NamespaceOfORMQueryOperators = "VL.Common.ORM.Utilities.QueryOperators";
+        public static string NamespaceOfObjectsEnums = "VL.Objects.Enums";
         public static List<string> GetReferences(this EGenerateTargetType targetType, bool isSupportWCF = false)
         {
             var result= new List<string>();
@@ -100,6 +101,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
                     result.Add(NamespaceOfORMObjects);
+                    result.Add(NamespaceOfObjectsEnums);
                     break;
                 case EGenerateTargetType.EntityProperties:
                     result.Add(NamespaceOfORMObjects);
@@ -107,7 +109,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.EntityOperators:
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
-                    result.Add("System.DbSession.Objects");
+                    result.Add(NamespaceOfDASObjects);
                     result.Add(NamespaceOfORMQueryBuilders);
                     result.Add(NamespaceOfORMQueryOperators);
                     break;
@@ -117,13 +119,13 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfORMObjects);
                     break;
                 case EGenerateTargetType.ReferenceFetchers:
+                    result.Add("System");
                     result.Add("System.Collections.Generic");
-                    result.Add(NamespaceOfDbSessionObjects);
+                    result.Add(NamespaceOfDASObjects);
                     result.Add(NamespaceOfORMQueryBuilders);
                     result.Add(NamespaceOfORMQueryOperators);
                     break;
                 case EGenerateTargetType.Enums:
-                    result.Add("System.Runtime.Serialization");
                     break;
                 default:
                     throw new NotImplementedException();

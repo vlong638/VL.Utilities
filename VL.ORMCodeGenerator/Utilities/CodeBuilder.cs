@@ -133,22 +133,23 @@ namespace VL.ORMCodeGenerator.Utilities
         public static void AppendEnumItems(this StringBuilder sb, bool isSupportWCF, string enumItemsString)
         {
             //TODO 为Enum生成EnumItem
-            if (isSupportWCF)
+            var enumItems = enumItemsString.Split('\n');//\r\n
+            foreach (var enumItem in enumItems)
             {
-                var enumItems = enumItemsString.Split('\n');//\r\n
-                foreach (var enumItem in enumItems)
+                var enumItemValues = enumItem.TrimEnd('\r').Split(',', '.');
+                string commend = enumItemValues[1];
+                //注释
+                if (!string.IsNullOrEmpty(commend))
                 {
-                    var enumItemValues = enumItem.TrimEnd('\r').Split(',', '.');
-                    string commend = enumItemValues[1];
-                    //注释
-                    if (!string.IsNullOrEmpty(commend))
-                    {
-                        sb.AppendCommend(CGenerate.MethodLS, commend, true);
-                    }
-                    //枚举项
-                    sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFEnumContract);
-                    AppendEnumItem(sb, enumItemValues[2], enumItemValues[0]);
+                    sb.AppendCommend(CGenerate.MethodLS, commend, true);
                 }
+                //WCF契约
+                if (isSupportWCF)
+                {
+                    sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFEnumContract);
+                }
+                //枚举项
+                AppendEnumItem(sb, enumItemValues[2], enumItemValues[0]);
             }
         }
         private static void AppendEnumItem(this StringBuilder sb, string name, string valueString)

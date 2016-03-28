@@ -35,18 +35,10 @@ namespace VL.ORMCodeGenerator.Utilities
         {
             if (!column.Mandatory)
             {
+                if (column.IsEnumField())
+                    return false;
                 var dataType = DataTypeHelper.GetPDMDataType(column.DataType);
-                switch (dataType)
-                {
-                    case PDMDataType.varchar:
-                        return false;
-                    case PDMDataType.numeric:
-                    case PDMDataType.datetime:
-                    case PDMDataType.uniqueidentifier:
-                        return true;
-                    default:
-                        throw new NotImplementedException("未实现该类型的空类型检测" + dataType.ToString());
-                }
+                return dataType.IsNullableType();
             }
             return false;
         }
