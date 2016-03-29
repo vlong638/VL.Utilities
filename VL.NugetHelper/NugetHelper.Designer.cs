@@ -1,6 +1,6 @@
 ﻿namespace VL.NugetHelper
 {
-    partial class Form1
+    partial class NugetHelper
     {
         /// <summary>
         /// 必需的设计器变量。
@@ -103,6 +103,7 @@
             this.tb_projectRootPath.Name = "tb_projectRootPath";
             this.tb_projectRootPath.Size = new System.Drawing.Size(387, 21);
             this.tb_projectRootPath.TabIndex = 5;
+            this.tb_projectRootPath.TextChanged += new System.EventHandler(this.tb_projectRootPath_TextChanged);
             // 
             // label1
             // 
@@ -429,8 +430,8 @@
             this.Controls.Add(this.Delete);
             this.Controls.Add(this.cb_projects);
             this.Controls.Add(this.Generate);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "NugetHelper";
+            this.Text = "NugetHelper";
             this.ResumeLayout(false);
             this.PerformLayout();
 

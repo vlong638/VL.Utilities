@@ -9,12 +9,12 @@ using VL.NugetHelper.Entities.ConfigEntities;
 
 namespace VL.NugetHelper
 {
-    public partial class Form1 : Form
+    public partial class NugetHelper : Form
     {
         ProjectsConfigEntity ProjectsConfigEntity { set; get; }
         AssemlyConfigEntity AssemlyConfigEntity { set; get; }
 
-        public Form1()
+        public NugetHelper()
         {
             InitializeComponent();
             ProjectsConfigEntity = new ProjectsConfigEntity("Projects.config", System.Environment.CurrentDirectory);
@@ -102,40 +102,56 @@ namespace VL.NugetHelper
         }
         private void cb_projects_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(cb_projects.Text))
+            //if (!string.IsNullOrEmpty(cb_projects.Text))
+            //{
+            //    LoadProjectDetail();
+            //    LoadAssemlyConfigEntity();
+            //}
+        }
+
+        private void LoadProjectDetail()
+        {
+            var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
+            if (project == null)
             {
-                var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
-                if (project != null)
-                {
-                    tb_Author.Text = project.Author;
-                    tb_projectRootPath.Text = project.RootPath;
-                    WriteText("切换为配置方案" + cb_projects.Text);
-                    LoadAssemlyConfigEntity();
-                }
+                project = new ProjectDetail(cb_projects.Text, "", "");
             }
+            tb_Author.Text = project.Author;
+            tb_projectRootPath.Text = project.RootPath;
+            WriteText("切换为配置方案" + cb_projects.Text);
         }
         #endregion
 
         #region Assemblies
         private void LoadAssemlyConfigEntity()
         {
-            if (!string.IsNullOrEmpty(cb_projects.Text))
+            //if (!string.IsNullOrEmpty(cb_projects.Text) && ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text) != null)
+            //{
+            //    var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
+            //    AssemlyConfigEntity = new AssemlyConfigEntity("AssemblyInfo.cs", Path.Combine(project.RootPath, "Properties"));
+            //    AssemlyConfigEntity.Load();
+            //}
+            //else
+            //{
+            //    AssemlyConfigEntity = new AssemlyConfigEntity("", "");
+            //}
+            AssemlyConfigEntity = new AssemlyConfigEntity("AssemblyInfo.cs", Path.Combine(tb_projectRootPath.Text, "Properties"));
+            if (File.Exists(AssemlyConfigEntity.InputFilePath))
             {
-                var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
-                AssemlyConfigEntity = new AssemlyConfigEntity("AssemblyInfo.cs", Path.Combine(project.RootPath, "Properties"));
                 AssemlyConfigEntity.Load();
-                tb_Title.Text = AssemlyConfigEntity.Title;
-                tb_Description.Text = AssemlyConfigEntity.Description;
-                tb_Configuration.Text = AssemlyConfigEntity.Configuration;
-                tb_Company.Text = AssemlyConfigEntity.Company;
-                tb_Product.Text = AssemlyConfigEntity.Product;
-                tb_Copyright.Text = AssemlyConfigEntity.Copyright;
-                tb_Trademark.Text = AssemlyConfigEntity.Trademark;
-                tb_Culture.Text = AssemlyConfigEntity.Culture;
-                tb_Version.Text = AssemlyConfigEntity.Version;
-                tb_FileVersion.Text = AssemlyConfigEntity.FileVersion;
-                WriteText("已加载配置方案{0}的AssemlyConfigEntity", project.Name);
+
             }
+            tb_Title.Text = AssemlyConfigEntity.Title;
+            tb_Description.Text = AssemlyConfigEntity.Description;
+            tb_Configuration.Text = AssemlyConfigEntity.Configuration;
+            tb_Company.Text = AssemlyConfigEntity.Company;
+            tb_Product.Text = AssemlyConfigEntity.Product;
+            tb_Copyright.Text = AssemlyConfigEntity.Copyright;
+            tb_Trademark.Text = AssemlyConfigEntity.Trademark;
+            tb_Culture.Text = AssemlyConfigEntity.Culture;
+            tb_Version.Text = AssemlyConfigEntity.Version;
+            tb_FileVersion.Text = AssemlyConfigEntity.FileVersion;
+            WriteText("已加载配置详情" + AssemlyConfigEntity.Title);
         }
         private void UpdateAssemlyConfigEntity()
         {
@@ -159,7 +175,7 @@ namespace VL.NugetHelper
             public string SourceRootPath { set; get; }
             public string OutputDirectoryPath { set; get; }
 
-            public NugetManager(string sourceRootPath,string projectName)
+            public NugetManager(string sourceRootPath, string projectName)
             {
                 SourceRootPath = sourceRootPath;
                 OutputDirectoryPath = Path.Combine(Environment.CurrentDirectory, projectName);
@@ -292,7 +308,7 @@ namespace VL.NugetHelper
                 {
                     Regex regex = new Regex(@"(\d+.\d+.)\d+(.\d+)");
                     var match = regex.Match(tb_Version.Text);
-                    tb_Version.Text = match.Groups[1].Value+DateTime.Now.ToString("yyMMddHHmm")+ match.Groups[2].Value;
+                    tb_Version.Text = match.Groups[1].Value + DateTime.Now.ToString("yyMMddHHmm") + match.Groups[2].Value;
                 }
             }
             SaveAll();
@@ -388,8 +404,13 @@ namespace VL.NugetHelper
         #endregion
         private void cb_projects_TextChanged(object sender, EventArgs e)
         {
-            tb_projectRootPath.Text = "";
-            tb_Author.Text = "";
+            LoadProjectDetail();
+            //LoadAssemlyConfigEntity();
+        }
+
+        private void tb_projectRootPath_TextChanged(object sender, EventArgs e)
+        {
+            LoadAssemlyConfigEntity();
         }
     }
 }
