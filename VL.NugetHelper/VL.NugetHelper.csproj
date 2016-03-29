@@ -76,6 +76,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="NugetPackages\mysql.data.6.9.8.nupkg" />
+    <None Include="NugetPackages\newtonsoft.json.8.0.3.nupkg" />
+    <None Include="NugetPackages\oracle.manageddataaccess.12.1.2400.nupkg" />
     <None Include="Nuget\package.bat" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
