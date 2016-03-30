@@ -64,7 +64,7 @@
             this.label15 = new System.Windows.Forms.Label();
             this.tb_NugetServer = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
-            this.tb_Notes = new System.Windows.Forms.TextBox();
+            this.tb_Tag = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Generate
@@ -187,7 +187,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(20, 168);
+            this.label5.Location = new System.Drawing.Point(19, 277);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(71, 12);
             this.label5.TabIndex = 17;
@@ -196,9 +196,10 @@
             // 
             // tb_Description
             // 
-            this.tb_Description.Location = new System.Drawing.Point(109, 163);
+            this.tb_Description.Location = new System.Drawing.Point(109, 274);
+            this.tb_Description.Multiline = true;
             this.tb_Description.Name = "tb_Description";
-            this.tb_Description.Size = new System.Drawing.Size(144, 21);
+            this.tb_Description.Size = new System.Drawing.Size(387, 129);
             this.tb_Description.TabIndex = 16;
             // 
             // label6
@@ -374,27 +375,26 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(20, 274);
+            this.label16.Location = new System.Drawing.Point(20, 168);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(35, 12);
+            this.label16.Size = new System.Drawing.Size(23, 12);
             this.label16.TabIndex = 39;
-            this.label16.Text = "Notes";
+            this.label16.Text = "Tag";
             // 
-            // tb_Notes
+            // tb_Tag
             // 
-            this.tb_Notes.Location = new System.Drawing.Point(109, 274);
-            this.tb_Notes.Multiline = true;
-            this.tb_Notes.Name = "tb_Notes";
-            this.tb_Notes.Size = new System.Drawing.Size(387, 129);
-            this.tb_Notes.TabIndex = 38;
+            this.tb_Tag.Location = new System.Drawing.Point(109, 163);
+            this.tb_Tag.Name = "tb_Tag";
+            this.tb_Tag.Size = new System.Drawing.Size(144, 21);
+            this.tb_Tag.TabIndex = 38;
             // 
-            // Form1
+            // NugetHelper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 568);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.tb_Notes);
+            this.Controls.Add(this.tb_Tag);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.tb_APIKey);
             this.Controls.Add(this.label15);
@@ -475,7 +475,7 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox tb_NugetServer;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox tb_Notes;
+        private System.Windows.Forms.TextBox tb_Tag;
     }
 }
 

@@ -59,7 +59,7 @@ namespace VL.ORMCodeGenerator.Utilities
 
         #region Using
         static string UsingPattern = "using {0};" + System.Environment.NewLine;
-        static List<string> BasicUsings = new List<string>()
+        static List<string> BasicUsings { set; get; } = new List<string>()
         {
             "System",
             "System.Collections.Generic",
@@ -74,10 +74,10 @@ namespace VL.ORMCodeGenerator.Utilities
                 Usings.AddRange(usings);
                 Usings = Usings.Distinct().ToList();
             }
-            else
-            {
-                Usings.AddRange(BasicUsings);
-            }
+            //else
+            //{
+            //    Usings.AddRange(BasicUsings);
+            //}
             //添加额外命名空间引用
             foreach (string exUsing in exUsings)
             {
@@ -132,10 +132,13 @@ namespace VL.ORMCodeGenerator.Utilities
         }
         public static void AppendEnumItems(this StringBuilder sb, bool isSupportWCF, string enumItemsString)
         {
-            //TODO 为Enum生成EnumItem
             var enumItems = enumItemsString.Split('\n');//\r\n
             foreach (var enumItem in enumItems)
             {
+                if (string.IsNullOrWhiteSpace(enumItem))
+                {
+                    continue;
+                }
                 var enumItemValues = enumItem.TrimEnd('\r').Split(',', '.');
                 string commend = enumItemValues[1];
                 //注释

@@ -418,7 +418,7 @@ namespace VL.ORMCodeGenerator.Generators
             string targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            sb.AppendUsings(EGenerateTargetType.Entities.GetReferences());
+            sb.AppendUsings(EGenerateTargetType.Entities.GetReferences(config));
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {
@@ -852,7 +852,7 @@ namespace VL.ORMCodeGenerator.Generators
             string targetFilePath = EGenerateTargetType.Enums.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.Enums.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            sb.AppendUsings(EGenerateTargetType.Enums.GetReferences());
+            sb.AppendUsings(EGenerateTargetType.Enums.GetReferences(config));
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {

@@ -29,7 +29,7 @@ namespace VL.NugetHelper
             tb_NugetServer.Text = ProjectsConfigEntity.NugetServer;
             tb_APIKey.Text = ProjectsConfigEntity.APIKey;
             //项目名称下拉列表
-            cb_projects.DataSource = ProjectsConfigEntity.Projects.Select(c => c.Name).ToList();
+            cb_projects.DataSource = ProjectsConfigEntity.Projects.Select(c => c.Name).OrderBy(c => c).ToList();
             cb_projects.DisplayMember = nameof(ProjectDetail.Name);
             cb_projects.Refresh();
         }
@@ -205,9 +205,9 @@ namespace VL.NugetHelper
                 //sb.AppendFormat(@"    <iconUrl>{0}</iconUrl>" + System.Environment.NewLine);
                 //sb.AppendFormat(@"    <requireLicenseAcceptance>{0}</requireLicenseAcceptance>" + System.Environment.NewLine);
                 sb.AppendFormat(@"    <description>{0}</description>" + System.Environment.NewLine, assembly.Description);
-                sb.AppendFormat(@"    <releaseNotes>{0}</releaseNotes>" + System.Environment.NewLine, project.Notes);
+                //sb.AppendFormat(@"    <releaseNotes>{0}</releaseNotes>" + System.Environment.NewLine);
                 sb.AppendFormat(@"    <copyright>{0}</copyright>" + System.Environment.NewLine, assembly.Copyright);
-                sb.AppendFormat(@"    <tags></tags>" + System.Environment.NewLine);
+                sb.AppendFormat(@"    <tags>{0}</tags>" + System.Environment.NewLine, project.Notes);
                 sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
                 sb.AppendFormat(@"      <dependency id=""SampleDependency"" version=""1.0"" />" + System.Environment.NewLine);
                 sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
@@ -294,22 +294,7 @@ namespace VL.NugetHelper
         {
             if (string.IsNullOrEmpty(tb_Version.Text))
             {
-                tb_Version.Text = "1.1.1.1";
-            }
-            else
-            {
-                if (tb_Version.Text.EndsWith("*"))
-                {
-                    Regex regex = new Regex(@"(\d+.\d+.)\*");
-                    var match = regex.Match(tb_Version.Text);
-                    tb_Version.Text = match.Groups[1].Value + DateTime.Now.ToString("yyMMddHHmm") + ".1";
-                }
-                else
-                {
-                    Regex regex = new Regex(@"(\d+.\d+.)\d+(.\d+)");
-                    var match = regex.Match(tb_Version.Text);
-                    tb_Version.Text = match.Groups[1].Value + DateTime.Now.ToString("yyMMddHHmm") + match.Groups[2].Value;
-                }
+                tb_Version.Text = "1.0.*";
             }
             SaveAll();
             if (!string.IsNullOrEmpty(cb_projects.Text))
@@ -317,7 +302,6 @@ namespace VL.NugetHelper
                 var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
                 if (project != null)
                 {
-                    project.Notes = tb_Notes.Text;
                     NugetManager manager = new NugetManager(project.RootPath, project.Name);
                     //Remove Previous Package
                     var filePaths = manager.GetNugetPackageFileFullPaths();
@@ -326,7 +310,10 @@ namespace VL.NugetHelper
                         File.Delete(filePath);
                     }
                     //Spec
+                    string tempVersion = GetTempVersion();
+                    AssemlyConfigEntity.Version = tempVersion;
                     manager.GenerateNugetSpec(project, AssemlyConfigEntity);
+                    AssemlyConfigEntity.Version = tb_Version.Text;
                     //Pack
                     var projectFileFullPath = manager.GetProjectFileFullPath(project.RootPath);
                     if (string.IsNullOrEmpty(projectFileFullPath))
@@ -346,6 +333,25 @@ namespace VL.NugetHelper
             {
                 WriteText("请选择有效的项目项");
             }
+        }
+
+        private string GetTempVersion()
+        {
+            string tempVersion;
+            if (tb_Version.Text.EndsWith("*"))
+            {
+                Regex regex = new Regex(@"(\d+.\d+.)\*");
+                var match = regex.Match(tb_Version.Text);
+                tempVersion = match.Groups[1].Value + DateTime.Now.ToString("yyMMddHHmm") + ".1";
+            }
+            else
+            {
+                Regex regex = new Regex(@"(\d+.\d+.)\d+(.\d+)");
+                var match = regex.Match(tb_Version.Text);
+                tempVersion = match.Groups[1].Value + DateTime.Now.ToString("yyMMddHHmm") + match.Groups[2].Value;
+            }
+
+            return tempVersion;
         }
 
         private void Push_Click(object sender, EventArgs e)

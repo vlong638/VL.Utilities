@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using VL.ORMCodeGenerator.Objects.Constraits;
+using VL.ORMCodeGenerator.Objects.Entities;
 
 namespace VL.ORMCodeGenerator.Objects.Enums
 {
@@ -86,11 +87,10 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         public static string NamespaceOfORMObjects = "VL.Common.ORM.Objects";
         public static string NamespaceOfORMQueryBuilders = "VL.Common.ORM.Utilities.QueryBuilders";
         public static string NamespaceOfORMQueryOperators = "VL.Common.ORM.Utilities.QueryOperators";
-        public static string NamespaceOfObjectsEnums = "VL.Objects.Enums";
-        public static List<string> GetReferences(this EGenerateTargetType targetType, bool isSupportWCF = false)
+        public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config=null)
         {
             var result= new List<string>();
-            if (isSupportWCF)
+            if (config!=null&& config.IsSupportWCF)
             {
                 result.Add("System.Runtime.Serialization");
             }
@@ -101,7 +101,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
                     result.Add(NamespaceOfORMObjects);
-                    result.Add(NamespaceOfObjectsEnums);
+                    result.Add(config.RootNamespace + ".Enums");
                     break;
                 case EGenerateTargetType.EntityProperties:
                     result.Add(NamespaceOfORMObjects);
