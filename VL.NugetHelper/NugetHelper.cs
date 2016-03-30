@@ -358,6 +358,7 @@ namespace VL.NugetHelper
                 var project = ProjectsConfigEntity.Projects.FirstOrDefault(c => c.Name == cb_projects.Text);
                 if (project != null)
                 {
+                    //Push
                     NugetManager manager = new NugetManager(project.RootPath, project.Name);
                     var filePaths = manager.GetNugetPackageFileFullPaths();
                     if (filePaths.Count() == 0)
@@ -371,20 +372,6 @@ namespace VL.NugetHelper
                         return;
                     }
                     StringBuilder sb = manager.ExecuteCmdCommand("nuget push " + filePaths.First() + " -s " + ProjectsConfigEntity.NugetServer + " " + ProjectsConfigEntity.APIKey);
-                    WriteText(sb.ToString());
-                    //Push
-                    filePaths = manager.GetNugetPackageFileFullPaths();
-                    if (filePaths.Count() == 0)
-                    {
-                        WriteText("该项目未创建Nuget包");
-                        return;
-                    }
-                    if (filePaths.Count() > 1)
-                    {
-                        WriteText("该项目存在多个包");
-                        return;
-                    }
-                    sb = manager.ExecuteCmdCommand("nuget push " + filePaths.First() + " -s " + ProjectsConfigEntity.NugetServer + " " + ProjectsConfigEntity.APIKey);
                     WriteText(sb.ToString());
                 }
                 else

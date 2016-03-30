@@ -391,12 +391,14 @@ namespace VL.ORMCodeGenerator.Generators
                 if (table.Name.StartsWith(CGenerate.PDMNameNotationOfRelationMapper))
                 {
                     result = result && GenerateEntity(config, table);
+                    result = result && GenerateDomainEntity(config, table);
                     result = result && GenerateEntityOperator(config, table, OperatorType.C | OperatorType.R | OperatorType.U | OperatorType.D);
                     result = result && GenerateEntityProperties(config, table);
                 }
                 if (table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
+                    result = result && GenerateDomainEntity(config, table);
                     result = result && GenerateEntityOperator(config, table, OperatorType.C | OperatorType.R | OperatorType.U | OperatorType.D);
                     result = result && GenerateEntityProperties(config, table);
                 }
@@ -420,140 +422,38 @@ namespace VL.ORMCodeGenerator.Generators
             StringBuilder sb = new StringBuilder();
             sb.AppendUsings(EGenerateTargetType.Entities.GetReferences(config));
             sb.AppendLine();
-            sb.AppendNameSpace(targetNamespace, () =>
+            CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
+             {
+                 sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(IPDMTBase), () =>
+                 {
+                     AppendClassContent(config, table, sb);
+                 });
+             });
+            //输出代码
+            if (!Directory.Exists(targetDirectoryPath))
             {
-                sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(IPDMTBase), () =>
-                {
-                    sb.AppendProperties(() =>
-                    {
-                        foreach (Column column in table.Columns)
-                        {
-                            if (config.IsSupportWCF)
-                            {
-                                sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
-                            }
-                            //TODO 如果字段是Enum类型的
-                            string dataType;
-                            if (column.IsEnumField())
-                            {
-                                dataType = column.GetEnumType();
-                            }
-                            else
-                            {
-                                dataType = DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataType(column.Length, column.Precision);
-                            }
-                            sb.AppendLine(CGenerate.MethodLS + "public" + " " + dataType + (column.IsNullableField() ? "?" : "") + " " + column.Name + " { get; set; }");
-                        }
-                    });
-                    sb.AppendLine();
-                    sb.AppendConstructors(() =>
-                    {
-                        //sb.AppendConstructor("static", table.Name, "", "", () =>
-                        //{
-                        //    sb.AppendCommend(GConstraints.ContentLS, "字段", false);
-                        //    foreach (Column column in table.Columns)
-                        //    {
-                        //        sb.AppendLine(GConstraints.ContentLS + "{0}.Properties.Add(new PDMDbProperty(nameof({1}), \"{2}\", \"{3}\", {4}, \"{5}\", {6}, {7}, {8}, \"{9}\"));"//, {9}
-                        //            , table.Name, column.Name, column.Code, column.Comment, column.Primary.ToString().ToLower(), column.DataType, column.Length, column.Precision, column.Mandatory.ToString().ToLower(), column.DefaultValue);//, column.DefaultValue
-                        //    }
-                        //});
-                        sb.AppendConstructor("public", table.Name, "", "", () =>
-                        {
-                        });
-                        sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
-                        {
-                        });
-                    });
-                    sb.AppendLine();
-                    sb.AppendMethods(() =>
-                    {
-                        sb.AppendMethod("public override void", "Init", "IDataReader reader", () =>
-                        {
-                            foreach (Column column in table.Columns)
-                            {
-                                if (column.IsEnumField())
-                                {
-                                    if (column.Mandatory)
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
-                                        sb.AppendLine(CGenerate.ContentLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
-                                        sb.AppendLine(CGenerate.ContentLS + "}");
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (column.Mandatory)
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = "
-                                            + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
-                                            + ";");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
-                                        sb.AppendLine(CGenerate.ContentLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                            + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
-                                            + ";");
-                                        sb.AppendLine(CGenerate.ContentLS + "}");
-                                    }
-                                }
-                            }
-                        });
-                        sb.AppendMethod("public override void", "Init", "IDataReader reader, List<string> fields", () =>
-                        {
-                            foreach (Column column in table.Columns)
-                            {
-                                sb.AppendLine(CGenerate.ContentLS + "if (fields.Contains(nameof(" + column.Name + ")))");
-                                sb.AppendLine(CGenerate.ContentLS + "{");
-                                if (column.IsEnumField())
-                                {
-                                    if (column.Mandatory)
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (column.Mandatory)
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                            + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
-                                            + ";");
-                                    }
-                                    else
-                                    {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                            + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
-                                            + ";");
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
-                                    }
-                                }
-                                sb.AppendLine(CGenerate.ContentLS + "}");
-                            }
-                        });
-                        sb.AppendMethod("public override string", "GetTableName", "", () =>
-                        {
-                            sb.AppendLine(CGenerate.ContentLS + "return nameof(" + table.Name + ");");
-                        });
-                    });
-                });
+                Directory.CreateDirectory(targetDirectoryPath);
+            }
+            File.WriteAllText(targetFilePath, sb.ToString());
+            return true;
+        }
+        bool GenerateDomainEntity(GenerateConfig config, Table table)
+        {
+            //代码生成
+            string targetDirectoryPath = EGenerateTargetType.DomainEntities.GetDirectoryPath(config.RootPath, table.Name);
+            string targetFilePath = EGenerateTargetType.DomainEntities.GetFilePath(targetDirectoryPath, table.Name);
+            string targetNamespace = EGenerateTargetType.DomainEntities.GetNamespace(config.RootNamespace);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendUsings(EGenerateTargetType.DomainEntities.GetReferences());
+            sb.AppendLine();
+            CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
+            {
+                sb.AppendClass(false, "public static", table.Name, "Ex", () =>
+                 {
+                     sb.AppendMethod("//public static void", "Sample", "this " + table.Name + " " + table.Name.ToParameterFormat(), () =>
+                          {
+                          }, true);
+                 });
             });
             //输出代码
             if (!Directory.Exists(targetDirectoryPath))
@@ -563,6 +463,130 @@ namespace VL.ORMCodeGenerator.Generators
             File.WriteAllText(targetFilePath, sb.ToString());
             return true;
         }
+
+        private static void AppendClassContent(GenerateConfig config, Table table, StringBuilder sb)
+        {
+            sb.AppendProperties(() =>
+            {
+                foreach (Column column in table.Columns)
+                {
+                    if (config.IsSupportWCF)
+                    {
+                        sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
+                    }
+                    string dataType;
+                    if (column.IsEnumField())
+                    {
+                        dataType = column.GetEnumType();
+                    }
+                    else
+                    {
+                        dataType = DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataType(column.Length, column.Precision);
+                    }
+                    sb.AppendLine(CGenerate.MethodLS + "public" + " " + dataType + (column.IsNullableField() ? "?" : "") + " " + column.Name + " { get; set; }");
+                }
+            });
+            sb.AppendLine();
+            sb.AppendConstructors(() =>
+            {
+                sb.AppendConstructor("public", table.Name, "", "", () =>
+                {
+                });
+                sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
+                {
+                });
+            });
+            sb.AppendLine();
+            sb.AppendMethods(() =>
+            {
+                sb.AppendMethod("public override void", "Init", "IDataReader reader", () =>
+                {
+                    foreach (Column column in table.Columns)
+                    {
+                        if (column.IsEnumField())
+                        {
+                            if (column.Mandatory)
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
+                            }
+                            else
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
+                                sb.AppendLine(CGenerate.ContentLS + "{");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
+                                sb.AppendLine(CGenerate.ContentLS + "}");
+                            }
+
+                        }
+                        else
+                        {
+                            if (column.Mandatory)
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = "
+                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + ";");
+                            }
+                            else
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
+                                sb.AppendLine(CGenerate.ContentLS + "{");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + ";");
+                                sb.AppendLine(CGenerate.ContentLS + "}");
+                            }
+                        }
+                    }
+                });
+                sb.AppendMethod("public override void", "Init", "IDataReader reader, List<string> fields", () =>
+                {
+                    foreach (Column column in table.Columns)
+                    {
+                        sb.AppendLine(CGenerate.ContentLS + "if (fields.Contains(nameof(" + column.Name + ")))");
+                        sb.AppendLine(CGenerate.ContentLS + "{");
+                        if (column.IsEnumField())
+                        {
+                            if (column.Mandatory)
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
+                            }
+                            else
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = (" + column.GetEnumType() + ")Enum.Parse(typeof(" + column.GetEnumType() + "), reader[nameof(this." + column.Name + ")].ToString());");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                            }
+
+                        }
+                        else
+                        {
+                            if (column.Mandatory)
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + ";");
+                            }
+                            else
+                            {
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = "
+                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + ";");
+                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                            }
+                        }
+                        sb.AppendLine(CGenerate.ContentLS + "}");
+                    }
+                });
+                sb.AppendMethod("public override string", "GetTableName", "", () =>
+                {
+                    sb.AppendLine(CGenerate.ContentLS + "return nameof(" + table.Name + ");");
+                });
+            });
+        }
+
         bool GenerateEntityOperator(GenerateConfig config, Table table, OperatorType operatorType)
         {
             //代码生成

@@ -12,6 +12,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
     public enum EGenerateTargetType
     {
         Entities,
+        DomainEntities,
         EntityProperties,
         EntityOperators,
         References,
@@ -24,14 +25,16 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         {
             switch (targetType)
             {
+                case EGenerateTargetType.DomainEntities:
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.DomainEntities.ToString(), tableName);
                 case EGenerateTargetType.Entities:
                 case EGenerateTargetType.EntityProperties:
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Entities.ToString(), tableName);
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Entities.ToString(), tableName);
                 case EGenerateTargetType.Enums:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EDirectoryNames.Enums.ToString());
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Enums.ToString());
                 default:
                     throw new NotImplementedException();
             }
@@ -42,6 +45,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.Entities:
+                case EGenerateTargetType.DomainEntities:
                     filePath= Path.Combine(directoryPath, tableName);
                     break;
                 case EGenerateTargetType.EntityProperties:
@@ -69,6 +73,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.Entities:
+                case EGenerateTargetType.DomainEntities:
                 case EGenerateTargetType.EntityProperties:
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
@@ -126,6 +131,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfORMQueryOperators);
                     break;
                 case EGenerateTargetType.Enums:
+                case EGenerateTargetType.DomainEntities:
                     break;
                 default:
                     throw new NotImplementedException();
