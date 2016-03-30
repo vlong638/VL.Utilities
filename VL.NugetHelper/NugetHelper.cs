@@ -273,16 +273,13 @@ namespace VL.NugetHelper
                 //获取cmd窗口的输出信息
                 StringBuilder sb = new StringBuilder();
                 string output;
-                try
+                while ((output = p.StandardOutput.ReadLine()) != null)
                 {
-                    while ((output = p.StandardOutput.ReadLine()) != null)
-                    {
-                        sb.AppendLine(output);
-                    }
+                    sb.AppendLine(output);
                 }
-                catch (Exception ex)
+                while ((output = p.StandardError.ReadLine()) != null)
                 {
-                    string error = ex.ToString();
+                    sb.AppendLine(output);
                 }
                 p.StandardOutput.Close();
                 p.WaitForExit();
