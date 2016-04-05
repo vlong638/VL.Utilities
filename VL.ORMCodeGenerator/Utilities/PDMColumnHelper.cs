@@ -25,7 +25,7 @@ namespace VL.ORMCodeGenerator.Utilities
         }
         public static bool IsEnumField(this Column column)
         {
-            return column.GetExtendedAttributeText("Enum") != "<None>";
+            return (!string.IsNullOrEmpty(column.GetExtendedAttributeText("Enum"))) && column.GetExtendedAttributeText("Enum") != "<None>";
         }
         public static string GetEnumType(this Column column)
         {

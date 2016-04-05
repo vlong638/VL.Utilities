@@ -26,7 +26,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.DomainEntities:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.DomainEntities.ToString(), tableName);
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.DomainEntities.ToString());
                 case EGenerateTargetType.Entities:
                 case EGenerateTargetType.EntityProperties:
                 case EGenerateTargetType.EntityOperators:
@@ -101,6 +101,11 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             }
             switch (targetType)
             {
+                case EGenerateTargetType.DomainEntities:
+                    result.Add("System");
+                    result.Add(NamespaceOfDASObjects);
+                    result.Add(config.RootNamespace + ".Enums");
+                    break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
@@ -131,7 +136,6 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfORMQueryOperators);
                     break;
                 case EGenerateTargetType.Enums:
-                case EGenerateTargetType.DomainEntities:
                     break;
                 default:
                     throw new NotImplementedException();

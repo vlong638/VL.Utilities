@@ -29,6 +29,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "VL.NugetServer(2)", "VL.Nug
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VL.ConfigGenerator", "VL.ConfigGenerator\VL.ConfigGenerator.csproj", "{D029A25B-C193-40CA-AA33-3C2957501F6D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{A712B49F-DA54-4B47-AA2C-DEDAB5AD188E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A712B49F-DA54-4B47-AA2C-DEDAB5AD188E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{A712B49F-DA54-4B47-AA2C-DEDAB5AD188E}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{D029A25B-C193-40CA-AA33-3C2957501F6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D029A25B-C193-40CA-AA33-3C2957501F6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D029A25B-C193-40CA-AA33-3C2957501F6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D029A25B-C193-40CA-AA33-3C2957501F6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

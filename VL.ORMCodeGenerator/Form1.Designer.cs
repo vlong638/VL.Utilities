@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.ctlDbType = new System.Windows.Forms.ComboBox();
             this.ctlCSharpEntityWcfEnabled = new System.Windows.Forms.CheckBox();
@@ -42,8 +43,7 @@
             this.lblCSharpEntityNameSpace = new System.Windows.Forms.Label();
             this.btnCSharpEntityBrowse = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.myProgressBar1 = new MyProgressBar();
-            this.button1 = new System.Windows.Forms.Button();
+            this.myProgressBar1 = new VL.ORMCodeGenerator.MyProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -55,8 +55,9 @@
             this.ctlSourcePdmFile.Name = "ctlSourcePdmFile";
             this.ctlSourcePdmFile.Size = new System.Drawing.Size(673, 20);
             this.ctlSourcePdmFile.TabIndex = 12;
-            this.ctlSourcePdmFile.SelectedIndexChanged += new System.EventHandler(this.ctlSourcePdmFile_SelectedIndexChanged);
-            this.ctlSourcePdmFile.TextChanged += new System.EventHandler(this.ctlSourcePdmFile_SelectedIndexChanged);
+            this.ctlSourcePdmFile.SelectedIndexChanged += new System.EventHandler(this.ctlSourcePdmFile_SelectedIndexChanged_1);
+            this.ctlSourcePdmFile.TextChanged += new System.EventHandler(this.ctlSourcePdmFile_TextChanged);
+            this.ctlSourcePdmFile.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ctlSourcePdmFile_KeyDown);
             // 
             // btnBrowse
             // 
@@ -79,8 +80,8 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(-1, 38);
@@ -108,6 +109,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "C# Entity";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(247, 233);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(101, 23);
+            this.button1.TabIndex = 21;
+            this.button1.Text = "保存配置";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.SaveConfig_Click);
             // 
             // label3
             // 
@@ -171,8 +182,6 @@
             this.ctlCSharpEntityOutputFile.Name = "ctlCSharpEntityOutputFile";
             this.ctlCSharpEntityOutputFile.Size = new System.Drawing.Size(586, 20);
             this.ctlCSharpEntityOutputFile.TabIndex = 15;
-            this.ctlCSharpEntityOutputFile.SelectedIndexChanged += new System.EventHandler(this.ctlCSharpEntityOutputFile_SelectedIndexChanged);
-            this.ctlCSharpEntityOutputFile.TextChanged += new System.EventHandler(this.ctlCSharpEntityOutputFile_SelectedIndexChanged);
             // 
             // lblCSharpEntityNameSpace
             // 
@@ -204,23 +213,13 @@
             // 
             // myProgressBar1
             // 
-            this.myProgressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.myProgressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.myProgressBar1.Location = new System.Drawing.Point(-1, 439);
             this.myProgressBar1.Name = "myProgressBar1";
             this.myProgressBar1.Size = new System.Drawing.Size(825, 21);
             this.myProgressBar1.TabIndex = 14;
             this.myProgressBar1.Visible = false;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(247, 233);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(101, 23);
-            this.button1.TabIndex = 21;
-            this.button1.Text = "保存配置";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.SaveConfig_Click);
             // 
             // Form1
             // 
