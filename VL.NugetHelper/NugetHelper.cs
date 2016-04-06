@@ -208,9 +208,9 @@ namespace VL.NugetHelper
                 //sb.AppendFormat(@"    <releaseNotes>{0}</releaseNotes>" + System.Environment.NewLine);
                 sb.AppendFormat(@"    <copyright>{0}</copyright>" + System.Environment.NewLine, assembly.Copyright);
                 sb.AppendFormat(@"    <tags>{0}</tags>" + System.Environment.NewLine, project.Notes);
-                sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
-                sb.AppendFormat(@"      <dependency id=""SampleDependency"" version=""1.0"" />" + System.Environment.NewLine);
-                sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
+                //sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
+                //sb.AppendFormat(@"      <dependency id=""SampleDependency"" version=""1.0"" />" + System.Environment.NewLine);
+                //sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
                 sb.AppendFormat(@"  </metadata>" + System.Environment.NewLine);
                 sb.AppendFormat(@"</package>" + System.Environment.NewLine);
                 return sb;

@@ -58,7 +58,7 @@ namespace VL.Common.Testing.Objects
         {
             foreach (var menuItem in menuItems)
             {
-                if (menuItem.Key == key)
+                if (menuItem.Key.ToLower() == key.ToLower())
                 {
                     menuItem.Action();
                 }
@@ -68,7 +68,7 @@ namespace VL.Common.Testing.Objects
         {
             foreach (var menuItem in menuItems)
             {
-                if (menuItem.Key == key)
+                if (menuItem.Key.ToLower() == key.ToLower())
                 {
                     return true;
                 }
