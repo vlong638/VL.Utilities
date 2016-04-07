@@ -65,6 +65,8 @@
             this.tb_NugetServer = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.tb_Tag = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.tb_DescriptionEx = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Generate
@@ -197,9 +199,8 @@
             // tb_Description
             // 
             this.tb_Description.Location = new System.Drawing.Point(109, 274);
-            this.tb_Description.Multiline = true;
             this.tb_Description.Name = "tb_Description";
-            this.tb_Description.Size = new System.Drawing.Size(387, 129);
+            this.tb_Description.Size = new System.Drawing.Size(387, 21);
             this.tb_Description.TabIndex = 16;
             // 
             // label6
@@ -388,11 +389,31 @@
             this.tb_Tag.Size = new System.Drawing.Size(144, 21);
             this.tb_Tag.TabIndex = 38;
             // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(19, 304);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(83, 12);
+            this.label17.TabIndex = 41;
+            this.label17.Text = "DescriptionEx";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // tb_DescriptionEx
+            // 
+            this.tb_DescriptionEx.Location = new System.Drawing.Point(109, 301);
+            this.tb_DescriptionEx.Multiline = true;
+            this.tb_DescriptionEx.Name = "tb_DescriptionEx";
+            this.tb_DescriptionEx.Size = new System.Drawing.Size(387, 102);
+            this.tb_DescriptionEx.TabIndex = 40;
+            // 
             // NugetHelper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 568);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.tb_DescriptionEx);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.tb_Tag);
             this.Controls.Add(this.label14);
@@ -476,6 +497,8 @@
         private System.Windows.Forms.TextBox tb_NugetServer;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox tb_Tag;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox tb_DescriptionEx;
     }
 }
 

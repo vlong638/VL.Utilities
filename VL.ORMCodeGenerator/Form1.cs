@@ -41,7 +41,6 @@ namespace VL.ORMCodeGenerator
             string currentPdmFile = ctlSourcePdmFile.Text;
             ctlSourcePdmFile.DataSource = GenerateConfigs.Items.Select(c => c.PDMFilePath).ToList();
             ctlSourcePdmFile.Text = currentPdmFile;
-            //ctlSourcePdmFile.SelectedItem = currentPdmFile;
             GenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == currentPdmFile);
             ctlSourcePdmFile.Refresh();
             if (GenerateConfig != null)
@@ -193,7 +192,6 @@ namespace VL.ORMCodeGenerator
             if (e.KeyData == Keys.Delete)
             {
                 GenerateConfigs.Items.Remove(GenerateConfig);
-
                 UpdateSourcePdmFile();
             }
             if (e.KeyData == Keys.Enter)

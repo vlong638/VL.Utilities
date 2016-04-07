@@ -309,8 +309,10 @@ namespace VL.NugetHelper
                     //Spec
                     string tempVersion = GetTempVersion();
                     AssemlyConfigEntity.Version = tempVersion;
+                    AssemlyConfigEntity.Description = tb_Description.Text + Environment.NewLine + tb_DescriptionEx.Text;
                     manager.GenerateNugetSpec(project, AssemlyConfigEntity);
                     AssemlyConfigEntity.Version = tb_Version.Text;
+                    AssemlyConfigEntity.Description = tb_Description.Text;
                     //Pack
                     var projectFileFullPath = manager.GetProjectFileFullPath(project.RootPath);
                     if (string.IsNullOrEmpty(projectFileFullPath))

@@ -18,6 +18,7 @@ namespace VL.ORMCodeGenerator.Utilities
             {
                 case "numeric":
                 case "varchar":
+                case "nvarchar":
                 case "datetime":
                 case "uniqueidentifier":
                     return (PDMDataType)Enum.Parse(typeof(PDMDataType), pdmDataType);
@@ -30,6 +31,7 @@ namespace VL.ORMCodeGenerator.Utilities
             switch (pdmDataType)
             {
                 case PDMDataType.varchar:
+                case PDMDataType.nvarchar:
                     return nameof(String);
                 case PDMDataType.numeric:
                     if (precision > 0)
@@ -65,6 +67,7 @@ namespace VL.ORMCodeGenerator.Utilities
             switch (pdmDataType)
             {
                 case PDMDataType.varchar:
+                case PDMDataType.nvarchar:
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
                     return string.Format("Convert.To{0}({1})", pdmDataType.GetCSharpDataType(length, precision), value);
@@ -79,6 +82,7 @@ namespace VL.ORMCodeGenerator.Utilities
             switch (dataType)
             {
                 case PDMDataType.varchar:
+                case PDMDataType.nvarchar:
                     return false;
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
