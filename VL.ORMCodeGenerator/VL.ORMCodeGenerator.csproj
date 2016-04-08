@@ -105,7 +105,6 @@
   <ItemGroup>
     <Content Include="DLLs\Interop.PdCommon.dll" />
     <Content Include="DLLs\Interop.PdPDM.dll" />
-    <Content Include="设计蓝图.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
