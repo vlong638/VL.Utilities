@@ -90,12 +90,6 @@
     <Compile Include="Generators\GenerateFacade.cs" />
     <Compile Include="Generators\IPDMGenerator.cs" />
     <Compile Include="Generators\PDMModelGenerator.cs" />
-    <Compile Include="MyProgressBar.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="MyProgressBar.Designer.cs">
-      <DependentUpon>MyProgressBar.cs</DependentUpon>
-    </Compile>
     <Compile Include="Objects\Constraits\CGenerate.cs" />
     <Compile Include="Objects\Entities\GenerateConfig.cs" />
     <Compile Include="Objects\Enums\EDirectoryNames.cs" />

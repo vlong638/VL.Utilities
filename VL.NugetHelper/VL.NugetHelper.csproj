@@ -76,6 +76,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="NugetPackages\log4net.2.0.5.nupkg" />
     <None Include="NugetPackages\mysql.data.6.9.8.nupkg" />
     <None Include="NugetPackages\newtonsoft.json.8.0.3.nupkg" />
     <None Include="NugetPackages\oracle.manageddataaccess.12.1.2400.nupkg" />
