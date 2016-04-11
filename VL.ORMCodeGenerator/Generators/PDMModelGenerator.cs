@@ -704,7 +704,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #region U
                             if ((operatorType & OperatorType.U) > 0)
                             {
-                                sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, List<string> fields", () =>
+                                sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "UpdateBuilder builder = new UpdateBuilder();");
@@ -730,7 +730,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
                                 });
-                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, List<string> fields", () =>
+                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
@@ -767,7 +767,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #region R
                             if ((operatorType & OperatorType.R) > 0)
                             {
-                                sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, List<string> fields", () =>
+                                sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
@@ -785,7 +785,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
                                 });
-                                sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, List<string> fields", () =>
+                                sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
