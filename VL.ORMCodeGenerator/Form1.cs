@@ -165,6 +165,11 @@ namespace VL.ORMCodeGenerator
                 MessageBox.Show("请输入pdm文件路径");
                 return false;
             }
+            if (GenerateConfigs.Items.FirstOrDefault(c=>c.PDMFilePath==GenerateConfig.PDMFilePath)==null)
+            {
+                GenerateConfig = new GenerateConfig();
+                GenerateConfigs.Items.Add(GenerateConfig);
+            }
             GenerateConfig.PDMFilePath = cb_source.Text;
             GenerateConfig.RootPath = tb_target.Text;
             GenerateConfig.RootNamespace = tb_namespace.Text;

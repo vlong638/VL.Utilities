@@ -11,6 +11,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
     /// </summary>
     public enum EGenerateTargetType
     {
+        Objects,
         Entities,
         DomainEntities,
         EntityProperties,
@@ -78,9 +79,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return rootNamespace + "." + EGenerateTargetType.Entities.ToString();
+                    return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Entities.ToString();
                 case EGenerateTargetType.Enums:
-                    return rootNamespace + "." + EGenerateTargetType.Enums.ToString();
+                    return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Enums.ToString();
                 default:
                     throw new NotImplementedException();
             }
@@ -104,14 +105,16 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.DomainEntities:
                     result.Add("System");
                     result.Add(NamespaceOfDASObjects);
-                    result.Add(config.RootNamespace + ".Enums");
+                    result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
+                    result.Add(NamespaceOfORMQueryBuilders);
+                    result.Add(NamespaceOfORMQueryOperators);
                     break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
                     result.Add(NamespaceOfORMObjects);
-                    result.Add(config.RootNamespace + ".Enums");
+                    result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
                     break;
                 case EGenerateTargetType.EntityProperties:
                     result.Add(NamespaceOfORMObjects);
