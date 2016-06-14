@@ -93,7 +93,7 @@ namespace VL.ORMCodeGenerator.Objects.Entities
     /// <summary>
     /// 生成相关参数
     /// </summary>
-    public class GenerateConfigs : XConfigEntity
+    public class GenerateConfigs : XMLConfigEntity
     {
         public List<GenerateConfig> Items = new List<GenerateConfig>();
 
@@ -104,9 +104,9 @@ namespace VL.ORMCodeGenerator.Objects.Entities
         {
         }
 
-        public override XElement ToXElement()
+        public override IEnumerable<XElement> GetXElements()
         {
-            XElement root = new XElement(nameof(GenerateConfigs));
+            List<XElement> elements = new List<XElement>();
             foreach (var item in Items)
             {
                 XElement configItems = new XElement(nameof(GenerateConfig)
@@ -115,9 +115,9 @@ namespace VL.ORMCodeGenerator.Objects.Entities
                     , new XAttribute(nameof(GenerateConfig.RootNamespace), item.RootNamespace)
                     , new XAttribute(nameof(GenerateConfig.DatabaseType), (int)item.DatabaseType)
                     , new XAttribute(nameof(GenerateConfig.IsSupportWCF), item.IsSupportWCF));
-                root.Add(configItems);
+                elements.Add(configItems);
             }
-            return root;
+            return elements;
         }
         protected override void Load(XDocument doc)
         {

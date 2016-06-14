@@ -16,6 +16,7 @@ namespace VL.ORMCodeGenerator.Utilities
             int.TryParse(match.Groups[5].Value, out precision);
             switch (pdmDataType)
             {
+                case "boolean":
                 case "numeric":
                 case "varchar":
                 case "nvarchar":
@@ -58,6 +59,8 @@ namespace VL.ORMCodeGenerator.Utilities
                     return nameof(DateTime);
                 case PDMDataType.uniqueidentifier:
                     return nameof(Guid);
+                case PDMDataType.boolean:
+                    return nameof(Boolean);
                 default:
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
             }
@@ -70,6 +73,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.nvarchar:
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
+                case PDMDataType.boolean:
                     return string.Format("Convert.To{0}({1})", pdmDataType.GetCSharpDataType(length, precision), value);
                 case PDMDataType.uniqueidentifier:
                     return string.Format("new Guid({0}.ToString())", value);
@@ -87,6 +91,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
                 case PDMDataType.uniqueidentifier:
+                case PDMDataType.boolean:
                     return true;
                 default:
                     throw new NotImplementedException("未实现该类型的空类型检测" + dataType.ToString());

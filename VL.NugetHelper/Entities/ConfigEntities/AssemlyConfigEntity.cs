@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using VL.Common.Configurator.Objects;
+using VL.Common.Configurator.Objects.ConfigEntities;
 
 namespace VL.NugetHelper.Entities.ConfigEntities
 {
@@ -38,7 +39,21 @@ namespace VL.NugetHelper.Entities.ConfigEntities
         public string FileVersion { set; get; }
         public List<string> Contents { set; get; }
 
-        public AssemlyConfigEntity(string fileName, string directoryPath, bool isInitFromFile = false) : base(fileName, directoryPath, isInitFromFile)
+        public AssemlyConfigEntity(string fileName) : base(fileName)
+        {
+            Title = "";
+            Description = "";
+            Configuration = "";
+            Company = "";
+            Product = "";
+            Copyright = "";
+            Trademark = "";
+            Culture = "";
+            Version = "";
+            FileVersion = "";
+            Contents = new List<string>();
+        }
+        public AssemlyConfigEntity(string fileName, string directoryPath) : base(fileName, directoryPath)
         {
             Title = "";
             Description = "";
