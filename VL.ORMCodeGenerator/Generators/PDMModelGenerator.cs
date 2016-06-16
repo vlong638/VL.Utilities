@@ -245,8 +245,8 @@ namespace VL.ORMCodeGenerator.Generators
                                             {
                                                 sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
-                                                var childTable = reference.ChildTable as Table;
-                                                foreach (Column column in childTable.Columns)
+                                                var parentTable = reference.ParentTable as Table;
+                                                foreach (Column column in parentTable.Columns)
                                                 {
                                                     if (column.Primary)
                                                     {
@@ -799,7 +799,10 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             //TODO 这里应该支持多键主键
                                             sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.In, Ids));");
+                                            sb.AppendLine(CGenerate.ContentLS + "if (Ids.Count() != 0)");
+                                            sb.AppendLine(CGenerate.ContentLS + "{");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.In, Ids));");
+                                            sb.AppendLine(CGenerate.ContentLS + "}");
                                             break;
                                         }
                                     }
