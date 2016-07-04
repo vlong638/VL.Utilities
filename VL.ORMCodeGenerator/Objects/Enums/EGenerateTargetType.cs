@@ -92,7 +92,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         public static string NamespaceOfDASObjects = "VL.Common.DAS.Objects";
         public static string NamespaceOfORMObjects = "VL.Common.ORM.Objects";
         public static string NamespaceOfORMQueryBuilders = "VL.Common.ORM.Utilities.QueryBuilders";
-        public static string NamespaceOfORMQueryOperators = "VL.Common.ORM.Utilities.QueryOperators";
+        public static string NamespaceOfORMQueryOperators = "VL.Common.Protocol.IService.IORM";
         public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config=null)
         {
             var result= new List<string>();

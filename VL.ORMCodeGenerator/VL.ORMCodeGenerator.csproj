@@ -44,6 +44,10 @@
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>DLLs\Interop.PdPDM.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
       <Private>True</Private>
@@ -75,8 +79,16 @@
       <HintPath>..\packages\VL.Common.DAS.1.0.1604131525.1\lib\net452\VL.Common.DAS.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="VL.Common.ORM, Version=1.0.6011.28538, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VL.Common.ORM.1.0.1606161551.1\lib\net452\VL.Common.ORM.dll</HintPath>
+    <Reference Include="VL.Common.Logger, Version=1.0.5946.30246, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VL.Common.Logger.1.0.1604121655.1\lib\net452\VL.Common.Logger.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VL.Common.ORM, Version=1.0.6025.30885, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VL.Common.ORM.1.0.1606301710.1\lib\net452\VL.Common.ORM.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="VL.Common.Protocol, Version=1.0.6025.30490, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VL.Common.Protocol.1.0.1606301707.1\lib\net452\VL.Common.Protocol.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

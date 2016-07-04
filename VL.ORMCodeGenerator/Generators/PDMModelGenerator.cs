@@ -5,6 +5,7 @@ using System.Text;
 using VL.Common.ORM.Objects;
 using VL.Common.ORM.Utilities.QueryBuilders;
 using VL.Common.ORM.Utilities.QueryOperators;
+using VL.Common.Protocol.IService.IORM;
 using VL.ORMCodeGenerator.Objects.Constraits;
 using VL.ORMCodeGenerator.Objects.Entities;
 using VL.ORMCodeGenerator.Objects.Enums;
@@ -182,7 +183,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         case "0..1"://1...1或0..1关联以直联形式存在, 比如xia挂靠在了class1下,那么xia有着class1的Id
                                             sb.AppendMethod("public static bool", "Fetch" + childTableName, "this " + parentTableName + " " + parentTableToParameter + ", DbSession session", () =>
                                             {
-                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                                 var childTable = reference.ChildTable as Table;
                                                 foreach (Column column in childTable.Columns)
@@ -193,7 +194,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IDbQueryOperator.GetQueryOperator(session)."
+                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IORMProvider.GetQueryOperator(session)."
                                                     + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(session, query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + parentTableToParameter + "." + childTableToProperty + " != null;");
                                             });
@@ -201,7 +202,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         case "1..1":
                                             sb.AppendMethod("public static bool", "Fetch" + childTableName, "this " + parentTableName + " " + parentTableToParameter + ", DbSession session", () =>
                                             {
-                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                                 var childTable = reference.ChildTable as Table;
                                                 foreach (Column column in childTable.Columns)
@@ -212,7 +213,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IDbQueryOperator.GetQueryOperator(session)."
+                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IORMProvider.GetQueryOperator(session)."
                                                     + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(session, query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childTableToProperty + " == null)");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
@@ -224,7 +225,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         case "0..*"://1..*或0..*关联则是以反向关联形式存在 即Class对应的Students 从Student表获取ClassId对应的一批数据
                                             sb.AppendMethod("public static bool", "Fetch" + childTableToProperty.ToPluralFormat(), "this " + parentTableName + " " + parentTableToParameter + ", DbSession session", () =>
                                             {
-                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                                 var parentTable = reference.ParentTable as Table;
                                                 foreach (Column column in parentTable.Columns)
@@ -235,7 +236,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IDbQueryOperator.GetQueryOperator(session)."
+                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IORMProvider.GetQueryOperator(session)."
                                                          + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(session, query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count > 0;");
                                             });
@@ -243,7 +244,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         case "1..*":
                                             sb.AppendMethod("public static bool", "Fetch" + childTableToProperty.ToPluralFormat(), "this " + parentTableName + " " + parentTableToParameter + ", DbSession session", () =>
                                             {
-                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                                 var parentTable = reference.ParentTable as Table;
                                                 foreach (Column column in parentTable.Columns)
@@ -254,7 +255,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IDbQueryOperator.GetQueryOperator(session)."
+                                                sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IORMProvider.GetQueryOperator(session)."
                                                     + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(session, query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count == 0)");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
@@ -283,7 +284,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //childTableName Student
                                                 //parentTableName R
                                                 //subChildTableName TCourses
-                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                                sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder subSelect = new SelectBuilder();");
                                                 var subChildTable = subReference.ChildTable as Table;
@@ -330,7 +331,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //    }
                                                 //}
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + " = IDbQueryOperator.GetQueryOperator(session).SelectAll<" + subChildTableName + ">(session, query);");
+                                                sb.AppendLine(CGenerate.ContentLS + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + " = IORMProvider.GetQueryOperator(session).SelectAll<" + subChildTableName + ">(session, query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + ".Count == 0;");
                                             });
                                             //TODO
@@ -347,8 +348,8 @@ namespace VL.ORMCodeGenerator.Generators
                                             //            sb.AppendLine(GConstraints.ContentLS + "query.SelectBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
                                             //        }
                                             //    }
-                                            //    sb.AppendLine(GConstraints.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IDbQueryOperator.GetQueryOperator(session)."
-                                            //        + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(session, query);");
+                                            //    sb.AppendLine(GConstraints.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IORMProvider.GetQueryOperator(session)."
+                                            //        + nameof(IORMProvider.SelectAll) + "<" + childTableName + ">(session, query);");
                                             //    sb.AppendLine(GConstraints.ContentLS + "return " + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count > 0;");
                                             //});
                                         }
@@ -580,10 +581,14 @@ namespace VL.ORMCodeGenerator.Generators
                         sb.AppendLine(CGenerate.ContentLS + "}");
                     }
                 });
-                sb.AppendMethod("public override string", "GetTableName", "", () =>
-                {
-                    sb.AppendLine(CGenerate.ContentLS + "return nameof(" + table.Name + ");");
-                });
+                sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
+                sb.AppendLine(CGenerate.MethodLS + "public override string TableName");
+                sb.AppendLine(CGenerate.MethodLS + "{");
+                sb.AppendLine(CGenerate.ContentLS + "get");
+                sb.AppendLine(CGenerate.ContentLS + "{");
+                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "return nameof(" + table.Name + ");");
+                sb.AppendLine(CGenerate.ContentLS + "}");
+                sb.AppendLine(CGenerate.MethodLS + "}");
             });
         }
 
@@ -610,7 +615,7 @@ namespace VL.ORMCodeGenerator.Generators
                             {
                                 sb.AppendMethod("public static bool", "DbDelete", "this " + table.Name + " entity, DbSession session", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (column.Primary)
@@ -618,11 +623,11 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
                                         }
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbDelete", "this List<" + table.Name + "> entities, DbSession session", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (column.Primary)
@@ -633,7 +638,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             break;
                                         }
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
                                 });
                             }
                             #endregion
@@ -643,7 +648,7 @@ namespace VL.ORMCodeGenerator.Generators
                             {
                                 sb.AppendMethod("public static bool", "DbInsert", "this " + table.Name + " entity, DbSession session", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "InsertBuilder builder = new InsertBuilder();");
                                     foreach (Column column in table.Columns)
                                     {
@@ -665,11 +670,11 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.InsertBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Insert<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Insert<" + table.Name + ">(session, query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbInsert", "this List<" + table.Name + "> entities, DbSession session", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "InsertBuilder builder = new InsertBuilder();");
@@ -696,7 +701,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.InsertBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).InsertAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).InsertAll<" + table.Name + ">(session, query);");
                                 });
                             }
                             #endregion
@@ -706,7 +711,7 @@ namespace VL.ORMCodeGenerator.Generators
                             {
                                 sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "UpdateBuilder builder = new UpdateBuilder();");
                                     foreach (Column column in table.Columns)
                                     {
@@ -728,11 +733,11 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "UpdateBuilder builder = new UpdateBuilder();");
@@ -755,7 +760,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.UpdateBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).UpdateAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).UpdateAll<" + table.Name + ">(session, query);");
                                 });
                             }
                             #endregion
@@ -769,7 +774,7 @@ namespace VL.ORMCodeGenerator.Generators
                             {
                                 sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
@@ -783,11 +788,11 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
                                 });
                                 sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
                                 {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IDbQueryBuilder) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
@@ -807,7 +812,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IDbQueryOperator.GetQueryOperator(session).SelectAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).SelectAll<" + table.Name + ">(session, query);");
                                 });
                             }
                             #endregion
