@@ -449,12 +449,18 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
             {
-                sb.AppendClass(false, "public static", table.Name, "Ex", () =>
-                 {
-                     sb.AppendMethod("//public static void", "Sample", "this " + table.Name + " " + table.Name.ToParameterFormat(), () =>
-                          {
-                          }, true);
-                 });
+                //sb.AppendClass(false, "public static", table.Name, "Ex", () =>
+                //{
+                //    sb.AppendMethod("//public static void", "Sample", "this " + table.Name + " " + table.Name.ToParameterFormat(), () =>
+                //    {
+                //    }, true);
+                //});
+                sb.AppendClass(false, "public partial", table.Name, "", () =>
+                {
+                    sb.AppendMethod("//public void", "Create", "DbSession session, " + table.Name + " " + table.Name.ToParameterFormat(), () =>
+                    {
+                    });
+                });
             });
             //输出代码
             if (!Directory.Exists(targetDirectoryPath))
@@ -713,41 +719,24 @@ namespace VL.ORMCodeGenerator.Generators
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "UpdateBuilder builder = new UpdateBuilder();");
+                                    //Wheres
                                     foreach (Column column in table.Columns)
                                     {
-                                        //Wheres
                                         if (column.Primary)
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
                                         }
                                     }
-                                    foreach (Column column in table.Columns)
-                                    {
-                                        //Values
-                                        if (!column.Primary)
-                                        {
-                                            sb.AppendLine(CGenerate.ContentLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
-                                            sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
-                                            sb.AppendLine(CGenerate.ContentLS + "}");
-                                        }
-                                    }
-                                    sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
-                                });
-                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
-                                {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
-                                    sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
+                                    //Values
+                                    sb.AppendLine(CGenerate.ContentLS + "if (fields==null|| fields.Length==0)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "UpdateBuilder builder = new UpdateBuilder();");
                                     foreach (Column column in table.Columns)
                                     {
-                                        if (column.Primary)
-                                        {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
-                                        }
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (!column.Primary)
@@ -758,6 +747,55 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                         }
                                     }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
+                                });
+                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
+                                {
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "UpdateBuilder builder = new UpdateBuilder();");
+                                    //Wheres
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
+                                        }
+                                    }
+                                    //Values
+                                    sb.AppendLine(CGenerate.ContentLS + "if (fields==null|| fields.Length==0)");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (!column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                                        }
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    //foreach (Column column in table.Columns)
+                                    //{
+                                    //    if (!column.Primary)
+                                    //    {
+                                    //        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
+                                    //        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                    //        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                    //        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                                    //    }
+                                    //}
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.UpdateBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).UpdateAll<" + table.Name + ">(session, query);");

@@ -213,10 +213,10 @@ namespace VL.ORMCodeGenerator.Utilities
                 appendMethodsContent();
             });
         }
-        internal static void AppendMethod(this StringBuilder sb, string prefix, string methodName, string parameterString, Action appendMethodContent,bool isAnnotation=false)
+        internal static void AppendMethod(this StringBuilder sb, string prefix, string methodName, string parameterString, Action appendMethodContent)
         {
             sb.AppendFormatLine(CGenerate.MethodLS + "{0} {1}({2})", prefix, methodName, parameterString);
-            if (isAnnotation)
+            if (prefix.StartsWith("//"))
             {
                 sb.AppendLine(CGenerate.MethodLS + "//{");
                 appendMethodContent();
