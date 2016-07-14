@@ -122,6 +122,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfORMObjects);
                     break;
                 case EGenerateTargetType.EntityOperators:
+                    result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDASObjects);

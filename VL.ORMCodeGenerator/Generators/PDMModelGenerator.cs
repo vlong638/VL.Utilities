@@ -672,6 +672,23 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                         else
                                         {
+                                            switch (DataTypeHelper.GetPDMDataType(column.DataType))
+                                            {
+                                                case PDMDataType.varchar:
+                                                case PDMDataType.nvarchar:
+                                                    sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + " == null)");
+                                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(\"缺少必填的参数项值, 参数项: \" + nameof(entity." + column.Name + "));");
+                                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    break;
+                                                case PDMDataType.numeric:
+                                                case PDMDataType.datetime:
+                                                case PDMDataType.uniqueidentifier:
+                                                case PDMDataType.boolean:
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
                                             sb.AppendLine(CGenerate.ContentLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
@@ -702,6 +719,23 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                         else
                                         {
+                                            switch (DataTypeHelper.GetPDMDataType(column.DataType))
+                                            {
+                                                case PDMDataType.varchar:
+                                                case PDMDataType.nvarchar:
+                                                    sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + " == null)");
+                                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(\"缺少必填的参数项值, 参数项: \" + nameof(entity." + column.Name + "));");
+                                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    break;
+                                                case PDMDataType.numeric:
+                                                case PDMDataType.datetime:
+                                                case PDMDataType.uniqueidentifier:
+                                                case PDMDataType.boolean:
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
@@ -766,26 +800,26 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     //Values
-                                    sb.AppendLine(CGenerate.ContentLS + "if (fields==null|| fields.Length==0)");
-                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields==null|| fields.Length==0)");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "}");
-                                    sb.AppendLine(CGenerate.ContentLS + "else");
-                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (!column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "{");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "}");
                                         }
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     //foreach (Column column in table.Columns)
                                     //{
                                     //    if (!column.Primary)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Linq;
 using VL.Common.Configurator.Objects.ConfigEntities;
 using VL.Common.DAS.Objects;
@@ -95,6 +96,7 @@ namespace VL.ORMCodeGenerator.Objects.Entities
     /// </summary>
     public class GenerateConfigs : XMLConfigEntity
     {
+        public string LastestPDMFilePath { set; get; } = "";
         public List<GenerateConfig> Items = new List<GenerateConfig>();
 
         public GenerateConfigs(string fileName) : base(fileName)
@@ -117,6 +119,8 @@ namespace VL.ORMCodeGenerator.Objects.Entities
                     , new XAttribute(nameof(GenerateConfig.IsSupportWCF), item.IsSupportWCF));
                 elements.Add(configItems);
             }
+            XElement lastestPDMFilePathItem = new XElement(nameof(LastestPDMFilePath), LastestPDMFilePath);
+            elements.Add(lastestPDMFilePathItem);
             return elements;
         }
         protected override void Load(XDocument doc)
@@ -133,6 +137,11 @@ namespace VL.ORMCodeGenerator.Objects.Entities
                     DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), configItem.Attribute(nameof(GenerateConfig.DatabaseType)).Value),
                     IsSupportWCF = Convert.ToBoolean(configItem.Attribute(nameof(GenerateConfig.IsSupportWCF)).Value.ToLower()),
                 });
+            }
+            var lastestPDMFilePathItem = doc.Descendants(nameof(LastestPDMFilePath));
+            if (lastestPDMFilePathItem.Count()!=0)
+            {
+                LastestPDMFilePath = lastestPDMFilePathItem.First().Value;
             }
         }
     }

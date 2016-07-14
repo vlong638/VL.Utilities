@@ -39,10 +39,19 @@ namespace VL.ORMCodeGenerator
             GenerateConfigs.Load();
             cb_source.DataSource = GenerateConfigs.Items.Select(c => c.PDMFilePath).ToList();
             cb_source.Refresh();
-            GenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
+            var lastestItem = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == GenerateConfigs.LastestPDMFilePath);
+            if (lastestItem != null)
+            {
+                cb_source.SelectedItem = lastestItem;
+                GenerateConfig = lastestItem;
+            }
+            else
+            {
+                GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
+            }
             if (GenerateConfig != null)
             {
-                //cb_source.Text = GenerateConfig.PDMFilePath;
+                cb_source.Text = GenerateConfig.PDMFilePath;
                 tb_target.Text = GenerateConfig.RootPath;
                 tb_namespace.Text = GenerateConfig.RootNamespace;
                 cb_dbType.Text = GenerateConfig.DatabaseType.ToString();
@@ -178,6 +187,7 @@ namespace VL.ORMCodeGenerator
             {
                 GenerateConfig.DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), cb_dbType.Text);
             }
+            GenerateConfigs.LastestPDMFilePath = GenerateConfig.PDMFilePath;
             return true;
         }
         private bool CheckConfig()
