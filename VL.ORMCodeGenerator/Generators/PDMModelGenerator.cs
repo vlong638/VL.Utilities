@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Linq;
 using VL.Common.ORM.Objects;
 using VL.Common.ORM.Utilities.QueryBuilders;
 using VL.Common.ORM.Utilities.QueryOperators;
@@ -204,14 +205,36 @@ namespace VL.ORMCodeGenerator.Generators
                                             {
                                                 sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                                 sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
+                                                //0715修正 TEvent.FetchTask()时TEvent可能没有TaskId.可以以EventId嵌套Subselect的形式获取
+                                                var parentTable = reference.ParentTable as Table;
                                                 var childTable = reference.ChildTable as Table;
+                                                Column parentIdentifier = null, childIdentifier = null;
+                                                foreach (Column column in parentTable.Columns)
+                                                {
+                                                    if (column.Primary)
+                                                    {
+                                                        parentIdentifier = column;
+                                                    }
+                                                }
                                                 foreach (Column column in childTable.Columns)
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
+                                                        childIdentifier = column;
                                                     }
                                                 }
+                                                sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childIdentifier.Name + " == " + DataTypeHelper.GetPDMDataType(parentIdentifier.DataType).GetEmptyValue() + ")");
+                                                sb.AppendLine(CGenerate.ContentLS + "{");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "var subselect = new SelectBuilder();");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.TableName = nameof(" + parentTableName + ");");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentFieldAliases.FieldAliases.Add(" + parentTableName + "Properties." + childIdentifier.Name + ");");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + parentTableName + "Properties." + parentIdentifier.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + parentIdentifier.Name + "));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + childIdentifier.Name + ", OperatorType.Equal, subselect));");
+                                                sb.AppendLine(CGenerate.ContentLS + "}");
+                                                sb.AppendLine(CGenerate.ContentLS + "else");
+                                                sb.AppendLine(CGenerate.ContentLS + "{");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + childIdentifier.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + childIdentifier.Name + "));");
+                                                sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IORMProvider.GetQueryOperator(session)."
                                                     + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(session, query);");

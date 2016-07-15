@@ -27,6 +27,24 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException();
             }
         }
+        public static string GetEmptyValue(this PDMDataType pdmDataType)
+        {
+            switch (pdmDataType)
+            {
+                case PDMDataType.varchar:
+                case PDMDataType.nvarchar:
+                    return "\"\"";
+                case PDMDataType.numeric:
+                    return "0";
+                case PDMDataType.datetime:
+                    return "DateTime.MinValue";
+                case PDMDataType.uniqueidentifier:
+                    return "Guid.Empty";
+                case PDMDataType.boolean:
+                default:
+                    throw new NotImplementedException();
+            }
+        }
         public static string GetCSharpDataType(this PDMDataType pdmDataType, int length, int precision)
         {
             switch (pdmDataType)
@@ -81,6 +99,11 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
             }
         }
+        /// <summary>
+        /// 是否可以以T?的形式构建可空类型
+        /// </summary>
+        /// <param name="dataType"></param>
+        /// <returns></returns>
         public static bool IsNullableType(this PDMDataType dataType)
         {
             switch (dataType)
