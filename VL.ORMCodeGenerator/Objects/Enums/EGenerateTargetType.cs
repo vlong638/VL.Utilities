@@ -126,6 +126,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDASObjects);
+                    result.Add(NamespaceOfORMObjects);
                     result.Add(NamespaceOfORMQueryBuilders);
                     result.Add(NamespaceOfORMQueryOperators);
                     break;

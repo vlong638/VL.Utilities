@@ -772,7 +772,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #region U
                             if ((operatorType & OperatorType.U) > 0)
                             {
-                                sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
+                                sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "UpdateBuilder builder = new UpdateBuilder();");
@@ -798,7 +798,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (!column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
@@ -808,7 +808,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Update<" + table.Name + ">(session, query);");
                                 });
-                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
+                                sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
@@ -836,7 +836,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (!column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + ".Title))");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "{");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "}");
@@ -867,13 +867,30 @@ namespace VL.ORMCodeGenerator.Generators
                             #region R
                             if ((operatorType & OperatorType.R) > 0)
                             {
-                                sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params string[] fields", () =>
+                                sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
-                                    sb.AppendLine(CGenerate.ContentLS + "foreach (var field in fields)");
+                                    sb.AppendLine(CGenerate.ContentLS + "if (fields.Count() == 0)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(new FieldAlias(field));");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        }
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
                                     {
@@ -885,13 +902,30 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
                                 });
-                                sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params string[] fields", () =>
+                                sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
                                     sb.AppendLine(CGenerate.ContentLS + "SelectBuilder builder = new SelectBuilder();");
-                                    sb.AppendLine(CGenerate.ContentLS + "foreach (var field in fields)");
+                                    sb.AppendLine(CGenerate.ContentLS + "if (fields.Count() == 0)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(new FieldAlias(field));");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        }
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
                                     {
