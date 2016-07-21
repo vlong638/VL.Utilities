@@ -396,9 +396,9 @@
             this.label17.AutoSize = true;
             this.label17.Location = new System.Drawing.Point(19, 304);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(83, 12);
+            this.label17.Size = new System.Drawing.Size(29, 12);
             this.label17.TabIndex = 41;
-            this.label17.Text = "DescriptionEx";
+            this.label17.Text = "Note";
             this.label17.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // tb_DescriptionEx

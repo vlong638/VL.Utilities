@@ -19,7 +19,7 @@ namespace VL.NugetHelper
             InitializeComponent();
             ProjectsConfigEntity = new ProjectsConfigEntity("Projects.config", System.Environment.CurrentDirectory);
             LoadProjectsConfigEntity();
-            WriteText("已加载项目配置");
+            //WriteText("结束初始化配置");
         }
 
         private void LoadProjectsConfigEntity()
@@ -123,7 +123,7 @@ namespace VL.NugetHelper
             tb_projectRootPath.Text = project.RootPath;
             //引用项目
             tb_Dependences.Text = project.GetDependencesString();
-            WriteText("切换为配置方案" + cb_projects.Text);
+            WriteText("已加载项目配置" + cb_projects.Text);
         }
         #endregion
 
@@ -156,7 +156,7 @@ namespace VL.NugetHelper
             tb_Culture.Text = AssemlyConfigEntity.Culture;
             tb_Version.Text = AssemlyConfigEntity.Version;
             tb_FileVersion.Text = AssemlyConfigEntity.FileVersion;
-            WriteText("已加载配置详情" + AssemlyConfigEntity.Title);
+            WriteText("已加载引用配置" + AssemlyConfigEntity.Title);
         }
         private void UpdateAssemlyConfigEntity()
         {
