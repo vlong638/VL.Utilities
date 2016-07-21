@@ -13,6 +13,7 @@ namespace VL.NugetHelper.Entities.ConfigEntities
     {
         public string NugetServer { set; get; } = "";
         public string APIKey { set; get; } = "";
+        public Dictionary<string, string> Dependences { set; get; } = new Dictionary<string, string>();
         public List<ProjectDetail> Projects { set; get; } = new List<ProjectDetail>();
 
         public ProjectsConfigEntity(string fileName) : base(fileName)
@@ -34,7 +35,10 @@ namespace VL.NugetHelper.Entities.ConfigEntities
             //Project
             foreach (var project in Projects)
             {
-                XElement xProject = new XElement("Project", new XAttribute(nameof(ProjectDetail.Name), project.Name), new XAttribute(nameof(ProjectDetail.Author), project.Author));
+                XElement xProject = new XElement("Project", 
+                    new XAttribute(nameof(ProjectDetail.Name), project.Name),
+                    new XAttribute(nameof(ProjectDetail.Author), project.Author),
+                    new XAttribute(nameof(ProjectDetail.Dependences), project.GetDependencesString()));
                 xProject.Value = project.RootPath;
                 xElements.Add(xProject);
             }
@@ -54,7 +58,14 @@ namespace VL.NugetHelper.Entities.ConfigEntities
             var configItems = doc.Descendants("Project");
             foreach (var configItem in configItems)
             {
-                Projects.Add(new ProjectDetail(configItem.Attribute(nameof(ProjectDetail.Name)).Value, configItem.Attribute(nameof(ProjectDetail.Author)).Value, configItem.Value));
+                var detail = new ProjectDetail(configItem.Attribute(nameof(ProjectDetail.Name)).Value,
+                    configItem.Attribute(nameof(ProjectDetail.Author)).Value,
+                    configItem.Value);
+                if (configItem.Attribute(nameof(ProjectDetail.Dependences)) != null)
+                {
+                    detail.SetDependencesString(configItem.Attribute(nameof(ProjectDetail.Dependences)).Value);
+                }
+                Projects.Add(detail);
             }
         }
 
@@ -96,17 +107,48 @@ namespace VL.NugetHelper.Entities.ConfigEntities
         //    }
         //}
     }
+    /// <summary>
+    /// 项目信息
+    /// 项目总是有着(项目名,作者,路径,备注等信息)
+    /// </summary>
     public class ProjectDetail
     {
         public string Name { set; get; }
         public string Author { set; get; }
         public string RootPath { set; get; }
         public string Notes { set; get; }
+        public Dictionary<string, string> Dependences { set; get; }
+
         public ProjectDetail(string name,string author, string rootPath)
         {
             Name = name;
             Author = author;
             RootPath = rootPath;
+            Dependences = new Dictionary<string, string>();
+        }
+
+        public void SetDependencesString(string references)
+        {
+            if (string.IsNullOrEmpty(references))
+            {
+                Dependences = new Dictionary<string, string>();
+                return;
+            }
+            var referencesWithVersion = references.Split('\r');
+            Dependences = new Dictionary<string, string>();
+            foreach (string referenceWithVersion in referencesWithVersion)
+            {
+                var value = referenceWithVersion.Trim('\n').Trim('\r');
+                if (!string.IsNullOrEmpty(value))
+                {
+                    Dependences.Add(value.Substring(0, value.IndexOf('@')), value.Substring(value.IndexOf('@') + 1));
+                }
+            }
+        }
+        public string GetDependencesString()
+        {
+            return string.Join(System.Environment.NewLine, Dependences.Select(c => c.Key + "@" + c.Value));
         }
     }
+
 }

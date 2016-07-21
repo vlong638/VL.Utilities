@@ -49,12 +49,14 @@ namespace VL.NugetHelper
             if (project == null)
             {
                 project = new ProjectDetail(cb_projects.Text, tb_Author.Text, tb_projectRootPath.Text);
+                project.SetDependencesString(tb_Dependences.Text);
                 ProjectsConfigEntity.Projects.Add(project);
             }
             else
             {
                 project.Author = tb_Author.Text;
                 project.RootPath = tb_projectRootPath.Text;
+                project.SetDependencesString(tb_Dependences.Text);
             }
             WriteText("已更新" + nameof(ProjectsConfigEntity));
         }
@@ -72,6 +74,7 @@ namespace VL.NugetHelper
                         cb_projects.SelectedItem = null;
                         tb_Author.Text = null;
                         tb_projectRootPath.Text = null;
+                        tb_Dependences.Text = null;
                     }
                     cb_projects.DataSource = dataSource;
                     cb_projects.DisplayMember = nameof(ProjectDetail.Name);
@@ -118,6 +121,8 @@ namespace VL.NugetHelper
             }
             tb_Author.Text = project.Author;
             tb_projectRootPath.Text = project.RootPath;
+            //引用项目
+            tb_Dependences.Text = project.GetDependencesString();
             WriteText("切换为配置方案" + cb_projects.Text);
         }
         #endregion
@@ -208,9 +213,15 @@ namespace VL.NugetHelper
                 //sb.AppendFormat(@"    <releaseNotes>{0}</releaseNotes>" + System.Environment.NewLine);
                 sb.AppendFormat(@"    <copyright>{0}</copyright>" + System.Environment.NewLine, assembly.Copyright);
                 sb.AppendFormat(@"    <tags>{0}</tags>" + System.Environment.NewLine, project.Notes);
-                //sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
-                //sb.AppendFormat(@"      <dependency id=""SampleDependency"" version=""1.0"" />" + System.Environment.NewLine);
-                //sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
+                if (project.Dependences.Count()!=0)
+                {
+                    sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
+                    foreach (var references in project.Dependences)
+                    {
+                        sb.AppendFormat("      <dependency id=\""+ references.Key+ "\" version=\""+ references.Value+ "\" />" + System.Environment.NewLine);
+                    }
+                    sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
+                }
                 sb.AppendFormat(@"  </metadata>" + System.Environment.NewLine);
                 sb.AppendFormat(@"</package>" + System.Environment.NewLine);
                 return sb;

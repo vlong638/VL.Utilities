@@ -41,19 +41,14 @@ namespace VL.NugetHelper.Entities.ConfigEntities
 
         public AssemlyConfigEntity(string fileName) : base(fileName)
         {
-            Title = "";
-            Description = "";
-            Configuration = "";
-            Company = "";
-            Product = "";
-            Copyright = "";
-            Trademark = "";
-            Culture = "";
-            Version = "";
-            FileVersion = "";
-            Contents = new List<string>();
+            Init();
         }
         public AssemlyConfigEntity(string fileName, string directoryPath) : base(fileName, directoryPath)
+        {
+            Init();
+        }
+
+        private void Init()
         {
             Title = "";
             Description = "";

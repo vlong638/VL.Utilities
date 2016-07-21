@@ -1,0 +1,10 @@
+﻿关于多表查询
+现有的查询标准是
+1.对象承载的方式
+SelectAsInt<T>()
+T承载了TableName的信息
+那么构建一个多表查询的对象TAB
+TAB.TableName="A a,B b"
+2.自定义设置
+SelectAsInt()
+IQueryBuilder.TableName="A a,B b"

@@ -67,6 +67,8 @@
             this.tb_Tag = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.tb_DescriptionEx = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.tb_Dependences = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // Generate
@@ -163,7 +165,7 @@
             // 
             // tb_output
             // 
-            this.tb_output.Location = new System.Drawing.Point(12, 409);
+            this.tb_output.Location = new System.Drawing.Point(12, 515);
             this.tb_output.Multiline = true;
             this.tb_output.Name = "tb_output";
             this.tb_output.Size = new System.Drawing.Size(521, 147);
@@ -407,11 +409,31 @@
             this.tb_DescriptionEx.Size = new System.Drawing.Size(387, 102);
             this.tb_DescriptionEx.TabIndex = 40;
             // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(19, 410);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(71, 12);
+            this.label18.TabIndex = 43;
+            this.label18.Text = "Dependences";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // tb_Dependences
+            // 
+            this.tb_Dependences.Location = new System.Drawing.Point(109, 407);
+            this.tb_Dependences.Multiline = true;
+            this.tb_Dependences.Name = "tb_Dependences";
+            this.tb_Dependences.Size = new System.Drawing.Size(387, 102);
+            this.tb_Dependences.TabIndex = 42;
+            // 
             // NugetHelper
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(556, 568);
+            this.ClientSize = new System.Drawing.Size(556, 671);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.tb_Dependences);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.tb_DescriptionEx);
             this.Controls.Add(this.label16);
@@ -499,6 +521,8 @@
         private System.Windows.Forms.TextBox tb_Tag;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox tb_DescriptionEx;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.TextBox tb_Dependences;
     }
 }
 
