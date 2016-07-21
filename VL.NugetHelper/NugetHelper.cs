@@ -209,20 +209,40 @@ namespace VL.NugetHelper
                 //sb.AppendFormat(@"    <projectUrl>{0}</projectUrl>" + System.Environment.NewLine);
                 //sb.AppendFormat(@"    <iconUrl>{0}</iconUrl>" + System.Environment.NewLine);
                 //sb.AppendFormat(@"    <requireLicenseAcceptance>{0}</requireLicenseAcceptance>" + System.Environment.NewLine);
-                sb.AppendFormat(@"    <description>{0}</description>" + System.Environment.NewLine, assembly.Description);
+                sb.AppendFormat(@"    <description>{0}</description>" + System.Environment.NewLine, assembly.Description.Trim('\n').Trim('\r'));
                 //sb.AppendFormat(@"    <releaseNotes>{0}</releaseNotes>" + System.Environment.NewLine);
                 sb.AppendFormat(@"    <copyright>{0}</copyright>" + System.Environment.NewLine, assembly.Copyright);
                 sb.AppendFormat(@"    <tags>{0}</tags>" + System.Environment.NewLine, project.Notes);
-                if (project.Dependences.Count()!=0)
+                //if (project.Dependences.Count() != 0)
+                //{
+                //    sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
+                //    foreach (var references in project.Dependences)
+                //    {
+                //        sb.AppendFormat("      <dependency id=\"" + references.Key + "\" version=\"" + references.Value + "\" />" + System.Environment.NewLine);
+                //    }
+                //    sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
+                //}
+                if (project.References.Count() != 0)
                 {
-                    sb.AppendFormat(@"    <dependencies>" + System.Environment.NewLine);
-                    foreach (var references in project.Dependences)
+                    sb.AppendFormat(@"    <references>" + System.Environment.NewLine);
+                    foreach (var reference in project.References)
                     {
-                        sb.AppendFormat("      <dependency id=\""+ references.Key+ "\" version=\""+ references.Value+ "\" />" + System.Environment.NewLine);
+                        sb.AppendFormat("      <reference file=\"" + reference.Substring(reference.IndexOf('\\') + 1) + "\" />" + System.Environment.NewLine);
                     }
-                    sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
+                    sb.AppendFormat(@"    </references>" + System.Environment.NewLine);
                 }
                 sb.AppendFormat(@"  </metadata>" + System.Environment.NewLine);
+                if (project.References.Count() != 0)
+                {
+                    sb.AppendFormat(@"  <files>" + System.Environment.NewLine);
+                    foreach (var reference in project.References)
+                    {
+                        sb.AppendFormat("      <file src=\"lib\\" + reference + "\"  target=\"lib\\" + reference.Substring(0, reference.IndexOf('\\')) + "\"/>" + System.Environment.NewLine);
+                        //sb.AppendFormat("      <file src=\"lib\\net452\\" + reference + "\"  target=\"lib\\net452\"/>" + System.Environment.NewLine);
+                        //sb.AppendFormat("      <file src=\"lib\\" + reference + "\"  target=\"lib\"/>" + System.Environment.NewLine);
+                    }
+                    sb.AppendFormat(@"  </files>" + System.Environment.NewLine);
+                }
                 sb.AppendFormat(@"</package>" + System.Environment.NewLine);
                 return sb;
             }

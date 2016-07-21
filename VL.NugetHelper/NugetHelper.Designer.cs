@@ -414,9 +414,9 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(19, 410);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(71, 12);
+            this.label18.Size = new System.Drawing.Size(65, 12);
             this.label18.TabIndex = 43;
-            this.label18.Text = "Dependences";
+            this.label18.Text = "References";
             this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // tb_Dependences

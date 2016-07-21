@@ -38,7 +38,7 @@ namespace VL.NugetHelper.Entities.ConfigEntities
                 XElement xProject = new XElement("Project", 
                     new XAttribute(nameof(ProjectDetail.Name), project.Name),
                     new XAttribute(nameof(ProjectDetail.Author), project.Author),
-                    new XAttribute(nameof(ProjectDetail.Dependences), project.GetDependencesString()));
+                    new XAttribute(nameof(ProjectDetail.References), project.GetDependencesString()));
                 xProject.Value = project.RootPath;
                 xElements.Add(xProject);
             }
@@ -61,9 +61,9 @@ namespace VL.NugetHelper.Entities.ConfigEntities
                 var detail = new ProjectDetail(configItem.Attribute(nameof(ProjectDetail.Name)).Value,
                     configItem.Attribute(nameof(ProjectDetail.Author)).Value,
                     configItem.Value);
-                if (configItem.Attribute(nameof(ProjectDetail.Dependences)) != null)
+                if (configItem.Attribute(nameof(ProjectDetail.References)) != null)
                 {
-                    detail.SetDependencesString(configItem.Attribute(nameof(ProjectDetail.Dependences)).Value);
+                    detail.SetDependencesString(configItem.Attribute(nameof(ProjectDetail.References)).Value);
                 }
                 Projects.Add(detail);
             }
@@ -117,37 +117,42 @@ namespace VL.NugetHelper.Entities.ConfigEntities
         public string Author { set; get; }
         public string RootPath { set; get; }
         public string Notes { set; get; }
-        public Dictionary<string, string> Dependences { set; get; }
+        public List<string> References { set; get; }
 
         public ProjectDetail(string name,string author, string rootPath)
         {
             Name = name;
             Author = author;
             RootPath = rootPath;
-            Dependences = new Dictionary<string, string>();
+            References = new List<string>();
         }
 
-        public void SetDependencesString(string references)
+        public void SetDependencesString(string referencesString)
         {
-            if (string.IsNullOrEmpty(references))
+            if (string.IsNullOrEmpty(referencesString))
             {
-                Dependences = new Dictionary<string, string>();
+                References = new List<string>();
                 return;
             }
-            var referencesWithVersion = references.Split('\r');
-            Dependences = new Dictionary<string, string>();
-            foreach (string referenceWithVersion in referencesWithVersion)
+            var references= referencesString.Split('\r');
+            References = new List<string>();
+            foreach (string reference in references)
             {
-                var value = referenceWithVersion.Trim('\n').Trim('\r');
+                var value = reference.Trim('\n').Trim('\r');
                 if (!string.IsNullOrEmpty(value))
                 {
-                    Dependences.Add(value.Substring(0, value.IndexOf('@')), value.Substring(value.IndexOf('@') + 1));
+                    if (!value.EndsWith(".dll"))
+                    {
+                        value = value + ".dll";
+                    }
+                    value = value.Replace('/', '\\');
+                    References.Add(value);
                 }
             }
         }
         public string GetDependencesString()
         {
-            return string.Join(System.Environment.NewLine, Dependences.Select(c => c.Key + "@" + c.Value));
+            return string.Join(System.Environment.NewLine, References);
         }
     }
 
