@@ -222,15 +222,15 @@ namespace VL.NugetHelper
                 //    }
                 //    sb.AppendFormat(@"    </dependencies>" + System.Environment.NewLine);
                 //}
-                if (project.References.Count() != 0)
-                {
-                    sb.AppendFormat(@"    <references>" + System.Environment.NewLine);
-                    foreach (var reference in project.References)
-                    {
-                        sb.AppendFormat("      <reference file=\"" + reference.Substring(reference.IndexOf('\\') + 1) + "\" />" + System.Environment.NewLine);
-                    }
-                    sb.AppendFormat(@"    </references>" + System.Environment.NewLine);
-                }
+                //if (project.References.Count() != 0)
+                //{
+                //    sb.AppendFormat(@"    <references>" + System.Environment.NewLine);
+                //    foreach (var reference in project.References)
+                //    {
+                //        sb.AppendFormat("      <reference file=\"" + reference.Substring(reference.IndexOf('\\') + 1) + "\" />" + System.Environment.NewLine);
+                //    }
+                //    sb.AppendFormat(@"    </references>" + System.Environment.NewLine);
+                //}
                 sb.AppendFormat(@"  </metadata>" + System.Environment.NewLine);
                 if (project.References.Count() != 0)
                 {
