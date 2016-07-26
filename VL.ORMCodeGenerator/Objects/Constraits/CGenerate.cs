@@ -1,5 +1,8 @@
 ﻿namespace VL.ORMCodeGenerator.Objects.Constraits
 {
+    /// <summary>
+    /// Generate Constants
+    /// </summary>
     public class CGenerate
     {
         /// <summary>

@@ -943,6 +943,27 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).SelectAll<" + table.Name + ">(session, query);");
                                 });
+                                sb.AppendMethod("public static void", "DbLoad", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
+                                {
+                                    sb.AppendLine(CGenerate.ContentLS + "var result = entity.DbSelect(session, fields);");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (!column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
+                                            sb.AppendLine(CGenerate.ContentLS + "{");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS+ "entity." + column.Name + " = result." + column.Name + ";");
+                                            sb.AppendLine(CGenerate.ContentLS + "}");
+                                        }
+                                    }
+                                });
+                                sb.AppendMethod("public static void", "DbLoad", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
+                                {
+                                    sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "entity.DbLoad(session, fields);");
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                });
                             }
                             #endregion
                         });
