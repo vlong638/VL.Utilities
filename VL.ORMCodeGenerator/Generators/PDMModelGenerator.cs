@@ -191,7 +191,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -227,13 +227,13 @@ namespace VL.ORMCodeGenerator.Generators
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "var subselect = new SelectBuilder();");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.TableName = nameof(" + parentTableName + ");");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentFieldAliases.FieldAliases.Add(" + parentTableName + "Properties." + childIdentifier.Name + ");");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + parentTableName + "Properties." + parentIdentifier.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + parentIdentifier.Name + "));");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + childIdentifier.Name + ", OperatorType.Equal, subselect));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentSelect.Values.Add(" + parentTableName + "Properties." + childIdentifier.Name + ");");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + parentIdentifier.Name + ", " + parentTableToParameter + "." + parentIdentifier.Name + ", LocateType.Equal));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", subselect, LocateType.Equal));");
                                                 sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "else");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + childIdentifier.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + childIdentifier.Name + "));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", " + parentTableToParameter + "." + childIdentifier.Name + ", LocateType.Equal));");
                                                 sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IORMProvider.GetQueryOperator(session)."
@@ -255,7 +255,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -274,7 +274,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -317,7 +317,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     if (column.Primary)
                                                     {
 
-                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentFieldAliases.FieldAliases.Add(" + subChildTableName + "Properties." + column.Name + ");");
+                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentSelect.Values.Add(" + subChildTableName + "Properties." + column.Name + ");");
                                                         break;
                                                     }
                                                 }
@@ -327,7 +327,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     //TODO 多主键
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + parentTableName + "Properties." + column.Name + ", OperatorType.Equal, " + childTableName.ToParameterFormat() + "." + column.Name + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + column.Name + ", " + childTableName.ToParameterFormat() + "." + column.Name + ", LocateType.Equal));");
                                                         break;
                                                     }
                                                 }
@@ -338,7 +338,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //    //TODO 多主键
                                                 //    if (column.Primary)
                                                 //    {
-                                                //        sb.AppendLine(GConstraints.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + subChildTableName + "Properties." + column.Name + ", OperatorType.In, subSelect");
+                                                //        sb.AppendLine(GConstraints.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + subChildTableName + "Properties." + column.Name + ", LocateType.In, subSelect");
                                                 //        break;
                                                 //    }
                                                 //}
@@ -349,7 +349,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //    //TODO 多主键
                                                 //    if (column.Primary)
                                                 //    {
-                                                //        sb.AppendLine(GConstraints.ContentLS + GConstraints.TabLS + ", new PDMDbPropertyOperateValue(" + parentTableName + "Properties." + column.Name + ", OperatorType.Equal, " + childTableName.ToParameterFormat() + "." + column.Name + ")));");
+                                                //        sb.AppendLine(GConstraints.ContentLS + GConstraints.TabLS + ", new PDMDbPropertyOperateValue(" + parentTableName + "Properties." + column.Name + ", LocateType.Equal, " + childTableName.ToParameterFormat() + "." + column.Name + ")));");
                                                 //        break;
                                                 //    }
                                                 //}
@@ -368,7 +368,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             //    {
                                             //        if (column.Primary)
                                             //        {
-                                            //            sb.AppendLine(GConstraints.ContentLS + "query.SelectBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", OperatorType.Equal, " + parentTableToParameter + "." + column.Name + "));");
+                                            //            sb.AppendLine(GConstraints.ContentLS + "query.SelectBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                             //        }
                                             //    }
                                             //    sb.AppendLine(GConstraints.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IORMProvider.GetQueryOperator(session)."
@@ -416,21 +416,21 @@ namespace VL.ORMCodeGenerator.Generators
                 {
                     result = result && GenerateEntity(config, table);
                     result = result && GenerateDomainEntity(config, table);
-                    result = result && GenerateEntityOperator(config, table, OperatorType.C | OperatorType.R | OperatorType.U | OperatorType.D);
+                    result = result && GenerateEntityOperator(config, table, LocateType.C | LocateType.R | LocateType.U | LocateType.D);
                     result = result && GenerateEntityProperties(config, table);
                 }
                 if (table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
                     result = result && GenerateDomainEntity(config, table);
-                    result = result && GenerateEntityOperator(config, table, OperatorType.C | OperatorType.R | OperatorType.U | OperatorType.D);
+                    result = result && GenerateEntityOperator(config, table, LocateType.C | LocateType.R | LocateType.U | LocateType.D);
                     result = result && GenerateEntityProperties(config, table);
                 }
             }
             return result;
         }
         [Flags]
-        public enum OperatorType
+        public enum LocateType
         {
             C = 1,
             R = 2,
@@ -621,7 +621,7 @@ namespace VL.ORMCodeGenerator.Generators
             });
         }
 
-        bool GenerateEntityOperator(GenerateConfig config, Table table, OperatorType operatorType)
+        bool GenerateEntityOperator(GenerateConfig config, Table table, LocateType LocateType)
         {
             //代码生成
             string targetDirectoryPath = EGenerateTargetType.EntityOperators.GetDirectoryPath(config.RootPath, table.Name);
@@ -640,7 +640,7 @@ namespace VL.ORMCodeGenerator.Generators
                         sb.AppendRegion("写", () =>
                         {
                             #region D
-                            if ((operatorType & OperatorType.D) > 0)
+                            if ((LocateType & LocateType.D) > 0)
                             {
                                 sb.AppendMethod("public static bool", "DbDelete", "this " + table.Name + " entity, DbSession session", () =>
                                 {
@@ -649,7 +649,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
@@ -663,7 +663,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             //TODO 这里应该支持多键主键
                                             sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
-                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.In, Ids));");
+                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
                                             break;
                                         }
                                     }
@@ -673,7 +673,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #endregion
 
                             #region C
-                            if ((operatorType & OperatorType.C) > 0)
+                            if ((LocateType & LocateType.C) > 0)
                             {
                                 sb.AppendMethod("public static bool", "DbInsert", "this " + table.Name + " entity, DbSession session", () =>
                                 {
@@ -690,7 +690,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + ".HasValue)");
                                             sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
                                             sb.AppendLine(CGenerate.ContentLS + "}");
                                         }
                                         else
@@ -712,7 +712,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 default:
                                                     break;
                                             }
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.InsertBuilders.Add(builder);");
@@ -737,7 +737,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (entity." + column.Name + ".HasValue)");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                         }
                                         else
@@ -759,7 +759,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 default:
                                                     break;
                                             }
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.InsertBuilders.Add(builder);");
@@ -770,7 +770,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #endregion
 
                             #region U
-                            if ((operatorType & OperatorType.U) > 0)
+                            if ((LocateType & LocateType.U) > 0)
                             {
                                 sb.AppendMethod("public static bool", "DbUpdate", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
@@ -781,7 +781,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     //Values
@@ -789,7 +789,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -800,7 +800,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                         }
                                     }
@@ -819,7 +819,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     //Values
@@ -827,7 +827,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "else");
@@ -838,7 +838,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentValue.Values.Add(new PDMDbPropertyValue(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "}");
                                         }
                                     }
@@ -865,7 +865,7 @@ namespace VL.ORMCodeGenerator.Generators
                         sb.AppendRegion("读", () =>
                         {
                             #region R
-                            if ((operatorType & OperatorType.R) > 0)
+                            if ((LocateType & LocateType.R) > 0)
                             {
                                 sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
@@ -875,7 +875,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -884,19 +884,19 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(field);");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.Equal, entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -910,7 +910,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -919,12 +919,12 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(" + table.Name + "Properties." + column.Name + ");");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentFieldAliases.FieldAliases.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(field);");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
@@ -935,7 +935,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
                                             sb.AppendLine(CGenerate.ContentLS + "if (Ids.Count() != 0)");
                                             sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + table.Name + "Properties." + column.Name + ", OperatorType.In, Ids));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
                                             sb.AppendLine(CGenerate.ContentLS + "}");
                                             break;
                                         }
