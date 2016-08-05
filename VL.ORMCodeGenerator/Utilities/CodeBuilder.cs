@@ -206,6 +206,21 @@ namespace VL.ORMCodeGenerator.Utilities
         #endregion
 
         #region Methods
+        internal static void AppendSummary(this StringBuilder sb, IEnumerable<string> summaries)
+        {
+
+            /// <summary>
+            /// return false if fetch.count()==0
+            /// return true if fetch.Count()>0
+            /// </summary>
+
+            sb.AppendFormatLine(CGenerate.MethodLS + "/// <summary>");
+            foreach (var summary in summaries)
+            {
+                sb.AppendFormatLine(CGenerate.MethodLS + "/// "+ summary);
+            }
+            sb.AppendFormatLine(CGenerate.MethodLS + "/// </summary>");
+        }
         internal static void AppendMethods(this StringBuilder sb, Action appendMethodsContent)
         {
             sb.AppendRegion("Methods", () =>

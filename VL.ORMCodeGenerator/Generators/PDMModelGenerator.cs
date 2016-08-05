@@ -11,6 +11,7 @@ using VL.ORMCodeGenerator.Objects.Constraits;
 using VL.ORMCodeGenerator.Objects.Entities;
 using VL.ORMCodeGenerator.Objects.Enums;
 using VL.ORMCodeGenerator.Utilities;
+using System.Collections.Generic;
 
 namespace VL.ORMCodeGenerator.Generators
 {
@@ -223,7 +224,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                         childIdentifier = column;
                                                     }
                                                 }
-                                                sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childIdentifier.Name + " == " + DataTypeHelper.GetPDMDataType(parentIdentifier.DataType).GetEmptyValue() + ")");
+                                                sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childIdentifier.Name + " == " + DataTypeHelper.GetPDMDataType(childIdentifier.DataType).GetEmptyValue() + ")");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "var subselect = new SelectBuilder();");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.TableName = nameof(" + parentTableName + ");");
@@ -265,6 +266,9 @@ namespace VL.ORMCodeGenerator.Generators
                                             });
                                             break;
                                         case "1..*":
+                                            sb.AppendSummary(new List<string>() {
+                                                "return false when fetch.Count()==0",
+                                                "return true when fetch.Count()>0" });
                                             sb.AppendMethod("public static bool", "Fetch" + childTableToProperty.ToPluralFormat(), "this " + parentTableName + " " + parentTableToParameter + ", DbSession session", () =>
                                             {
                                                 sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
