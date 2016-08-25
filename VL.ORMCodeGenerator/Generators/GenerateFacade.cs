@@ -23,6 +23,7 @@ namespace VL.ORMCodeGenerator.Generators
                 case EDatabaseType.Oracle:
                 case EDatabaseType.MySQL:
                     new PDMModelGenerator().Generate(config, model);
+                    model.Close();
                     break;
                 //new PDMGeneratorOfOracle().Generate(config, model);
                 //break;

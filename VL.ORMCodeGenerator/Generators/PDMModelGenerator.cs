@@ -526,6 +526,33 @@ namespace VL.ORMCodeGenerator.Generators
                 sb.AppendConstructor("public", table.Name, "", "", () =>
                 {
                 });
+                List<string> parameters = new List<string>();
+                foreach (Column column in table.Columns)
+                {
+                    if (column.Primary)
+                    {
+                        string dataType;
+                        if (column.IsEnumField())
+                        {
+                            dataType = column.GetEnumType();
+                        }
+                        else
+                        {
+                            dataType = DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataType(column.Length, column.Precision);
+                        }
+                        parameters.Add(dataType + " " + column.Name.ToParameterFormat());
+                    }
+                }
+                sb.AppendConstructor("public", table.Name, string.Join(", ", parameters), "", () =>
+                {
+                    foreach (Column column in table.Columns)
+                    {
+                        if (column.Primary)
+                        {
+                            sb.AppendLine(CGenerate.ContentLS + column.Name + " = " + column.Name.ToParameterFormat());
+                        }
+                    }
+                });
                 sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
                 {
                 });
@@ -685,7 +712,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "InsertBuilder builder = new InsertBuilder();");
                                     foreach (Column column in table.Columns)
                                     {
-                                        if (column.Identity)
+                                        if (column.Primary)
                                         {
                                             continue;
                                             //TODO 这里存在两种方案  一种是设置了标识增量的自增型, 一种是支持并发的预分配UId机制

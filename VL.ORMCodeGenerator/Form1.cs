@@ -13,7 +13,7 @@ namespace VL.ORMCodeGenerator
     public partial class Form1 : Form
     {
         private GenerateConfig _generateConfig = new GenerateConfig();
-        public GenerateConfig GenerateConfig
+        public GenerateConfig CurrentGenerateConfig
         {
             get
             {
@@ -43,19 +43,19 @@ namespace VL.ORMCodeGenerator
             if (lastestItem != null)
             {
                 cb_source.SelectedItem = lastestItem;
-                GenerateConfig = lastestItem;
+                CurrentGenerateConfig = lastestItem;
             }
             else
             {
                 GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
             }
-            if (GenerateConfig != null)
+            if (CurrentGenerateConfig != null)
             {
-                cb_source.Text = GenerateConfig.PDMFilePath;
-                tb_target.Text = GenerateConfig.RootPath;
-                tb_namespace.Text = GenerateConfig.RootNamespace;
-                cb_dbType.Text = GenerateConfig.DatabaseType.ToString();
-                cb_wcf.Checked = GenerateConfig.IsSupportWCF;
+                cb_source.Text = CurrentGenerateConfig.PDMFilePath;
+                tb_target.Text = CurrentGenerateConfig.RootPath;
+                tb_namespace.Text = CurrentGenerateConfig.RootNamespace;
+                cb_dbType.Text = CurrentGenerateConfig.DatabaseType.ToString();
+                cb_wcf.Checked = CurrentGenerateConfig.IsSupportWCF;
             }
         }
         private void btnPDMBrowse_Click(object sender, EventArgs e)
@@ -66,7 +66,7 @@ namespace VL.ORMCodeGenerator
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 this.cb_source.Text = dialog.FileName;
-                GenerateConfig.PDMFilePath = this.cb_source.Text;
+                CurrentGenerateConfig.PDMFilePath = this.cb_source.Text;
             }
         }
         private void btnCSharpEntityBrowse_Click(object sender, EventArgs e)
@@ -77,62 +77,62 @@ namespace VL.ORMCodeGenerator
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 this.tb_target.Text = dialog.FileName;
-                GenerateConfig.PDMFilePath = this.tb_target.Text;
+                CurrentGenerateConfig.PDMFilePath = this.tb_target.Text;
             }
         }
         private void ctlSourcePdmFile_TextChanged(object sender, EventArgs e)
         {
-            GenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
-            if (GenerateConfig == null)
+            CurrentGenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
+            if (CurrentGenerateConfig == null)
             {
-                GenerateConfig = new GenerateConfig();
+                CurrentGenerateConfig = new GenerateConfig();
             }
             //cb_source.Text = GenerateConfig.PDMFilePath;
-            tb_target.Text = GenerateConfig.RootPath;
-            tb_namespace.Text = GenerateConfig.RootNamespace;
-            cb_dbType.Text = GenerateConfig.DatabaseType.ToString();
-            cb_wcf.Checked = GenerateConfig.IsSupportWCF;
+            tb_target.Text = CurrentGenerateConfig.RootPath;
+            tb_namespace.Text = CurrentGenerateConfig.RootNamespace;
+            cb_dbType.Text = CurrentGenerateConfig.DatabaseType.ToString();
+            cb_wcf.Checked = CurrentGenerateConfig.IsSupportWCF;
         }
         private void ctlSourcePdmFile_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Back)
             {
-                GenerateConfigs.Items.Remove(GenerateConfig);
+                GenerateConfigs.Items.Remove(CurrentGenerateConfig);
                 cb_source.DataSource = GenerateConfigs.Items.Select(c => c.PDMFilePath).ToList();
                 cb_source.Refresh();
-                GenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
-                if (GenerateConfig == null)
+                CurrentGenerateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
+                if (CurrentGenerateConfig == null)
                 {
-                    GenerateConfig = new GenerateConfig();
+                    CurrentGenerateConfig = new GenerateConfig();
                     cb_source.Text = "";
                 }
-                tb_target.Text = GenerateConfig.RootPath;
-                tb_namespace.Text = GenerateConfig.RootNamespace;
-                cb_dbType.Text = GenerateConfig.DatabaseType.ToString();
-                cb_wcf.Checked = GenerateConfig.IsSupportWCF;
+                tb_target.Text = CurrentGenerateConfig.RootPath;
+                tb_namespace.Text = CurrentGenerateConfig.RootNamespace;
+                cb_dbType.Text = CurrentGenerateConfig.DatabaseType.ToString();
+                cb_wcf.Checked = CurrentGenerateConfig.IsSupportWCF;
             }
             if (e.KeyData == Keys.Enter)
             {
                 var generateConfig = GenerateConfigs.Items.FirstOrDefault(c => c.PDMFilePath == cb_source.Text);
                 if (generateConfig != null && !string.IsNullOrEmpty(generateConfig.PDMFilePath))
                 {
-                    GenerateConfig = generateConfig;
+                    CurrentGenerateConfig = generateConfig;
                 }
                 else if (generateConfig != null)
                 {
-                    GenerateConfig = new GenerateConfig();
+                    CurrentGenerateConfig = new GenerateConfig();
                 }
                 else
                 {
-                    GenerateConfig = new GenerateConfig();
-                    GenerateConfig.PDMFilePath = cb_source.Text;
-                    GenerateConfigs.Items.Add(GenerateConfig);
+                    CurrentGenerateConfig = new GenerateConfig();
+                    CurrentGenerateConfig.PDMFilePath = cb_source.Text;
+                    GenerateConfigs.Items.Add(CurrentGenerateConfig);
                 }
                 //cb_source.Text = GenerateConfig.PDMFilePath;
-                tb_target.Text = GenerateConfig.RootPath;
-                tb_namespace.Text = GenerateConfig.RootNamespace;
-                cb_dbType.Text = GenerateConfig.DatabaseType.ToString();
-                cb_wcf.Checked = GenerateConfig.IsSupportWCF;
+                tb_target.Text = CurrentGenerateConfig.RootPath;
+                tb_namespace.Text = CurrentGenerateConfig.RootNamespace;
+                cb_dbType.Text = CurrentGenerateConfig.DatabaseType.ToString();
+                cb_wcf.Checked = CurrentGenerateConfig.IsSupportWCF;
             }
         }
         private void btnCSharpEntityGenerate_Click(object sender, EventArgs e)
@@ -146,7 +146,7 @@ namespace VL.ORMCodeGenerator
                 return;
             }
             //根据Config执行生成
-            var result = GenerateFacade.Generate(GenerateConfig);
+            var result = GenerateFacade.Generate(CurrentGenerateConfig);
             //保存Config
             if (result)
             {
@@ -174,37 +174,37 @@ namespace VL.ORMCodeGenerator
                 MessageBox.Show("请输入pdm文件路径");
                 return false;
             }
-            if (GenerateConfigs.Items.FirstOrDefault(c=>c.PDMFilePath==GenerateConfig.PDMFilePath)==null)
+            if (GenerateConfigs.Items.FirstOrDefault(c=>c.PDMFilePath==CurrentGenerateConfig.PDMFilePath)==null)
             {
-                GenerateConfig = new GenerateConfig();
-                GenerateConfigs.Items.Add(GenerateConfig);
+                CurrentGenerateConfig = new GenerateConfig();
+                GenerateConfigs.Items.Add(CurrentGenerateConfig);
             }
-            GenerateConfig.PDMFilePath = cb_source.Text;
-            GenerateConfig.RootPath = tb_target.Text;
-            GenerateConfig.RootNamespace = tb_namespace.Text;
-            GenerateConfig.IsSupportWCF = cb_wcf.Checked;
+            CurrentGenerateConfig.PDMFilePath = cb_source.Text;
+            CurrentGenerateConfig.RootPath = tb_target.Text;
+            CurrentGenerateConfig.RootNamespace = tb_namespace.Text;
+            CurrentGenerateConfig.IsSupportWCF = cb_wcf.Checked;
             if (!string.IsNullOrEmpty(cb_dbType.Text))
             {
-                GenerateConfig.DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), cb_dbType.Text);
+                CurrentGenerateConfig.DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), cb_dbType.Text);
             }
-            GenerateConfigs.LastestPDMFilePath = GenerateConfig.PDMFilePath;
+            GenerateConfigs.LastestPDMFilePath = CurrentGenerateConfig.PDMFilePath;
             return true;
         }
         private bool CheckConfig()
         {
-            if (string.IsNullOrEmpty(GenerateConfig.PDMFilePath) || !File.Exists(GenerateConfig.PDMFilePath))
+            if (string.IsNullOrEmpty(CurrentGenerateConfig.PDMFilePath) || !File.Exists(CurrentGenerateConfig.PDMFilePath))
             {
-                MessageBox.Show("请输入有效的" + nameof(GenerateConfig.PDMFilePath));
+                MessageBox.Show("请输入有效的" + nameof(CurrentGenerateConfig.PDMFilePath));
                 return false;
             }
-            if (string.IsNullOrEmpty(GenerateConfig.RootNamespace))
+            if (string.IsNullOrEmpty(CurrentGenerateConfig.RootNamespace))
             {
-                MessageBox.Show("请输入有效的" + nameof(GenerateConfig.RootNamespace));
+                MessageBox.Show("请输入有效的" + nameof(CurrentGenerateConfig.RootNamespace));
                 return false;
             }
-            if (GenerateConfig.DatabaseType == EDatabaseType.None)
+            if (CurrentGenerateConfig.DatabaseType == EDatabaseType.None)
             {
-                MessageBox.Show("选择输入有效的" + nameof(GenerateConfig.DatabaseType));
+                MessageBox.Show("选择输入有效的" + nameof(CurrentGenerateConfig.DatabaseType));
                 return false;
             }
             return true;

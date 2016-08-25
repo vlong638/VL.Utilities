@@ -57,11 +57,11 @@ namespace VL.ORMCodeGenerator.Utilities
                     {
                         return nameof(Decimal);
                     }
-                    if (length > 32 || length == 0)
+                    if (length > 32)
                     {
                         return nameof(Int64);
                     }
-                    else if (length > 16)
+                    else if (length > 16 || length == 0)
                     {
                         return nameof(Int32);
                     }
