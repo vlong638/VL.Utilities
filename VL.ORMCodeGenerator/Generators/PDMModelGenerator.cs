@@ -549,7 +549,7 @@ namespace VL.ORMCodeGenerator.Generators
                     {
                         if (column.Primary)
                         {
-                            sb.AppendLine(CGenerate.ContentLS + column.Name + " = " + column.Name.ToParameterFormat());
+                            sb.AppendLine(CGenerate.ContentLS + column.Name + " = " + column.Name.ToParameterFormat() + ";");
                         }
                     }
                 });
