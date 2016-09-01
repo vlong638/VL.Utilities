@@ -982,18 +982,31 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "var result = entity.DbSelect(session, fields);");
                                     sb.AppendLine(CGenerate.ContentLS + "if (result == null)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS +CGenerate.TabLS+ "return false;");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "return false;");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "if (fields.Count() == 0)");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (!column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
-                                            sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS+ "entity." + column.Name + " = result." + column.Name + ";");
-                                            sb.AppendLine(CGenerate.ContentLS + "}");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "entity." + column.Name + " = result." + column.Name + ";");
                                         }
                                     }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "else");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    foreach (Column column in table.Columns)
+                                    {
+                                        if (!column.Primary)
+                                        {
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "entity." + column.Name + " = result." + column.Name + ";");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
+                                        }
+                                    }
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "return true;");
                                 });
                                 sb.AppendCommend(true, "存在相应对象时返回true,缺少对象时返回false");
