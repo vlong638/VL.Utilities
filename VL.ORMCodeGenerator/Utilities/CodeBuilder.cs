@@ -25,27 +25,21 @@ namespace VL.ORMCodeGenerator.Utilities
             appendRegionContents();
             sb.AppendLine(CGenerate.MethodLS + "#endregion");
         }
-        internal static void AppendCommend(this StringBuilder sb, string leadingSpace, string commend, bool isForMethod)
+        internal static void AppendCommend(this StringBuilder sb, bool isForMethod, params string[] commends)
         {
+            string leadingSpace = CGenerate.MethodLS;
             if (isForMethod)
             {
                 sb.AppendLine(leadingSpace + "/// <summary>");
-                sb.AppendLine(leadingSpace + "/// " + commend);
-                sb.AppendLine(leadingSpace + "/// </summary>");
             }
-            else
-            {
-                sb.AppendLine(leadingSpace + "//" + commend);
-            }
-        }
-        internal static void AppendCommend(this StringBuilder sb, string leadingSpace, List<string> commends)
-        {
-            sb.AppendLine(leadingSpace + "/// <summary>");
             foreach (var commend in commends)
             {
                 sb.AppendLine(leadingSpace + "/// " + commend);
             }
-            sb.AppendLine(leadingSpace + "/// </summary>");
+            if (isForMethod)
+            {
+                sb.AppendLine(leadingSpace + "/// </summary>");
+            }
         }
         internal static void AppendContent(this StringBuilder sb, string content)
         {
@@ -144,7 +138,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 //注释
                 if (!string.IsNullOrEmpty(commend))
                 {
-                    sb.AppendCommend(CGenerate.MethodLS, commend, true);
+                    sb.AppendCommend(true, commend);
                 }
                 //WCF契约
                 if (isSupportWCF)
@@ -217,7 +211,7 @@ namespace VL.ORMCodeGenerator.Utilities
             sb.AppendFormatLine(CGenerate.MethodLS + "/// <summary>");
             foreach (var summary in summaries)
             {
-                sb.AppendFormatLine(CGenerate.MethodLS + "/// "+ summary);
+                sb.AppendFormatLine(CGenerate.MethodLS + "/// " + summary);
             }
             sb.AppendFormatLine(CGenerate.MethodLS + "/// </summary>");
         }

@@ -712,7 +712,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "InsertBuilder builder = new InsertBuilder();");
                                     foreach (Column column in table.Columns)
                                     {
-                                        if (column.Primary)
+                                        if (column.Identity)
                                         {
                                             continue;
                                             //TODO 这里存在两种方案  一种是设置了标识增量的自增型, 一种是支持并发的预分配UId机制
@@ -898,6 +898,7 @@ namespace VL.ORMCodeGenerator.Generators
                             #region R
                             if ((LocateType & LocateType.R) > 0)
                             {
+                                sb.AppendCommend(true, "未查询到数据时返回 null");
                                 sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
@@ -933,6 +934,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
                                 });
+                                sb.AppendCommend(true, "未查询到数据时返回 null");
                                 sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
@@ -974,9 +976,14 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).SelectAll<" + table.Name + ">(session, query);");
                                 });
-                                sb.AppendMethod("public static void", "DbLoad", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
+                                sb.AppendCommend(true,  "存在相应对象时返回true,缺少对象时返回false");
+                                sb.AppendMethod("public static bool", "DbLoad", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var result = entity.DbSelect(session, fields);");
+                                    sb.AppendLine(CGenerate.ContentLS + "if (result == null)");
+                                    sb.AppendLine(CGenerate.ContentLS + "{");
+                                    sb.AppendLine(CGenerate.ContentLS +CGenerate.TabLS+ "return false;");
+                                    sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (!column.Primary)
@@ -987,13 +994,17 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + "}");
                                         }
                                     }
+                                    sb.AppendLine(CGenerate.ContentLS + "return true;");
                                 });
-                                sb.AppendMethod("public static void", "DbLoad", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
+                                sb.AppendCommend(true, "存在相应对象时返回true,缺少对象时返回false");
+                                sb.AppendMethod("public static bool", "DbLoad", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
+                                    sb.AppendLine(CGenerate.ContentLS + "bool result = true;");
                                     sb.AppendLine(CGenerate.ContentLS + "foreach (var entity in entities)");
                                     sb.AppendLine(CGenerate.ContentLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "entity.DbLoad(session, fields);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "result = result && entity.DbLoad(session, fields);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
+                                    sb.AppendLine(CGenerate.ContentLS + "return result;");
                                 });
                             }
                             #endregion
