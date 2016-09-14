@@ -31,6 +31,11 @@ namespace VL.PythonTranslator
             StringReader reader;
             StringBuilder result = new StringBuilder();
             var textLine = "";
+            //Reference
+            if (cb_addReference.IsChecked.HasValue && cb_addReference.IsChecked.Value)
+            {
+                result.AppendLine("import PrintHelper");
+            }
             //Title
             result.AppendLine("PrintHelper.PrintTitle('" + tb_Title.Text + "')");
             //Definitions
