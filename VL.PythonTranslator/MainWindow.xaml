@@ -1,0 +1,22 @@
+﻿<Window x:Class="VL.PythonTranslator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VL.PythonTranslator"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="625">
+    <Grid>
+        <TextBox x:Name="tb_definitions" HorizontalAlignment="Left" Height="106" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,33,0,0"/>
+        <Button x:Name="button" Content="=&gt;&#xA;" HorizontalAlignment="Left" Margin="335,191,0,0" VerticalAlignment="Top" Width="34" Height="23" Click="button_Click"/>
+        <TextBox x:Name="tb_output" HorizontalAlignment="Left" Height="295" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="233" Margin="374,35,0,0"/>
+        <TextBox x:Name="tb_suffixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="210,146,0,0" TextWrapping="Wrap" Text="')" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label_Copy" Content="suffix" HorizontalAlignment="Left" Margin="165,146,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_samples" HorizontalAlignment="Left" Height="116" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,214,0,0"/>
+        <Label x:Name="label_Copy1" Content="definitions&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="0,10,0,0"/>
+        <Label x:Name="label_Copy2" Content="samples&#xA;" HorizontalAlignment="Left" Margin="0,191,0,0" VerticalAlignment="Top" Height="23"/>
+        <TextBox x:Name="tb_prefixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="47,146,0,0" TextWrapping="Wrap" Text="print('" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="prefix" HorizontalAlignment="Left" Margin="0,144,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>
