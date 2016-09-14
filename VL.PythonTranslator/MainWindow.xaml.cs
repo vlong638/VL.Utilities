@@ -28,19 +28,27 @@ namespace VL.PythonTranslator
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            var definitions = tb_definitions.Text;
-            StringReader reader = new StringReader(definitions);
+            StringReader reader;
             StringBuilder result = new StringBuilder();
             var textLine = "";
-            while (!string.IsNullOrEmpty(textLine = reader.ReadLine()))
+            //Title
+            result.AppendLine("PrintHelper.PrintTitle('" + tb_Title.Text + "')");
+            //Definitions
+            var definitions = tb_definitions.Text;
+            if (cb_keepOrient.IsChecked.HasValue&& cb_keepOrient.IsChecked.Value)
             {
-                result.AppendLine(textLine);
+                reader = new StringReader(definitions);
+                while (!string.IsNullOrEmpty(textLine = reader.ReadLine()))
+                {
+                    result.AppendLine(textLine);
+                }
             }
             reader = new StringReader(definitions);
             while (!string.IsNullOrEmpty(textLine = reader.ReadLine()))
             {
                 result.AppendLine(tb_prefixForDefinitions.Text + textLine + tb_suffixForDefinitions.Text);
             }
+            //Samples
             var samples = tb_samples.Text;
             reader = new StringReader(samples);
             while (!string.IsNullOrEmpty(textLine = reader.ReadLine()))

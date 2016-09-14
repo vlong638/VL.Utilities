@@ -7,16 +7,19 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="625">
     <Grid>
-        <TextBox x:Name="tb_definitions" HorizontalAlignment="Left" Height="106" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,33,0,0"/>
-        <Button x:Name="button" Content="=&gt;&#xA;" HorizontalAlignment="Left" Margin="335,191,0,0" VerticalAlignment="Top" Width="34" Height="23" Click="button_Click"/>
-        <TextBox x:Name="tb_output" HorizontalAlignment="Left" Height="295" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="233" Margin="374,35,0,0"/>
-        <TextBox x:Name="tb_suffixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="210,146,0,0" TextWrapping="Wrap" Text="')" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label_Copy" Content="suffix" HorizontalAlignment="Left" Margin="165,146,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tb_samples" HorizontalAlignment="Left" Height="116" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,214,0,0"/>
-        <Label x:Name="label_Copy1" Content="definitions&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="0,10,0,0"/>
-        <Label x:Name="label_Copy2" Content="samples&#xA;" HorizontalAlignment="Left" Margin="0,191,0,0" VerticalAlignment="Top" Height="23"/>
-        <TextBox x:Name="tb_prefixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="47,146,0,0" TextWrapping="Wrap" Text="print('" VerticalAlignment="Top" Width="120"/>
-        <Label x:Name="label" Content="prefix" HorizontalAlignment="Left" Margin="0,144,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_definitions" HorizontalAlignment="Left" Height="106" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,66,0,0"/>
+        <Button x:Name="button" Content="=&gt;&#xA;" HorizontalAlignment="Left" Margin="335,166,0,0" VerticalAlignment="Top" Width="34" Height="23" Click="button_Click"/>
+        <TextBox x:Name="tb_output" HorizontalAlignment="Left" Height="336" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="233" Margin="374,10,0,0"/>
+        <TextBox x:Name="tb_suffixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="210,179,0,0" TextWrapping="Wrap" Text="')" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label_Copy" Content="suffix" HorizontalAlignment="Left" Margin="165,179,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tb_samples" HorizontalAlignment="Left" Height="116" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="330" Margin="0,230,0,0"/>
+        <Label x:Name="label_Copy1" Content="definitions&#xD;&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="0,43,0,0"/>
+        <Label x:Name="label_Copy2" Content="samples&#xA;" HorizontalAlignment="Left" Margin="0,207,0,0" VerticalAlignment="Top" Height="23"/>
+        <TextBox x:Name="tb_prefixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="47,179,0,0" TextWrapping="Wrap" Text="print('" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" Content="prefix" HorizontalAlignment="Left" Margin="0,177,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy3" Content="title" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="0,10,0,0"/>
+        <TextBox x:Name="tb_Title" HorizontalAlignment="Left" Height="28" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="293" Margin="37,10,0,0"/>
+        <CheckBox x:Name="cb_keepOrient" Content="KeepOrient" HorizontalAlignment="Left" Margin="91,49,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
