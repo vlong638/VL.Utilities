@@ -38,19 +38,29 @@ namespace VL.PythonTranslator
             StringReader reader;
             StringBuilder result = new StringBuilder();
             var currentText = "";
+            var definitions = tb_definitions.Text;
             ////Reference
             if (cb_addReference.IsChecked.HasValue && cb_addReference.IsChecked.Value)
             {
-                result.AppendLine("import PrintHelper");
-            }
-            ////Title
-            if (!string.IsNullOrEmpty(tb_Title.Text))
-            {
-                result.AppendLine("PrintHelper.PrintTitle('" + tb_Title.Text + "')");
+                reader = new StringReader(definitions);
+                bool isNeedPrintHelper = true;
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!string.IsNullOrEmpty(currentText = reader.ReadLine()))
+                    {
+                        if (currentText== "import PrintHelper")
+                        {
+                            isNeedPrintHelper = false;
+                        }
+                    }
+                }
+                if (isNeedPrintHelper)
+                {
+                    result.AppendLine("import PrintHelper");
+                }
             }
             ////Definitions
             //Oriented
-            var definitions = tb_definitions.Text;
             if (cb_keepOrient.IsChecked.HasValue && cb_keepOrient.IsChecked.Value)
             {
                 reader = new StringReader(definitions);
@@ -60,110 +70,133 @@ namespace VL.PythonTranslator
                 }
             }
             //Print
-            reader = new StringReader(definitions);
-            while (!string.IsNullOrEmpty(currentText = reader.ReadLine()))
+            AppendPrintText(tb_prefixForDefinitions.Text, tb_suffixForDefinitions.Text, result, new StringReader(definitions));
+            tb_output.Text = result.ToString();
+        }
+
+        private static void AppendPrintText(string prefix, string suffix, StringBuilder result, StringReader reader)
+        {
+            string currentText, text;
+            while ((currentText = reader.ReadLine()) != null)
             {
-                if (currentText.Contains("  "))
+                if (currentText.StartsWith("c-"))
                 {
-                    var texts = currentText.Split(new string[1] { "  " }, StringSplitOptions.RemoveEmptyEntries);
+                    text = currentText.Substring(2);
+                    AppendContent(prefix, suffix, result, text);
+                }
+                else if (currentText.StartsWith("cm-"))
+                {
+                    List<string> multipleLineSample = new List<string>();
+                    string subCurrentText;
+                    while ((subCurrentText = reader.ReadLine()) != null)
+                    {
+                        if (subCurrentText.StartsWith("-cm"))
+                        {
+                            break;
+                        }
+                        multipleLineSample.Add(subCurrentText);
+                    }
+                    foreach (var line in multipleLineSample)
+                    {
+                        AppendContent(prefix, suffix, result, line);
+                    }
+                }
+                else if (currentText.StartsWith("t-"))
+                {
+                    text = currentText.Substring(2);
+                    result.AppendLine("PrintHelper.PrintTitle('" + text + "')");
+                }
+                else if (currentText.StartsWith("sub-"))
+                {
+                    text = currentText.Substring(4);
+                    result.AppendLine("PrintHelper.PrintSubtitle('" + text + "')");
+                }
+                else if (currentText.StartsWith("h-"))
+                {
+                    text = currentText.Substring(2);
+                    result.AppendLine("PrintHelper.PrintHint('" + text + "')");
+                }
+                else if (currentText.StartsWith("s-"))
+                {
+                    text = currentText.Substring(2);
+                    result.AppendLine("PrintHelper.PrintCode('" + GetEscapeSequencedText(text) + "')");
+                    result.AppendLine(text);
+                }
+                else if (currentText.StartsWith("ss-"))
+                {
+                    List<string> multipleLineSample = new List<string>();
+                    string subCurrentText;
+                    while ((subCurrentText = reader.ReadLine()) != null)
+                    {
+                        if (subCurrentText.StartsWith("-ss"))
+                        {
+                            break;
+                        }
+                        multipleLineSample.Add(subCurrentText);
+                    }
+                    AppendSample(result, multipleLineSample, false);
+                }
+                else if (currentText.StartsWith("sm-"))
+                {
+                    List<string> multipleLineSample = new List<string>();
+                    string subCurrentText;
+                    while ((subCurrentText = reader.ReadLine()) != null)
+                    {
+                        if (subCurrentText.StartsWith("-sm"))
+                        {
+                            break;
+                        }
+                        multipleLineSample.Add(subCurrentText);
+                    }
+                    AppendSample(result, multipleLineSample, true);
+                }
+                else
+                {
+                    result.AppendLine(currentText);
+                }
+            }
+        }
+
+        private static void AppendContent(string prefix, string suffix, StringBuilder result,  string text)
+        {
+            if (text.Contains("  "))
+            {
+                var texts = text.Split(new string[1] { "  " }, StringSplitOptions.RemoveEmptyEntries);
+                if (texts.Count() == 2)
+                {
                     result.AppendLine("PrintHelper.PrintSampleWithDescription('" + GetEscapeSequencedText(texts[0]) + "','" + GetEscapeSequencedText(texts[1]) + "')");
                 }
                 else
                 {
-                    result.AppendLine(tb_prefixForDefinitions.Text + GetEscapeSequencedText(currentText) + tb_suffixForDefinitions.Text);
+                    throw new NotImplementedException("暂不支持二段以上的多段式");
                 }
-                //AppendPrintText(tb_prefixForDefinitions.Text, tb_suffixForDefinitions.Text, result, currentText);
-            }
-            ////Samples
-            var samples = tb_samples.Text;
-            reader = new StringReader(samples);
-            currentText = reader.ReadLine();
-            string previousText = "";
-            List<string> previousTexts = new List<string>();
-            MultilineType currentMultilineType = MultilineType.None;
-            if (!string.IsNullOrEmpty(currentText))
-            {
-                do
-                {
-                    if (currentText.StartsWith(" ") || currentMultilineType != MultilineType.None)
-                    {
-                        switch (currentMultilineType)
-                        {
-                            case MultilineType.None:
-                                break;
-                            case MultilineType.Backslash:
-                                if (!currentText.EndsWith("\\"))
-                                {
-                                    currentMultilineType = MultilineType.None;
-                                }
-                                break;
-                            case MultilineType.TripleDoubleQuote:
-                                if (currentText.Contains("\"\"\""))
-                                {
-                                    currentMultilineType = MultilineType.None;
-                                }
-                                break;
-                            case MultilineType.TripleSingleQuote:
-                                if (currentText.Contains("\'\'\'"))
-                                {
-                                    currentMultilineType = MultilineType.None;
-                                }
-                                break;
-                            default:
-                                throw new NotImplementedException("not implemented with type " + currentMultilineType.ToString());
-                        }
-                        previousTexts.Add(currentText);
-                    }
-                    else
-                    {
-                        PrintPreviousTexts(result, previousTexts);
-                        previousTexts = new List<string>() { currentText };
-                        if (currentText.EndsWith("\\"))
-                        {
-                            currentMultilineType = MultilineType.Backslash;
-                        }
-                        else if (currentText.Contains("\"\"\""))
-                        {
-                            currentMultilineType = MultilineType.TripleDoubleQuote;
-                        }
-                        else if (currentText.Contains("\'\'\'"))
-                        {
-                            currentMultilineType = MultilineType.TripleSingleQuote;
-                        }
-                    }
-                    previousText = currentText;
-                }
-                while (!string.IsNullOrEmpty(currentText = reader.ReadLine()));
-                if (previousTexts.Count > 0)
-                {
-                    PrintPreviousTexts(result, previousTexts);
-                }
-            }
-            tb_output.Text = result.ToString();
-        }
-
-        private static void AppendPrintText(string prefix,string suffix,StringBuilder result, string currentText)
-        {
-            if (currentText.Contains("  "))
-            {
-                var texts = currentText.Split(new string[1] { "  " }, StringSplitOptions.RemoveEmptyEntries);
-                result.AppendLine("PrintHelper.PrintSampleWithDescription('" + GetEscapeSequencedText(texts[0]) + "','" + GetEscapeSequencedText(texts[1]) + "')");
             }
             else
             {
-                result.AppendLine(prefix+GetEscapeSequencedText(currentText) + suffix);
+                result.AppendLine(prefix + GetEscapeSequencedText(text) + suffix);
             }
         }
 
-        private static void PrintPreviousTexts(StringBuilder result, List<string> previousTexts)
+        private static void AppendSample(StringBuilder result, List<string> previousTexts, bool isIndividual = true)
         {
-            foreach (var previousText in previousTexts)
+            if (isIndividual)
             {
-                result.AppendLine("PrintHelper.PrintCode('" + GetEscapeSequencedText(previousText) + "')");
+                foreach (var previousText in previousTexts)
+                {
+                    result.AppendLine("PrintHelper.PrintCode('" + GetEscapeSequencedText(previousText) + "')");
+                }
+                foreach (var previousText in previousTexts)
+                {
+                    result.AppendLine(previousText);
+                }
             }
-            foreach (var previousText in previousTexts)
+            else
             {
-                result.AppendLine(previousText);
+                foreach (var previousText in previousTexts)
+                {
+                    result.AppendLine("PrintHelper.PrintCode('" + GetEscapeSequencedText(previousText) + "')");
+                    result.AppendLine(previousText);
+                }
             }
         }
 
