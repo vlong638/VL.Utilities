@@ -414,17 +414,17 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(19, 410);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(65, 12);
+            this.label18.Size = new System.Drawing.Size(359, 12);
             this.label18.TabIndex = 43;
-            this.label18.Text = "References";
+            this.label18.Text = "References     格式:net452\\System.Runtime.Serialization.dll";
             this.label18.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // tb_Dependences
             // 
-            this.tb_Dependences.Location = new System.Drawing.Point(109, 407);
+            this.tb_Dependences.Location = new System.Drawing.Point(109, 425);
             this.tb_Dependences.Multiline = true;
             this.tb_Dependences.Name = "tb_Dependences";
-            this.tb_Dependences.Size = new System.Drawing.Size(387, 102);
+            this.tb_Dependences.Size = new System.Drawing.Size(387, 84);
             this.tb_Dependences.TabIndex = 42;
             // 
             // NugetHelper
