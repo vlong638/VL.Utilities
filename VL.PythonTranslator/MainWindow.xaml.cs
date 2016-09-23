@@ -79,7 +79,7 @@ namespace VL.PythonTranslator
             string currentText, text;
             while ((currentText = reader.ReadLine()) != null)
             {
-                if (currentText.StartsWith("c-"))
+                if (currentText.StartsWith("c-")|| currentText.StartsWith("//"))
                 {
                     text = currentText.Substring(2);
                     AppendContent(prefix, suffix, result, text);
@@ -90,7 +90,7 @@ namespace VL.PythonTranslator
                     string subCurrentText;
                     while ((subCurrentText = reader.ReadLine()) != null)
                     {
-                        if (subCurrentText.StartsWith("-cm"))
+                        if (subCurrentText.StartsWith("cm-"))
                         {
                             break;
                         }
@@ -104,17 +104,17 @@ namespace VL.PythonTranslator
                 else if (currentText.StartsWith("t-"))
                 {
                     text = currentText.Substring(2);
-                    result.AppendLine("PrintHelper.PrintTitle('" + text + "')");
+                    AppendContent("PrintHelper.PrintTitle('", "')", result, text, false);
                 }
                 else if (currentText.StartsWith("sub-"))
                 {
                     text = currentText.Substring(4);
-                    result.AppendLine("PrintHelper.PrintSubtitle('" + text + "')");
+                    AppendContent("PrintHelper.PrintSubtitle('", "')", result, text, false);
                 }
                 else if (currentText.StartsWith("h-"))
                 {
                     text = currentText.Substring(2);
-                    result.AppendLine("PrintHelper.PrintHint('" + text + "')");
+                    AppendContent("PrintHelper.PrintHint('", "')", result, text, false);
                 }
                 else if (currentText.StartsWith("s-"))
                 {
@@ -128,7 +128,7 @@ namespace VL.PythonTranslator
                     string subCurrentText;
                     while ((subCurrentText = reader.ReadLine()) != null)
                     {
-                        if (subCurrentText.StartsWith("-ss"))
+                        if (subCurrentText.StartsWith("ss-"))
                         {
                             break;
                         }
@@ -142,7 +142,7 @@ namespace VL.PythonTranslator
                     string subCurrentText;
                     while ((subCurrentText = reader.ReadLine()) != null)
                     {
-                        if (subCurrentText.StartsWith("-sm"))
+                        if (subCurrentText.StartsWith("sm-"))
                         {
                             break;
                         }
@@ -157,19 +157,28 @@ namespace VL.PythonTranslator
             }
         }
 
-        private static void AppendContent(string prefix, string suffix, StringBuilder result,  string text)
+        private static void AppendContent(string prefix, string suffix, StringBuilder result,  string text,bool isSample=true)
         {
-            if (text.Contains("  "))
+            if (isSample&&text.Contains("  "))
             {
                 var texts = text.Split(new string[1] { "  " }, StringSplitOptions.RemoveEmptyEntries);
                 if (texts.Count() == 2)
                 {
                     result.AppendLine("PrintHelper.PrintSampleWithDescription('" + GetEscapeSequencedText(texts[0]) + "','" + GetEscapeSequencedText(texts[1]) + "')");
                 }
+                else if (texts.Count() < 2)
+                {
+                    result.AppendLine(prefix + GetEscapeSequencedText(text) + suffix);
+                }
                 else
                 {
                     throw new NotImplementedException("暂不支持二段以上的多段式");
                 }
+            }
+            else if (text.Contains("  "))
+            {
+                var texts = text.Split(new string[1] { "  " }, StringSplitOptions.RemoveEmptyEntries);
+                result.AppendLine(prefix + string.Join("','", texts) + suffix);
             }
             else
             {

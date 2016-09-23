@@ -7,19 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="825">
     <Grid>
-        <TextBox x:Name="tb_definitions" HorizontalAlignment="Left" Height="106" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="398" Margin="10,336,0,0"/>
+        <TextBox x:Name="tb_definitions" HorizontalAlignment="Left" Height="258" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="408" Margin="0,361,0,0"/>
         <Button x:Name="button" Content="=&gt;&#xA;" HorizontalAlignment="Left" Margin="425,334,0,0" VerticalAlignment="Top" Width="34" Height="23" Click="button_Click"/>
         <TextBox x:Name="tb_output" HorizontalAlignment="Left" Height="619" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="343" Margin="464,0,0,0"/>
-        <TextBox x:Name="tb_suffixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="258,449,0,0" TextWrapping="Wrap" Text="')" VerticalAlignment="Top" Width="150"/>
-        <Label x:Name="label_Copy" Content="suffix" HorizontalAlignment="Left" Margin="212,447,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="tb_samples" HorizontalAlignment="Left" Height="119" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" Text="" VerticalAlignment="Top" Width="398" Margin="10,500,0,0"/>
-        <Label x:Name="label_Copy1" Content="t-@段落&#xA;sub-@子标题&#xD;&#xA;h-@高亮子标题&#xA;s-@单行样例&#xA;sm- or ss-&#xA;@多行样例&#xA;-sm or -ss&#xA;ss和sm的区别是:&#xA;ss是输出一行执行一行&#xA;sm是以段为单位输出和执行&#xA;c-@内容&#xA;cm- &#xD;&#xA;@多行内容 &#xD;&#xA;-cm&#xA;多段式 以两个空格隔开&#xA;c-@段1  @段2&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="293" Width="398" Margin="10,10,0,0"/>
-        <Label x:Name="label_Copy2" Content="samples&#xA;" HorizontalAlignment="Left" Margin="10,477,0,0" VerticalAlignment="Top" Height="23"/>
-        <TextBox x:Name="tb_prefixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="57,449,0,0" TextWrapping="Wrap" Text="print('" VerticalAlignment="Top" Width="150"/>
-        <Label x:Name="label" Content="prefix" HorizontalAlignment="Left" Margin="10,447,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="cb_keepOrient" Content="KeepOrient" HorizontalAlignment="Left" Margin="101,314,0,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="cb_addReference" Content="AddReference" HorizontalAlignment="Left" Margin="201,314,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <Label x:Name="label_Copy4" Content="definitions&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="10,308,0,0"/>
+        <TextBox x:Name="tb_suffixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="258,333,0,0" TextWrapping="Wrap" Text="')" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="label_Copy" Content="suffix" HorizontalAlignment="Left" Margin="212,331,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_Copy1" Content="t-@段落&#xA;sub-@子标题&#xA;h-@高亮子标题&#xA;s-@单行样例&#xA;sm- or ss-&#xA;@多行样例&#xD;&#xA;sm- or ss-&#xA;ss和sm的区别是:&#xA;ss是输出一行执行一行&#xA;sm是以段为单位输出和执行&#xA;c- or //@内容&#xA;cm- &#xA;@多行内容 &#xD;&#xA;cm- &#xA;多段式 以两个空格隔开(支持c-和cm-)&#xA;c-@段1  @段2&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="293" Width="398" Margin="10,10,0,0"/>
+        <TextBox x:Name="tb_prefixForDefinitions" HorizontalAlignment="Left" Height="23" Margin="57,333,0,0" TextWrapping="Wrap" Text="print('" VerticalAlignment="Top" Width="150"/>
+        <Label x:Name="label" Content="prefix" HorizontalAlignment="Left" Margin="10,331,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cb_keepOrient" Content="KeepOrient" HorizontalAlignment="Left" Margin="101,309,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cb_addReference" Content="AddReference" HorizontalAlignment="Left" Margin="201,309,0,0" VerticalAlignment="Top" IsChecked="True"/>
+        <Label x:Name="label_Copy4" Content="definitions&#xA;" HorizontalAlignment="Left" VerticalAlignment="Top" Height="23" Margin="10,303,0,0"/>
 
     </Grid>
 </Window>
