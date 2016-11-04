@@ -192,7 +192,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -228,13 +228,13 @@ namespace VL.ORMCodeGenerator.Generators
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "var subselect = new SelectBuilder();");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.TableName = nameof(" + parentTableName + ");");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentSelect.Values.Add(" + parentTableName + "Properties." + childIdentifier.Name + ");");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + parentIdentifier.Name + ", " + parentTableToParameter + "." + parentIdentifier.Name + ", LocateType.Equal));");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", subselect, LocateType.Equal));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentSelect.Add(" + parentTableName + "Properties." + childIdentifier.Name + ");");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.ComponentWhere.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + parentIdentifier.Name + ", " + parentTableToParameter + "." + parentIdentifier.Name + ", LocateType.Equal));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", subselect, LocateType.Equal));");
                                                 sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "else");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
-                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", " + parentTableToParameter + "." + childIdentifier.Name + ", LocateType.Equal));");
+                                                sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + childIdentifier.Name + ", " + parentTableToParameter + "." + childIdentifier.Name + ", LocateType.Equal));");
                                                 sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = IORMProvider.GetQueryOperator(session)."
@@ -256,7 +256,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -278,7 +278,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 {
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                                     }
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -321,7 +321,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     if (column.Primary)
                                                     {
 
-                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentSelect.Values.Add(" + subChildTableName + "Properties." + column.Name + ");");
+                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentSelect.Add(" + subChildTableName + "Properties." + column.Name + ");");
                                                         break;
                                                     }
                                                 }
@@ -331,7 +331,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                     //TODO 多主键
                                                     if (column.Primary)
                                                     {
-                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + column.Name + ", " + childTableName.ToParameterFormat() + "." + column.Name + ", LocateType.Equal));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "subSelect.ComponentWhere.Add(new ComponentValueOfWhere(" + parentTableName + "Properties." + column.Name + ", " + childTableName.ToParameterFormat() + "." + column.Name + ", LocateType.Equal));");
                                                         break;
                                                     }
                                                 }
@@ -342,7 +342,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //    //TODO 多主键
                                                 //    if (column.Primary)
                                                 //    {
-                                                //        sb.AppendLine(GConstraints.ContentLS + "builder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + subChildTableName + "Properties." + column.Name + ", LocateType.In, subSelect");
+                                                //        sb.AppendLine(GConstraints.ContentLS + "builder.ComponentWhere.Add(new PDMDbPropertyOperateValue(" + subChildTableName + "Properties." + column.Name + ", LocateType.In, subSelect");
                                                 //        break;
                                                 //    }
                                                 //}
@@ -372,7 +372,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             //    {
                                             //        if (column.Primary)
                                             //        {
-                                            //            sb.AppendLine(GConstraints.ContentLS + "query.SelectBuilder.ComponentWhere.Wheres.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
+                                            //            sb.AppendLine(GConstraints.ContentLS + "query.Selectbuilder.ComponentWhere.Add(new PDMDbPropertyOperateValue(" + childTableName + "Properties." + column.Name + ", " + parentTableToParameter + "." + column.Name + ", LocateType.Equal));");
                                             //        }
                                             //    }
                                             //    sb.AppendLine(GConstraints.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = IORMProvider.GetQueryOperator(session)."
@@ -680,7 +680,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
+                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Delete<" + table.Name + ">(session, query);");
@@ -694,7 +694,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             //TODO 这里应该支持多键主键
                                             sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
-                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
+                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
                                             break;
                                         }
                                     }
@@ -721,7 +721,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + ".HasValue)");
                                             sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
                                             sb.AppendLine(CGenerate.ContentLS + "}");
                                         }
                                         else
@@ -743,7 +743,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 default:
                                                     break;
                                             }
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentInsert.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.InsertBuilders.Add(builder);");
@@ -768,7 +768,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (entity." + column.Name + ".HasValue)");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentInsert.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ".Value));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                         }
                                         else
@@ -790,7 +790,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 default:
                                                     break;
                                             }
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Values.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentInsert.Add(new ComponentValueOfInsert(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.InsertBuilders.Add(builder);");
@@ -812,7 +812,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     //Values
@@ -820,7 +820,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSet.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -831,7 +831,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                         }
                                     }
@@ -850,7 +850,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     //Values
@@ -858,7 +858,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "else");
@@ -869,7 +869,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         {
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "if (fields.Contains(" + table.Name + "Properties." + column.Name + "))");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Values.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSet.Add(new ComponentValueOfSet(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + "));");
                                             sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "}");
                                         }
                                     }
@@ -899,6 +899,13 @@ namespace VL.ORMCodeGenerator.Generators
                             if ((LocateType & LocateType.R) > 0)
                             {
                                 sb.AppendCommend(true, "未查询到数据时返回 null");
+                                sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, SelectBuilder select", () =>
+                                {
+                                    sb.AppendLine(CGenerate.ContentLS + "var query = IORMProvider.GetDbQueryBuilder(session);");
+                                    sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilder = select;");
+                                    sb.AppendLine(CGenerate.ContentLS + "return IORMProvider.GetQueryOperator(session).Select<" + table.Name + ">(session, query);");
+                                });
+                                sb.AppendCommend(true, "未查询到数据时返回 null");
                                 sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = " + nameof(IORMProvider) + ".GetDbQueryBuilder(session);");
@@ -907,7 +914,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Add(" + table.Name + "Properties." + column.Name + ");");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -916,19 +923,19 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Add(" + table.Name + "Properties." + column.Name + ");");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Add(field);");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
+                                            sb.AppendLine(CGenerate.ContentLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
@@ -943,7 +950,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                     foreach (Column column in table.Columns)
                                     {
-                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
+                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Add(" + table.Name + "Properties." + column.Name + ");");
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "else");
@@ -952,12 +959,12 @@ namespace VL.ORMCodeGenerator.Generators
                                     {
                                         if (column.Primary)
                                         {
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(" + table.Name + "Properties." + column.Name + ");");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentSelect.Add(" + table.Name + "Properties." + column.Name + ");");
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "foreach (var field in fields)");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
-                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Values.Add(field);");
+                                    sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "builder.ComponentSelect.Add(field);");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     foreach (Column column in table.Columns)
@@ -968,7 +975,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
                                             sb.AppendLine(CGenerate.ContentLS + "if (Ids.Count() != 0)");
                                             sb.AppendLine(CGenerate.ContentLS + "{");
-                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Wheres.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
+                                            sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "builder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
                                             sb.AppendLine(CGenerate.ContentLS + "}");
                                             break;
                                         }

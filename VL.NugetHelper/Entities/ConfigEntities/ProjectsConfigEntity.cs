@@ -68,44 +68,6 @@ namespace VL.NugetHelper.Entities.ConfigEntities
                 Projects.Add(detail);
             }
         }
-
-        //public ProjectsConfigEntity(string fileName, string directoryPath, bool isInitFromFile = false) : base(fileName, directoryPath, isInitFromFile)
-        //{
-        //}
-
-        //public override XElement ToXElement()
-        //{
-        //    XElement xProjects = new XElement("Projects");
-        //    //Server
-        //    XElement xServer = new XElement("Server"
-        //        ,new XAttribute(nameof(NugetServer), NugetServer)
-        //        , new XAttribute(nameof(APIKey), APIKey));
-        //    xProjects.Add(xServer);
-        //    //Project
-        //    foreach (var project in Projects)
-        //    {
-        //        XElement xProject = new XElement("Project", new XAttribute(nameof(ProjectDetail.Name), project.Name), new XAttribute(nameof(ProjectDetail.Author), project.Author));
-        //        xProject.Value = project.RootPath;
-        //        xProjects.Add(xProject);
-        //    }
-        //    return xProjects;
-        //}
-        //protected override void Load(XDocument doc)
-        //{
-        //    //Server
-        //    var xServer = doc.Descendants("Server");
-        //    if (xServer!=null)
-        //    {
-        //        NugetServer = xServer.First().Attribute(nameof(NugetServer)).Value;
-        //        APIKey = xServer.First().Attribute(nameof(APIKey)).Value;
-        //    }
-        //    //Project
-        //    var configItems = doc.Descendants("Project");
-        //    foreach (var configItem in configItems)
-        //    {
-        //        Projects.Add(new ProjectDetail(configItem.Attribute(nameof(ProjectDetail.Name)).Value, configItem.Attribute(nameof(ProjectDetail.Author)).Value, configItem.Value));
-        //    }
-        //}
     }
     /// <summary>
     /// 项目信息
