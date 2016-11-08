@@ -86,7 +86,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     throw new NotImplementedException();
             }
         }
-        /// <summary>
+        /// <summary>啊
         /// ORM模型Entity的基类命名空间
         /// </summary>
         public static string NamespaceOfDASObjects = "VL.Common.DAS.Objects";
