@@ -92,8 +92,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         public static string NamespaceOfDASObjects = "VL.Common.DAS.Objects";
         public static string NamespaceOfORMObjects = "VL.Common.ORM.Objects";
         public static string NamespaceOfORMQueryBuilders = "VL.Common.ORM.Utilities.QueryBuilders";
-        public static string NamespaceOfORMQueryOperators = "VL.Common.Protocol.IService.IORM";
-        public static string NamespaceOfServiceResult = "VL.Common.Protocol.IService";
+        public static string NamespaceOfProtocol = "VL.Common.Protocol.IService";
         public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config=null)
         {
             var result= new List<string>();
@@ -108,8 +107,8 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfDASObjects);
                     result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
                     result.Add(NamespaceOfORMQueryBuilders);
-                    result.Add(NamespaceOfORMQueryOperators);
-                    result.Add(NamespaceOfServiceResult);
+                    result.Add(NamespaceOfProtocol);
+                    result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
@@ -128,7 +127,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfDASObjects);
                     result.Add(NamespaceOfORMObjects);
                     result.Add(NamespaceOfORMQueryBuilders);
-                    result.Add(NamespaceOfORMQueryOperators);
+                    result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.References:
                     result.Add("System");
@@ -140,7 +139,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add(NamespaceOfDASObjects);
                     result.Add(NamespaceOfORMQueryBuilders);
-                    result.Add(NamespaceOfORMQueryOperators);
+                    result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.Enums:
                     break;
