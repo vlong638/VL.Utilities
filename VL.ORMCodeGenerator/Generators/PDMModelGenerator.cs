@@ -1,17 +1,13 @@
 ﻿using PdPDM;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Linq;
-using VL.Common.ORM.Objects;
-using VL.Common.ORM.Utilities.QueryBuilders;
-using VL.Common.ORM.Utilities.QueryOperators;
-using VL.Common.Protocol.IService.IORM;
+using VL.Common.ORM;
 using VL.ORMCodeGenerator.Objects.Constraits;
 using VL.ORMCodeGenerator.Objects.Entities;
 using VL.ORMCodeGenerator.Objects.Enums;
 using VL.ORMCodeGenerator.Utilities;
-using System.Collections.Generic;
 
 namespace VL.ORMCodeGenerator.Generators
 {

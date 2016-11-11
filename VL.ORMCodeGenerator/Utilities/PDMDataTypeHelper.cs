@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using VL.Common.ORM.Objects;
+using VL.Common.ORM;
 
 namespace VL.ORMCodeGenerator.Utilities
 {

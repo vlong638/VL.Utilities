@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VL.Common.ORM.Objects;
+using VL.Common.ORM;
 
 namespace VL.ORMCodeGenerator.Utilities
 {

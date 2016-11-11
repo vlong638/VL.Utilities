@@ -89,10 +89,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         /// <summary>啊
         /// ORM模型Entity的基类命名空间
         /// </summary>
-        public static string NamespaceOfDASObjects = "VL.Common.DAS.Objects";
-        public static string NamespaceOfORMObjects = "VL.Common.ORM.Objects";
-        public static string NamespaceOfORMQueryBuilders = "VL.Common.ORM.Utilities.QueryBuilders";
-        public static string NamespaceOfProtocol = "VL.Common.Protocol.IService";
+        public static string NamespaceOfDAS = "VL.Common.DAS";
+        public static string NamespaceOfORM = "VL.Common.ORM";
+        public static string NamespaceOfProtocol = "VL.Common.Protocol";
         public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config=null)
         {
             var result= new List<string>();
@@ -104,41 +103,39 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             {
                 case EGenerateTargetType.DomainEntities:
                     result.Add("System");
-                    result.Add(NamespaceOfDASObjects);
+                    result.Add(NamespaceOfDAS);
                     result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
-                    result.Add(NamespaceOfORMQueryBuilders);
-                    result.Add(NamespaceOfProtocol);
+                    result.Add(NamespaceOfORM);
                     result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
-                    result.Add(NamespaceOfORMObjects);
+                    result.Add(NamespaceOfORM);
                     result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
                     break;
                 case EGenerateTargetType.EntityProperties:
-                    result.Add(NamespaceOfORMObjects);
+                    result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.EntityOperators:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
-                    result.Add(NamespaceOfDASObjects);
-                    result.Add(NamespaceOfORMObjects);
-                    result.Add(NamespaceOfORMQueryBuilders);
+                    result.Add(NamespaceOfDAS);
+                    result.Add(NamespaceOfORM);
                     result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.References:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
-                    result.Add(NamespaceOfORMObjects);
+                    result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.ReferenceFetchers:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
-                    result.Add(NamespaceOfDASObjects);
-                    result.Add(NamespaceOfORMQueryBuilders);
+                    result.Add(NamespaceOfDAS);
+                    result.Add(NamespaceOfORM);
                     result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.Enums:

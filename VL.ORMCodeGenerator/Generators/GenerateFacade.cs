@@ -1,6 +1,6 @@
 ﻿using PdCommon;
 using PdPDM;
-using VL.Common.DAS.Objects;
+using VL.Common.DAS;
 using VL.ORMCodeGenerator.Objects.Entities;
 using VL.ORMCodeGenerator.Objects.Enums;
 

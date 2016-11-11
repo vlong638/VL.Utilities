@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using VL.Common.DAS.Objects;
+using VL.Common.DAS;
 using VL.ORMCodeGenerator.Generators;
 using VL.ORMCodeGenerator.Objects.Entities;
 

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using VL.Common.Configurator.Objects.ConfigEntities;
-using VL.Common.DAS.Objects;
-using VL.ORMCodeGenerator.Utilities;
+using VL.Common.Configurator;
+using VL.Common.DAS;
 
 namespace VL.ORMCodeGenerator.Objects.Entities
 {
@@ -106,7 +105,7 @@ namespace VL.ORMCodeGenerator.Objects.Entities
         {
         }
 
-        public override IEnumerable<XElement> GetXElements()
+        public override IEnumerable<XElement> ToXElements()
         {
             List<XElement> elements = new List<XElement>();
             foreach (var item in Items)
