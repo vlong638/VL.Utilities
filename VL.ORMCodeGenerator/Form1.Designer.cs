@@ -147,7 +147,7 @@
             this.lblCSharpEntityNameSpace.Name = "lblCSharpEntityNameSpace";
             this.lblCSharpEntityNameSpace.Size = new System.Drawing.Size(53, 12);
             this.lblCSharpEntityNameSpace.TabIndex = 22;
-            this.lblCSharpEntityNameSpace.Text = "命名空间";
+            this.lblCSharpEntityNameSpace.Text = "项目代号";
             // 
             // tb_namespace
             // 

@@ -27,12 +27,12 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.DomainEntities:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.DomainEntities.ToString());
+                case EGenerateTargetType.EntityOperators:
+                case EGenerateTargetType.ReferenceFetchers:
+                    return Path.Combine(rootPath, EDirectoryNames.Business.ToString(), tableName);
                 case EGenerateTargetType.Entities:
                 case EGenerateTargetType.EntityProperties:
-                case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
-                case EGenerateTargetType.ReferenceFetchers:
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Entities.ToString(), tableName);
                 case EGenerateTargetType.Enums:
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Enums.ToString());
@@ -46,8 +46,10 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.Entities:
+                    filePath = Path.Combine(directoryPath, tableName);
+                    break;
                 case EGenerateTargetType.DomainEntities:
-                    filePath= Path.Combine(directoryPath, tableName);
+                    filePath = Path.Combine(directoryPath, tableName + CGenerate.FileNameSuffixOfDomain);
                     break;
                 case EGenerateTargetType.EntityProperties:
                     filePath = Path.Combine(directoryPath, tableName + CGenerate.FileNameSuffixOfProperties);
@@ -69,19 +71,22 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             }
             return filePath + ".cs";
         }
+        public const string RootCommonNamespace = "VL.Common.Object";
         public static string GetNamespace(this EGenerateTargetType targetType, string rootNamespace)
         {
             switch (targetType)
             {
                 case EGenerateTargetType.Entities:
-                case EGenerateTargetType.DomainEntities:
                 case EGenerateTargetType.EntityProperties:
-                case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.References:
-                case EGenerateTargetType.ReferenceFetchers:
-                    return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Entities.ToString();
                 case EGenerateTargetType.Enums:
-                    return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Enums.ToString();
+                    return RootCommonNamespace + "." + rootNamespace;
+                case EGenerateTargetType.DomainEntities:
+                case EGenerateTargetType.EntityOperators:
+                case EGenerateTargetType.ReferenceFetchers:
+                    return rootNamespace + "." + "Business";
+                //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Entities.ToString();
+                //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Enums.ToString();
                 default:
                     throw new NotImplementedException();
             }
@@ -90,59 +95,67 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         /// ORM模型Entity的基类命名空间
         /// </summary>
         public static string NamespaceOfDAS = "VL.Common.DAS";
-        public static string NamespaceOfORM = "VL.Common.ORM";
-        public static string NamespaceOfProtocol = "VL.Common.Protocol";
-        public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config=null)
+        public static string NamespaceOfORMObject = "VL.Common.Object.ORM";
+        public static string NamespaceOfORMBusiness = "VL.Common.ORM";
+        public static string NamespaceOfProtocolObject = "VL.Common.Object.Protocol";
+        public static string NamespaceOfProtocolBusiness = "VL.Common.Protocol";
+        public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config)
         {
-            var result= new List<string>();
-            if (config!=null&& config.IsSupportWCF)
-            {
-                result.Add("System.Runtime.Serialization");
-            }
+            var result = new List<string>();
             switch (targetType)
             {
                 case EGenerateTargetType.DomainEntities:
                     result.Add("System");
+                    result.Add("System.Collections.Generic");
+                    result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
+                    result.Add(NamespaceOfProtocolObject);
+                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    result.Add(NamespaceOfORMBusiness);
+                    result.Add(NamespaceOfProtocolBusiness);
                     result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
-                    result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
                     break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
-                    result.Add(NamespaceOfORM);
-                    result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
+                    if (config.IsSupportWCF)
+                    {
+                        result.Add("System.Runtime.Serialization");
+                    }
+                    result.Add(NamespaceOfORMObject);
                     break;
                 case EGenerateTargetType.EntityProperties:
-                    result.Add(NamespaceOfORM);
+                    result.Add(NamespaceOfORMObject);
                     break;
                 case EGenerateTargetType.EntityOperators:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
-                    result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
+                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    result.Add(NamespaceOfORMObject);
+                    result.Add(NamespaceOfORMBusiness);
+                    result.Add(NamespaceOfProtocolBusiness);
                     break;
                 case EGenerateTargetType.References:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
-                    result.Add(NamespaceOfORM);
+                    result.Add(NamespaceOfORMObject);
                     break;
                 case EGenerateTargetType.ReferenceFetchers:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add(NamespaceOfDAS);
-                    result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
+                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    result.Add(NamespaceOfORMBusiness);
+                    result.Add(NamespaceOfProtocolBusiness);
                     break;
                 case EGenerateTargetType.Enums:
                     break;
                 default:
                     throw new NotImplementedException();
-            }
+            } 
             return result;
         }
     }

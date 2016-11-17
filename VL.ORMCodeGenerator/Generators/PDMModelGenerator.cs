@@ -76,7 +76,7 @@ namespace VL.ORMCodeGenerator.Generators
                 string targetFilePath = EGenerateTargetType.References.GetFilePath(targetDirectoryPath, tableName);
                 string targetNamespace = EGenerateTargetType.References.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
-                sb.AppendUsings(EGenerateTargetType.References.GetReferences());
+                sb.AppendUsings(EGenerateTargetType.References.GetReferences(config));
                 sb.AppendLine();
                 sb.AppendNameSpace(targetNamespace, () =>
                 {
@@ -159,7 +159,7 @@ namespace VL.ORMCodeGenerator.Generators
                 string targetFilePath = EGenerateTargetType.ReferenceFetchers.GetFilePath(targetDirectoryPath, tableName);
                 string targetNamespace = EGenerateTargetType.ReferenceFetchers.GetNamespace(config.RootNamespace);
                 StringBuilder sb = new StringBuilder();
-                sb.AppendUsings(EGenerateTargetType.ReferenceFetchers.GetReferences());
+                sb.AppendUsings(EGenerateTargetType.ReferenceFetchers.GetReferences(config));
                 sb.AppendLine();
                 sb.AppendNameSpace(targetNamespace, () =>
                 {
@@ -412,14 +412,8 @@ namespace VL.ORMCodeGenerator.Generators
                 {
                     continue;
                 }
-                if (table.Name.StartsWith(CGenerate.PDMNameNotationOfRelationMapper))
-                {
-                    result = result && GenerateEntity(config, table);
-                    result = result && GenerateDomainEntity(config, table);
-                    result = result && GenerateEntityOperator(config, table, LocateType.C | LocateType.R | LocateType.U | LocateType.D);
-                    result = result && GenerateEntityProperties(config, table);
-                }
-                if (table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
+                if (table.Name.StartsWith(CGenerate.PDMNameNotationOfRelationMapper) 
+                    ||table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
                     result = result && GenerateDomainEntity(config, table);
@@ -478,7 +472,7 @@ namespace VL.ORMCodeGenerator.Generators
                 //    {
                 //    }, true);
                 //});
-                sb.AppendClass(false, "public partial", table.Name, "", () =>
+                sb.AppendClass(false, "public static", table.Name + CGenerate.FileNameSuffixOfDomain, "", () =>
                 {
                     sb.AppendMethod("//public void", "Create", "DbSession session, " + table.Name + " " + table.Name.ToParameterFormat(), () =>
                     {
@@ -655,7 +649,7 @@ namespace VL.ORMCodeGenerator.Generators
             string targetFilePath = EGenerateTargetType.EntityOperators.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.EntityOperators.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            sb.AppendUsings(EGenerateTargetType.EntityOperators.GetReferences());
+            sb.AppendUsings(EGenerateTargetType.EntityOperators.GetReferences(config));
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {
@@ -1044,7 +1038,7 @@ namespace VL.ORMCodeGenerator.Generators
             string targetFilePath = EGenerateTargetType.EntityProperties.GetFilePath(targetDirectoryPath, table.Name);
             string targetNamespace = EGenerateTargetType.EntityProperties.GetNamespace(config.RootNamespace);
             StringBuilder sb = new StringBuilder();
-            sb.AppendUsings(EGenerateTargetType.EntityProperties.GetReferences());
+            sb.AppendUsings(EGenerateTargetType.EntityProperties.GetReferences(config));
             sb.AppendLine();
             sb.AppendNameSpace(targetNamespace, () =>
             {

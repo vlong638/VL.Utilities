@@ -36,6 +36,10 @@
         /// <summary>
         /// 输出文件名称后缀
         /// </summary>
+        public static string FileNameSuffixOfDomain = "Domain";
+        /// <summary>
+        /// 输出文件名称后缀
+        /// </summary>
         public static string FileNameSuffixOfFetcher = "Fetcher";
         /// <summary>
         /// 输出类名称

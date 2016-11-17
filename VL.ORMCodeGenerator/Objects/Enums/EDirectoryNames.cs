@@ -2,12 +2,14 @@
 {
     public enum EDirectoryNames
     {
-        Objects,
         Entities,
-        Enums,
         Controllers,
         InputControllers,
         Processors,
         OutputControllers,
+        //生成目录
+        Objects,
+        Enums,
+        Business,
     }
 }

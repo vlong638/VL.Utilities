@@ -138,7 +138,7 @@ namespace VL.ORMCodeGenerator.Objects.Entities
                 });
             }
             var lastestPDMFilePathItem = doc.Descendants(nameof(LastestPDMFilePath));
-            if (lastestPDMFilePathItem.Count()!=0)
+            if (lastestPDMFilePathItem.Count() != 0)
             {
                 LastestPDMFilePath = lastestPDMFilePathItem.First().Value;
             }
@@ -155,7 +155,7 @@ namespace VL.ORMCodeGenerator.Objects.Entities
         /// </summary>
         public string RootPath { set; get; } = "";
         /// <summary>
-        /// 目标命名空间
+        /// 项目代号
         /// </summary>
         public string RootNamespace { set; get; } = "";
         /// <summary>
