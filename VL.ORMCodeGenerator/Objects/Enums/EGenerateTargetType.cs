@@ -27,9 +27,10 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             switch (targetType)
             {
                 case EGenerateTargetType.DomainEntities:
+                    return Path.Combine(rootPath, EDirectoryNames.Business.ToString(), "Domain");
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return Path.Combine(rootPath, EDirectoryNames.Business.ToString(), tableName);
+                    return Path.Combine(rootPath, EDirectoryNames.Business.ToString(),"DAL", tableName);
                 case EGenerateTargetType.Entities:
                 case EGenerateTargetType.EntityProperties:
                 case EGenerateTargetType.References:
