@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VL.Common.Object.Protocol;
 
 namespace VL.ToolKit
 {
@@ -26,6 +27,7 @@ namespace VL.ToolKit
 
             StringBuilder result = new StringBuilder();
             result.AppendLine("            AddMessages(result.Code, new KeyValueCollection {");
+            result.AppendLine(string.Format("                            new KeyValue({0}, \"{1}\") ,", CProtocol.CReport.CError, "系统内部异常"));
             var reader = new StringReader(tb_enum.Text);
             string line;
             int index = -1;
