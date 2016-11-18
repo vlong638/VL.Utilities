@@ -58,6 +58,8 @@
             this.tb_KeyValueCollection.Name = "tb_KeyValueCollection";
             this.tb_KeyValueCollection.Size = new System.Drawing.Size(380, 411);
             this.tb_KeyValueCollection.TabIndex = 2;
+            this.tb_KeyValueCollection.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tb_KeyValueCollection_KeyDown);
+            this.tb_KeyValueCollection.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tb_KeyValueCollection_KeyUp);
             // 
             // ECodeParser
             // 

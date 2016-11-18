@@ -24,7 +24,8 @@ namespace VL.ToolKit
             if (string.IsNullOrEmpty(tb_enum.Text))
                 return;
 
-            List<string> results = new List<string>();
+            StringBuilder result = new StringBuilder();
+            result.AppendLine("            AddMessages(result.Code, new KeyValueCollection {");
             var reader = new StringReader(tb_enum.Text);
             string line;
             int index = -1;
@@ -45,7 +46,7 @@ namespace VL.ToolKit
                 }
                 else
                 {
-                    var regex = new Regex(@"([\w]+)(\s=\s(\d+))?,?");
+                    var regex = new Regex(@"([\w]+)(\s?=\s?(\d+))?,?");
                     if (regex.IsMatch(line))
                     {
                         var match = regex.Match(line);
@@ -53,12 +54,36 @@ namespace VL.ToolKit
                         {
                             index = Convert.ToInt32(match.Groups[3].Value);
                         }
-                        results.Add(string.Format("                            new KeyValue({0}, \"{1}\") ,", index, match.Groups[1]));
+                        result.AppendLine(string.Format("                            new KeyValue({0}, \"{1}\") ,", index, match.Groups[1]));
                     }
                     index += 1;
                 }
             }
-            tb_KeyValueCollection.Text = string.Join(System.Environment.NewLine, results);
+            result.AppendLine("                        });");
+            tb_KeyValueCollection.Text = result.ToString();
+        }
+
+        public Keys Pre { set; get; } = Keys.None;
+        private void tb_KeyValueCollection_KeyDown(object sender, KeyEventArgs e)
+        {
+            if ((e.KeyData&Keys.Control)>0)
+            {
+                Pre = Keys.Control;
+            }
+            if ((e.KeyData&Keys.C)>0)
+            {
+                if (Pre!=Keys.Control)
+                    return;
+                Clipboard.SetDataObject(tb_KeyValueCollection.Text);
+            }
+        }
+
+        private void tb_KeyValueCollection_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Control)
+            {
+                Pre = Keys.None;
+            }
         }
     }
 }
