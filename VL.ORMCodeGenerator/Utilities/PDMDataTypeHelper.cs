@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PdPDM;
+using System;
 using System.Text.RegularExpressions;
 using VL.Common.ORM;
 
@@ -6,8 +7,9 @@ namespace VL.ORMCodeGenerator.Utilities
 {
     public static class DataTypeHelper
     {
-        public static PDMDataType GetPDMDataType(string pdmDataTypeString)
+        public static PDMDataType GetPDMDataType(this Column column)
         {
+            var pdmDataTypeString = column.DataType;
             Regex regex = new Regex(@"(\w+)(\((\d+))?(,(\d+)\))?");
             Match match = regex.Match(pdmDataTypeString);
             string pdmDataType = match.Groups[1].Value;
@@ -27,9 +29,9 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException();
             }
         }
-        public static string GetEmptyValue(this PDMDataType pdmDataType)
+        public static string GetEmptyValue(this Column column)
         {
-            switch (pdmDataType)
+            switch (column.GetPDMDataType())
             {
                 case PDMDataType.varchar:
                 case PDMDataType.nvarchar:
@@ -45,8 +47,11 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException();
             }
         }
-        public static string GetCSharpDataType(this PDMDataType pdmDataType, int length, int precision)
+        public static string GetCSharpDataType(this Column column)
         {
+            PDMDataType pdmDataType = column.GetPDMDataType();
+            int length=column.Length ;
+            int precision=column.Precision ;
             switch (pdmDataType)
             {
                 case PDMDataType.varchar:
@@ -83,8 +88,47 @@ namespace VL.ORMCodeGenerator.Utilities
                     throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
             }
         }
-        public static string GetCSharpDataTypeConvertString(this PDMDataType pdmDataType, int length, int precision, string value)
+        public static string GetCSharpValue(this Column column)
         {
+            switch (column.GetCSharpDataType())
+            {
+                case nameof(String):
+                case nameof(DateTime):
+                    if (string.IsNullOrEmpty(column.DefaultValue))
+                    {
+                        return "";
+                    }
+                    return "\"" + column.DefaultValue + "\"";
+                case nameof(Decimal):
+                case nameof(Int64):
+                case nameof(Int32):
+                case nameof(Int16):
+                case nameof(Guid):
+                    if (string.IsNullOrEmpty(column.DefaultValue))
+                    {
+                        return "";
+                    }
+                    return column.DefaultValue;
+                case nameof(Boolean):
+                    if (string.IsNullOrEmpty(column.DefaultValue))
+                    {
+                        return "";
+                    }
+                    if ( column.DefaultValue == "0")
+                    {
+                        return "false";
+                    }
+                    return "true";
+                default:
+                    throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+            }
+        }
+        public static string GetCSharpDataTypeConvertString(this Column column)
+        {
+            PDMDataType pdmDataType = column.GetPDMDataType();
+            int length = column.Length;
+            int precision = column.Precision;
+            string value = "reader[nameof(this." + column.Name + ")]";
             switch (pdmDataType)
             {
                 case PDMDataType.varchar:
@@ -92,7 +136,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
                 case PDMDataType.boolean:
-                    return string.Format("Convert.To{0}({1})", pdmDataType.GetCSharpDataType(length, precision), value);
+                    return string.Format("Convert.To{0}({1})", column.GetCSharpDataType(), value);
                 case PDMDataType.uniqueidentifier:
                     return string.Format("new Guid({0}.ToString())", value);
                 default:

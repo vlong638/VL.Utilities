@@ -37,7 +37,7 @@ namespace VL.ORMCodeGenerator.Utilities
             {
                 if (column.IsEnumField())
                     return false;
-                var dataType = DataTypeHelper.GetPDMDataType(column.DataType);
+                var dataType = column.GetPDMDataType();
                 return dataType.IsNullableType();
             }
             return false;

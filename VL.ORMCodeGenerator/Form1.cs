@@ -95,7 +95,7 @@ namespace VL.ORMCodeGenerator
         }
         private void ctlSourcePdmFile_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == Keys.Back)
+            if (e.KeyData == Keys.Back||e.KeyData==Keys.Delete)
             {
                 GenerateConfigs.Items.Remove(CurrentGenerateConfig);
                 cb_source.DataSource = GenerateConfigs.Items.Select(c => c.PDMFilePath).ToList();

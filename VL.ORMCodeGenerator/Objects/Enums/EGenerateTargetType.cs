@@ -127,6 +127,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfORMObject);
                     break;
                 case EGenerateTargetType.EntityProperties:
+                    result.Add("System");
                     result.Add(NamespaceOfORMObject);
                     break;
                 case EGenerateTargetType.EntityOperators:
@@ -153,6 +154,10 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add(NamespaceOfProtocolBusiness);
                     break;
                 case EGenerateTargetType.Enums:
+                    if (config.IsSupportWCF)
+                    {
+                        result.Add("System.Runtime.Serialization");
+                    }
                     break;
                 default:
                     throw new NotImplementedException();

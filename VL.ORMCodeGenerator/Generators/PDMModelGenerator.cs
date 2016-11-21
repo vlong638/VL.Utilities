@@ -220,7 +220,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                         childIdentifier = column;
                                                     }
                                                 }
-                                                sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childIdentifier.Name + " == " + DataTypeHelper.GetPDMDataType(childIdentifier.DataType).GetEmptyValue() + ")");
+                                                sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childIdentifier.Name + " == " + childIdentifier.GetEmptyValue() + ")");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "var subselect = new SelectBuilder();");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "subselect.TableName = nameof(" + parentTableName + ");");
@@ -505,7 +505,7 @@ namespace VL.ORMCodeGenerator.Generators
                     }
                     else
                     {
-                        dataType = DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataType(column.Length, column.Precision);
+                        dataType = column.GetCSharpDataType();
                     }
                     sb.AppendLine(CGenerate.MethodLS + "public" + " " + dataType + (column.IsNullableField() ? "?" : "") + " " + column.Name + " { get; set; }");
                 }
@@ -528,7 +528,7 @@ namespace VL.ORMCodeGenerator.Generators
                         }
                         else
                         {
-                            dataType = DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataType(column.Length, column.Precision);
+                            dataType = column.GetCSharpDataType();
                         }
                         parameters.Add(dataType + " " + column.Name.ToParameterFormat());
                     }
@@ -574,7 +574,7 @@ namespace VL.ORMCodeGenerator.Generators
                             if (column.Mandatory)
                             {
                                 sb.AppendLine(CGenerate.ContentLS + "this." + column.Name + " = "
-                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + column.GetCSharpDataTypeConvertString()
                                     + ";");
                             }
                             else
@@ -582,7 +582,7 @@ namespace VL.ORMCodeGenerator.Generators
                                 sb.AppendLine(CGenerate.ContentLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + column.GetCSharpDataTypeConvertString()
                                     + ";");
                                 sb.AppendLine(CGenerate.ContentLS + "}");
                             }
@@ -615,7 +615,7 @@ namespace VL.ORMCodeGenerator.Generators
                             if (column.Mandatory)
                             {
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + column.GetCSharpDataTypeConvertString()
                                     + ";");
                             }
                             else
@@ -623,7 +623,7 @@ namespace VL.ORMCodeGenerator.Generators
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "if (reader[nameof(this." + column.Name + ")] != DBNull.Value)");
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "{");
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + CGenerate.TabLS + "this." + column.Name + " = "
-                                    + DataTypeHelper.GetPDMDataType(column.DataType).GetCSharpDataTypeConvertString(column.Length, column.Precision, "reader[nameof(this." + column.Name + ")]")
+                                    + column.GetCSharpDataTypeConvertString()
                                     + ";");
                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                             }
@@ -716,7 +716,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                         else
                                         {
-                                            switch (DataTypeHelper.GetPDMDataType(column.DataType))
+                                            switch (column.GetPDMDataType())
                                             {
                                                 case PDMDataType.varchar:
                                                 case PDMDataType.nvarchar:
@@ -763,7 +763,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                         else
                                         {
-                                            switch (DataTypeHelper.GetPDMDataType(column.DataType))
+                                            switch (column.GetPDMDataType())
                                             {
                                                 case PDMDataType.varchar:
                                                 case PDMDataType.nvarchar:
@@ -1044,9 +1044,11 @@ namespace VL.ORMCodeGenerator.Generators
                     {
                         foreach (Column column in table.Columns)
                         {
-                            sb.AppendLine(CGenerate.MethodLS + "public static PDMDbProperty " + column.Name + " { get; set; } = new PDMDbProperty(nameof(" + column.Name + "), \"" + column.Code
-                                + "\", \"" + column.Comment + "\", " + column.Primary.ToString().ToLower() + ", " + nameof(PDMDataType) + "." + DataTypeHelper.GetPDMDataType(column.DataType) + ", " + column.Length
-                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + ", " + (string.IsNullOrEmpty(column.DefaultValue) ? "null" : column.DefaultValue) + ");");
+                            var pClass = "PDMDbProperty<" + column.GetCSharpDataType() + ">";
+                            var cValue = column.GetCSharpValue();
+                            sb.AppendLine(CGenerate.MethodLS + "public static "+ pClass + " " + column.Name + " { get; set; } = new "+ pClass + "(nameof(" + column.Name + "), \"" + column.Code
+                                + "\", \"" + column.Comment + "\", " + column.Primary.ToString().ToLower() + ", " + nameof(PDMDataType) + "." + column.GetPDMDataType() + ", " + column.Length
+                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() +(string.IsNullOrEmpty(cValue)?"":", "+ cValue )+ ");");
                         }
                     });
                 });
