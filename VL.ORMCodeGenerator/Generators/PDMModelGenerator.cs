@@ -412,8 +412,8 @@ namespace VL.ORMCodeGenerator.Generators
                 {
                     continue;
                 }
-                if (table.Name.StartsWith(CGenerate.PDMNameNotationOfRelationMapper) 
-                    ||table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
+                if (table.Name.StartsWith(CGenerate.PDMNameNotationOfRelationMapper)
+                    || table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
                     result = result && GenerateDomainEntity(config, table);
@@ -724,6 +724,13 @@ namespace VL.ORMCodeGenerator.Generators
                                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(\"缺少必填的参数项值, 参数项: \" + nameof(entity." + column.Name + "));");
                                                     sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    if (column.Length > 0)
+                                                    {
+                                                        sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + ".Length > " + column.Length + ")");
+                                                        sb.AppendLine(CGenerate.ContentLS + "{");
+                                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(string.Format(\"参数项:{0}长度:{1}超过额定限制:{2}\", nameof(entity." + column.Name + "), entity." + column.Name + ".Length, " + column.Length + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    }
                                                     break;
                                                 case PDMDataType.numeric:
                                                 case PDMDataType.datetime:
@@ -771,6 +778,13 @@ namespace VL.ORMCodeGenerator.Generators
                                                     sb.AppendLine(CGenerate.ContentLS + "{");
                                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(\"缺少必填的参数项值, 参数项: \" + nameof(entity." + column.Name + "));");
                                                     sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    if (column.Length > 0)
+                                                    {
+                                                        sb.AppendLine(CGenerate.ContentLS + "if (entity." + column.Name + ".Length > " + column.Length + ")");
+                                                        sb.AppendLine(CGenerate.ContentLS + "{");
+                                                        sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(string.Format(\"参数项:{0}长度:{1}超过额定限制:{2}\", nameof(entity." + column.Name + "), entity." + column.Name + ".Length, " + column.Length + "));");
+                                                        sb.AppendLine(CGenerate.ContentLS + "}");
+                                                    }
                                                     break;
                                                 case PDMDataType.numeric:
                                                 case PDMDataType.datetime:
@@ -969,7 +983,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().SelectAll<" + table.Name + ">(query);");
                                 });
-                                sb.AppendCommend(true,  "存在相应对象时返回true,缺少对象时返回false");
+                                sb.AppendCommend(true, "存在相应对象时返回true,缺少对象时返回false");
                                 sb.AppendMethod("public static bool", "DbLoad", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var result = entity.DbSelect(session, fields);");
@@ -1046,9 +1060,9 @@ namespace VL.ORMCodeGenerator.Generators
                         {
                             var pClass = "PDMDbProperty<" + column.GetCSharpDataType() + ">";
                             var cValue = column.GetCSharpValue();
-                            sb.AppendLine(CGenerate.MethodLS + "public static "+ pClass + " " + column.Name + " { get; set; } = new "+ pClass + "(nameof(" + column.Name + "), \"" + column.Code
+                            sb.AppendLine(CGenerate.MethodLS + "public static " + pClass + " " + column.Name + " { get; set; } = new " + pClass + "(nameof(" + column.Name + "), \"" + column.Code
                                 + "\", \"" + column.Comment + "\", " + column.Primary.ToString().ToLower() + ", " + nameof(PDMDataType) + "." + column.GetPDMDataType() + ", " + column.Length
-                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() +(string.IsNullOrEmpty(cValue)?"":", "+ cValue )+ ");");
+                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + (string.IsNullOrEmpty(cValue) ? "" : ", " + cValue) + ");");
                         }
                     });
                 });
