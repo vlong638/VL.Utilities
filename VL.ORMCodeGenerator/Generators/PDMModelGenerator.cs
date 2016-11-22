@@ -193,7 +193,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = session.GetQueryOperator()."
-                                                    + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(session, query);");
+                                                    + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + parentTableToParameter + "." + childTableToProperty + " != null;");
                                             });
                                             break;
@@ -234,7 +234,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 sb.AppendLine(CGenerate.ContentLS + "}");
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableToProperty + " = session.GetQueryOperator()."
-                                                    + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(session, query);");
+                                                    + nameof(IDbQueryOperator.Select) + "<" + childTableName + ">(query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childTableToProperty + " == null)");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(string.Format(\"1..* 关联未查询到匹配数据, Parent:{0}; Child: {1}\", nameof(" + parentTableName + "), nameof(" + childTableName + ")));");
@@ -257,7 +257,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = session.GetQueryOperator()."
-                                                         + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(session, query);");
+                                                         + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count > 0;");
                                             });
                                             break;
@@ -279,7 +279,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 }
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                                 sb.AppendLine(CGenerate.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = session.GetQueryOperator()."
-                                                    + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(session, query);");
+                                                    + nameof(IDbQueryOperator.SelectAll) + "<" + childTableName + ">(query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "if (" + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count == 0)");
                                                 sb.AppendLine(CGenerate.ContentLS + "{");
                                                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "throw new NotImplementedException(string.Format(\"1..* 关联未查询到匹配数据, Parent:{0}; Child: {1}\", nameof(" + parentTableName + "), nameof(" + childTableName + ")));");
@@ -354,7 +354,7 @@ namespace VL.ORMCodeGenerator.Generators
                                                 //    }
                                                 //}
                                                 sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                                sb.AppendLine(CGenerate.ContentLS + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + " = session.GetQueryOperator().SelectAll<" + subChildTableName + ">(session, query);");
+                                                sb.AppendLine(CGenerate.ContentLS + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + " = session.GetQueryOperator().SelectAll<" + subChildTableName + ">(query);");
                                                 sb.AppendLine(CGenerate.ContentLS + "return " + childTableName.ToParameterFormat() + "." + subChildTableToProperty.ToPluralFormat() + ".Count == 0;");
                                             });
                                             //TODO
@@ -372,7 +372,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             //        }
                                             //    }
                                             //    sb.AppendLine(GConstraints.ContentLS + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + " = session.GetQueryOperator()."
-                                            //        + nameof(IORMProvider.SelectAll) + "<" + childTableName + ">(session, query);");
+                                            //        + nameof(IORMProvider.SelectAll) + "<" + childTableName + ">(query);");
                                             //    sb.AppendLine(GConstraints.ContentLS + "return " + parentTableToParameter + "." + childTableName.ToPropertyFormat().ToPluralFormat() + ".Count > 0;");
                                             //});
                                         }
@@ -673,7 +673,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", entity." + column.Name + ", LocateType.Equal));");
                                         }
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbDelete", "this List<" + table.Name + "> entities, DbSession session", () =>
                                 {
@@ -688,7 +688,7 @@ namespace VL.ORMCodeGenerator.Generators
                                             break;
                                         }
                                     }
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(query);");
                                 });
                             }
                             #endregion
@@ -737,7 +737,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.InsertBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Insert<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Insert<" + table.Name + ">(query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbInsert", "this List<" + table.Name + "> entities, DbSession session", () =>
                                 {
@@ -785,7 +785,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.InsertBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().InsertAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().InsertAll<" + table.Name + ">(query);");
                                 });
                             }
                             #endregion
@@ -830,7 +830,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + "query.UpdateBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Update<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Update<" + table.Name + ">(query);");
                                 });
                                 sb.AppendMethod("public static bool", "DbUpdate", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
@@ -872,7 +872,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "}");
                                     sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "query.UpdateBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "}");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().UpdateAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().UpdateAll<" + table.Name + ">(query);");
                                 });
                             }
                             #endregion
@@ -889,7 +889,7 @@ namespace VL.ORMCodeGenerator.Generators
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = session.GetDbQueryBuilder();");
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilder = select;");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Select<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Select<" + table.Name + ">(query);");
                                 });
                                 sb.AppendCommend(true, "未查询到数据时返回 null");
                                 sb.AppendMethod("public static " + table.Name, "DbSelect", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
@@ -925,7 +925,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Select<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Select<" + table.Name + ">(query);");
                                 });
                                 sb.AppendCommend(true, "未查询到数据时返回 null");
                                 sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
@@ -967,7 +967,7 @@ namespace VL.ORMCodeGenerator.Generators
                                         }
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().SelectAll<" + table.Name + ">(session, query);");
+                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().SelectAll<" + table.Name + ">(query);");
                                 });
                                 sb.AppendCommend(true,  "存在相应对象时返回true,缺少对象时返回false");
                                 sb.AppendMethod("public static bool", "DbLoad", "this " + table.Name + " entity, DbSession session, params PDMDbProperty[] fields", () =>
