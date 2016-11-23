@@ -95,11 +95,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         /// <summary>啊
         /// ORM模型Entity的基类命名空间
         /// </summary>
-        public static string NamespaceOfDAS = "VL.Common.DAS";
-        public static string NamespaceOfORMObject = "VL.Common.Object.ORM";
-        public static string NamespaceOfORMBusiness = "VL.Common.ORM";
-        public static string NamespaceOfProtocolObject = "VL.Common.Object.Protocol";
-        public static string NamespaceOfProtocolBusiness = "VL.Common.Protocol";
+        public static string NamespaceOfDAS = "VL.Common.Core.DAS";
+        public static string NamespaceOfORM = "VL.Common.Core.ORM";
+        public static string NamespaceOfProtocol = "VL.Common.Core.Protocol";
         public static List<string> GetReferences(this EGenerateTargetType targetType, GenerateConfig config)
         {
             var result = new List<string>();
@@ -110,10 +108,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
-                    result.Add(NamespaceOfProtocolObject);
+                    result.Add(NamespaceOfORM);
+                    result.Add(NamespaceOfProtocol);
                     result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
-                    result.Add(NamespaceOfORMBusiness);
-                    result.Add(NamespaceOfProtocolBusiness);
                     result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
                     break;
                 case EGenerateTargetType.Entities:
@@ -124,34 +121,33 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     {
                         result.Add("System.Runtime.Serialization");
                     }
-                    result.Add(NamespaceOfORMObject);
+                    result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.EntityProperties:
                     result.Add("System");
-                    result.Add(NamespaceOfORMObject);
+                    result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.EntityOperators:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
+                    result.Add(NamespaceOfORM);
+                    result.Add(NamespaceOfProtocol);
                     result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
-                    result.Add(NamespaceOfORMObject);
-                    result.Add(NamespaceOfORMBusiness);
-                    result.Add(NamespaceOfProtocolBusiness);
                     break;
                 case EGenerateTargetType.References:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
-                    result.Add(NamespaceOfORMObject);
+                    result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.ReferenceFetchers:
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add(NamespaceOfDAS);
+                    result.Add(NamespaceOfORM);
+                    result.Add(NamespaceOfProtocol);
                     result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
-                    result.Add(NamespaceOfORMBusiness);
-                    result.Add(NamespaceOfProtocolBusiness);
                     break;
                 case EGenerateTargetType.Enums:
                     if (config.IsSupportWCF)
