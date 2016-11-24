@@ -72,7 +72,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
             }
             return filePath + ".cs";
         }
-        public const string RootCommonNamespace = "VL.Common.Object";
+        public const string RootCommonNamespace = "VL.Common.Core.Object";
         public static string GetNamespace(this EGenerateTargetType targetType, string rootNamespace)
         {
             switch (targetType)
