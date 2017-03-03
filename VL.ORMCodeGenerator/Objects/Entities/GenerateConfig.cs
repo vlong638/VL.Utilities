@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using VL.Common.Configurator;
-using VL.Common.DAS;
+using VL.Common.Core.DAS;
 
 namespace VL.ORMCodeGenerator.Objects.Entities
 {

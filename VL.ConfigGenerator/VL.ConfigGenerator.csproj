@@ -45,9 +45,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="VL.Common.Configurator, Version=1.1.6026.27142, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VL.Common.Configurator.1.1.1607011505.1\lib\net452\VL.Common.Configurator.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="VL.Common.Core, Version=1.0.6271.17172, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\VL.Common.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,7 +61,9 @@
     <None Include="Configs\DbConnectionsConfigEntity.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="libs\VL.Common.Core.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

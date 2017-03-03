@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using VL.Common.ORM;
+using VL.Common.Core.ORM;
 using VL.ORMCodeGenerator.Objects.Constraits;
 using VL.ORMCodeGenerator.Objects.Entities;
 using VL.ORMCodeGenerator.Objects.Enums;

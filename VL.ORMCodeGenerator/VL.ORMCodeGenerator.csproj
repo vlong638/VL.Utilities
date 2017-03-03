@@ -75,9 +75,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="VL.Common.Core, Version=1.0.6159.31130, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VL.Common.Core.1.0.1611111722.1\lib\net452\VL.Common.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="VL.Common.Core, Version=1.0.6271.17172, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLLs\VL.Common.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +105,7 @@
   <ItemGroup>
     <Content Include="DLLs\Interop.PdCommon.dll" />
     <Content Include="DLLs\Interop.PdPDM.dll" />
+    <Content Include="DLLs\VL.Common.Core.dll" />
     <Content Include="Protocol\IService\备注.txt" />
   </ItemGroup>
   <ItemGroup>

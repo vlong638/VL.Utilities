@@ -1,10 +1,8 @@
-﻿using PdPDM;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using VL.Common.DAS;
+using VL.Common.Core.DAS;
 using VL.ORMCodeGenerator.Generators;
 using VL.ORMCodeGenerator.Objects.Entities;
 

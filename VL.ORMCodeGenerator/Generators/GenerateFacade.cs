@@ -1,8 +1,7 @@
 ﻿using PdCommon;
 using PdPDM;
-using VL.Common.DAS;
+using VL.Common.Core.DAS;
 using VL.ORMCodeGenerator.Objects.Entities;
-using VL.ORMCodeGenerator.Objects.Enums;
 
 namespace VL.ORMCodeGenerator.Generators
 {

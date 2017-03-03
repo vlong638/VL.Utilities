@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using VL.Common.Configurator.Objects.ConfigEntities;
+﻿using System.Collections.Generic;
 using VL.Common.Testing.Objects;
 
 namespace VL.ConfigGenerator

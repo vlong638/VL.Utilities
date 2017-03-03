@@ -1,7 +1,7 @@
 ﻿using PdPDM;
 using System;
 using System.Text.RegularExpressions;
-using VL.Common.ORM;
+using VL.Common.Core.ORM;
 
 namespace VL.ORMCodeGenerator.Utilities
 {
