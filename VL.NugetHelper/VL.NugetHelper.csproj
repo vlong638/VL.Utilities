@@ -52,9 +52,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="VL.Common.Configurator, Version=1.1.6026.27142, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\VL.Common.Configurator.1.1.1607011505.1\lib\net452\VL.Common.Configurator.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="VL.Common.Core, Version=1.0.6271.17172, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>libs\VL.Common.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -100,6 +100,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="libs\VL.Common.Core.dll" />
     <Content Include="Nuget\NuGet.exe" />
     <Content Include="设计蓝图.txt" />
     <Content Include="重要参考资料.txt" />

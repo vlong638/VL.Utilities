@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using VL.Common.Configurator.Objects;
-using VL.Common.Configurator.Objects.ConfigEntities;
+using VL.Common.Configurator;
 
 namespace VL.NugetHelper.Entities.ConfigEntities
 {

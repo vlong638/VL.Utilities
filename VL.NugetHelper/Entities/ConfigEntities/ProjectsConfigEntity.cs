@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using VL.Common.Configurator.Objects.ConfigEntities;
+using VL.Common.Configurator;
 
 namespace VL.NugetHelper.Entities.ConfigEntities
 {
@@ -22,27 +23,6 @@ namespace VL.NugetHelper.Entities.ConfigEntities
 
         public ProjectsConfigEntity(string fileName, string directoryPath) : base(fileName, directoryPath)
         {
-        }
-
-        public override IEnumerable<XElement> GetXElements()
-        {
-            List<XElement> xElements = new List<XElement>();
-            //Server
-            XElement xServer = new XElement("Server"
-                , new XAttribute(nameof(NugetServer), NugetServer)
-                , new XAttribute(nameof(APIKey), APIKey));
-            xElements.Add(xServer);
-            //Project
-            foreach (var project in Projects)
-            {
-                XElement xProject = new XElement("Project", 
-                    new XAttribute(nameof(ProjectDetail.Name), project.Name),
-                    new XAttribute(nameof(ProjectDetail.Author), project.Author),
-                    new XAttribute(nameof(ProjectDetail.References), project.GetDependencesString()));
-                xProject.Value = project.RootPath;
-                xElements.Add(xProject);
-            }
-            return xElements;
         }
 
         protected override void Load(XDocument doc)
@@ -67,6 +47,27 @@ namespace VL.NugetHelper.Entities.ConfigEntities
                 }
                 Projects.Add(detail);
             }
+        }
+
+        public override IEnumerable<XElement> ToXElements()
+        {
+            List<XElement> xElements = new List<XElement>();
+            //Server
+            XElement xServer = new XElement("Server"
+                , new XAttribute(nameof(NugetServer), NugetServer)
+                , new XAttribute(nameof(APIKey), APIKey));
+            xElements.Add(xServer);
+            //Project
+            foreach (var project in Projects)
+            {
+                XElement xProject = new XElement("Project",
+                    new XAttribute(nameof(ProjectDetail.Name), project.Name),
+                    new XAttribute(nameof(ProjectDetail.Author), project.Author),
+                    new XAttribute(nameof(ProjectDetail.References), project.GetDependencesString()));
+                xProject.Value = project.RootPath;
+                xElements.Add(xProject);
+            }
+            return xElements;
         }
     }
     /// <summary>

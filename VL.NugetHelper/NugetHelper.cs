@@ -17,6 +17,9 @@ namespace VL.NugetHelper
         public NugetHelper()
         {
             InitializeComponent();
+            //ProjectsConfigEntity = new ProjectsConfigEntity("", System.Environment.CurrentDirectory);
+            //ProjectsConfigEntity.Save();
+
             ProjectsConfigEntity = new ProjectsConfigEntity("Projects.config", System.Environment.CurrentDirectory);
             LoadProjectsConfigEntity();
             //WriteText("结束初始化配置");
@@ -160,6 +163,8 @@ namespace VL.NugetHelper
         }
         private void UpdateAssemlyConfigEntity()
         {
+            if (AssemlyConfigEntity==null)
+                AssemlyConfigEntity = new AssemlyConfigEntity("");
             AssemlyConfigEntity.Title = tb_Title.Text;
             AssemlyConfigEntity.Description = tb_Description.Text;
             AssemlyConfigEntity.Configuration = tb_Configuration.Text;
