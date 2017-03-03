@@ -24,17 +24,20 @@ namespace VL.ORMCodeGenerator.Utilities
                 case "nvarchar":
                 case "datetime":
                 case "uniqueidentifier":
+                case "text":
                     return (PDMDataType)Enum.Parse(typeof(PDMDataType), pdmDataType);
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format("GetPDMDataType()未支持数据格式{0}", pdmDataType));
             }
         }
         public static string GetEmptyValue(this Column column)
         {
-            switch (column.GetPDMDataType())
+            var pdmDataType = column.GetPDMDataType();
+            switch (pdmDataType)
             {
                 case PDMDataType.varchar:
                 case PDMDataType.nvarchar:
+                case PDMDataType.text:
                     return "\"\"";
                 case PDMDataType.numeric:
                     return "0";
@@ -44,7 +47,7 @@ namespace VL.ORMCodeGenerator.Utilities
                     return "Guid.Empty";
                 case PDMDataType.boolean:
                 default:
-                    throw new NotImplementedException();
+                    throw new NotImplementedException(string.Format("GetEmptyValue()未支持数据格式{0}", pdmDataType));
             }
         }
         public static string GetCSharpDataType(this Column column)
@@ -56,6 +59,7 @@ namespace VL.ORMCodeGenerator.Utilities
             {
                 case PDMDataType.varchar:
                 case PDMDataType.nvarchar:
+                case PDMDataType.text:
                     return nameof(String);
                 case PDMDataType.numeric:
                     if (precision > 0)
@@ -85,12 +89,13 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.boolean:
                     return nameof(Boolean);
                 default:
-                    throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+                    throw new NotImplementedException(string.Format("GetCSharpDataType()该PDM字段类型未设置对应的C#类型{0}", pdmDataType));
             }
         }
         public static string GetCSharpValue(this Column column)
         {
-            switch (column.GetCSharpDataType())
+            var pdmDataType = column.GetCSharpDataType();
+            switch (pdmDataType)
             {
                 case nameof(String):
                 case nameof(DateTime):
@@ -120,7 +125,7 @@ namespace VL.ORMCodeGenerator.Utilities
                     }
                     return "true";
                 default:
-                    throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+                    throw new NotImplementedException(string.Format("GetCSharpValue()该PDM字段类型未设置对应的C#类型{0}", pdmDataType));
             }
         }
         public static string GetCSharpDataTypeConvertString(this Column column)
@@ -133,6 +138,7 @@ namespace VL.ORMCodeGenerator.Utilities
             {
                 case PDMDataType.varchar:
                 case PDMDataType.nvarchar:
+                case PDMDataType.text:
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
                 case PDMDataType.boolean:
@@ -140,7 +146,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.uniqueidentifier:
                     return string.Format("new Guid({0}.ToString())", value);
                 default:
-                    throw new NotImplementedException("该PDM字段类型未设置对应的C#类型");
+                    throw new NotImplementedException(string.Format("GetCSharpValue()该PDM字段类型未设置对应的C#类型{0}", pdmDataType));
             }
         }
         /// <summary>
@@ -154,6 +160,7 @@ namespace VL.ORMCodeGenerator.Utilities
             {
                 case PDMDataType.varchar:
                 case PDMDataType.nvarchar:
+                case PDMDataType.text:
                     return false;
                 case PDMDataType.numeric:
                 case PDMDataType.datetime:
@@ -161,7 +168,7 @@ namespace VL.ORMCodeGenerator.Utilities
                 case PDMDataType.boolean:
                     return true;
                 default:
-                    throw new NotImplementedException("未实现该类型的空类型检测" + dataType.ToString());
+                    throw new NotImplementedException(string.Format("IsNullableType()未实现该类型的空类型检测{0}", dataType));
             }
         }
     }
