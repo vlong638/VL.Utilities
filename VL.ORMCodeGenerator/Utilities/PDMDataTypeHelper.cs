@@ -12,7 +12,7 @@ namespace VL.ORMCodeGenerator.Utilities
             var pdmDataTypeString = column.DataType;
             Regex regex = new Regex(@"(\w+)(\((\d+))?(,(\d+)\))?");
             Match match = regex.Match(pdmDataTypeString);
-            string pdmDataType = match.Groups[1].Value;
+            string pdmDataType = match.Groups[1].Value.ToLower();
             int length, precision;
             int.TryParse(match.Groups[3].Value, out length);
             int.TryParse(match.Groups[5].Value, out precision);
