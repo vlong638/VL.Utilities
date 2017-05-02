@@ -494,10 +494,19 @@ namespace VL.ORMCodeGenerator.Generators
             {
                 foreach (Column column in table.Columns)
                 {
+                    //注释
+                    if (!string.IsNullOrEmpty(column.Comment))
+                    {
+                        sb.AppendLine(CGenerate.MethodLS + "/// <summary>");
+                        sb.AppendLine(CGenerate.MethodLS + "/// " + column.Comment);
+                        sb.AppendLine(CGenerate.MethodLS + "/// </summary>");
+                    }
+                    //WCF特性
                     if (config.IsSupportWCF)
                     {
                         sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
                     }
+                    //Enum转换
                     string dataType;
                     if (column.IsEnumField())
                     {
@@ -639,6 +648,10 @@ namespace VL.ORMCodeGenerator.Generators
                 sb.AppendLine(CGenerate.ContentLS + CGenerate.TabLS + "return nameof(" + table.Name + ");");
                 sb.AppendLine(CGenerate.ContentLS + "}");
                 sb.AppendLine(CGenerate.MethodLS + "}");
+            });
+            sb.AppendLine();
+            sb.AppendRegion("Manual", () =>
+            {
             });
         }
 
