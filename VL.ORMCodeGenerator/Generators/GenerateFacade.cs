@@ -21,6 +21,7 @@ namespace VL.ORMCodeGenerator.Generators
                 case EDatabaseType.MSSQL:
                 case EDatabaseType.Oracle:
                 case EDatabaseType.MySQL:
+                case EDatabaseType.SQLite:
                     new PDMModelGenerator().Generate(config, model);
                     model.Close();
                     break;

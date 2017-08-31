@@ -117,10 +117,11 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System");
                     result.Add("System.Collections.Generic");
                     result.Add("System.Data");
-                    if (config.IsSupportWCF)
-                    {
-                        result.Add("System.Runtime.Serialization");
-                    }
+                    //if (config.IsSupportWCF)
+                    //{
+                    //    result.Add("System.Runtime.Serialization");
+                    //}
+                    result.Add("System.Runtime.Serialization");
                     result.Add(NamespaceOfORM);
                     break;
                 case EGenerateTargetType.EntityProperties:

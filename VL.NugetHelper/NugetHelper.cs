@@ -27,14 +27,21 @@ namespace VL.NugetHelper
 
         private void LoadProjectsConfigEntity()
         {
-            ProjectsConfigEntity.Load();
-            //NugetServer配置
-            tb_NugetServer.Text = ProjectsConfigEntity.NugetServer;
-            tb_APIKey.Text = ProjectsConfigEntity.APIKey;
-            //项目名称下拉列表
-            cb_projects.DataSource = ProjectsConfigEntity.Projects.Select(c => c.Name).OrderBy(c => c).ToList();
-            cb_projects.DisplayMember = nameof(ProjectDetail.Name);
-            cb_projects.Refresh();
+            try
+            {
+                ProjectsConfigEntity.Load();
+                //NugetServer配置
+                tb_NugetServer.Text = ProjectsConfigEntity.NugetServer;
+                tb_APIKey.Text = ProjectsConfigEntity.APIKey;
+                //项目名称下拉列表
+                cb_projects.DataSource = ProjectsConfigEntity.Projects.Select(c => c.Name).OrderBy(c => c).ToList();
+                cb_projects.DisplayMember = nameof(ProjectDetail.Name);
+                cb_projects.Refresh();
+            }
+            catch (Exception ex)
+            {
+                ProjectsConfigEntity.Save();
+            }
         }
 
         #region Projects

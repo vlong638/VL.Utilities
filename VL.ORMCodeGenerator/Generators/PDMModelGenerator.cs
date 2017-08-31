@@ -954,7 +954,7 @@ namespace VL.ORMCodeGenerator.Generators
                                     sb.AppendLine(CGenerate.ContentLS + "query.SelectBuilders.Add(builder);");
                                     sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Select<" + table.Name + ">(query);");
                                 });
-                                sb.AppendCommend(true, "未查询到数据时返回 null");
+                                sb.AppendCommend(true, "未查询到数据时返回 new List<T>()");
                                 sb.AppendMethod("public static List<" + table.Name + ">", "DbSelect", "this List<" + table.Name + "> entities, DbSession session, params PDMDbProperty[] fields", () =>
                                 {
                                     sb.AppendLine(CGenerate.ContentLS + "var query = session.GetDbQueryBuilder();");
@@ -1075,7 +1075,7 @@ namespace VL.ORMCodeGenerator.Generators
                             var cValue = column.GetCSharpValue();
                             sb.AppendLine(CGenerate.MethodLS + "public static " + pClass + " " + column.Name + " { get; set; } = new " + pClass + "(nameof(" + column.Name + "), \"" + column.Code
                                 + "\", \"" + column.Comment + "\", " + column.Primary.ToString().ToLower() + ", " + nameof(PDMDataType) + "." + column.GetPDMDataType() + ", " + column.Length
-                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + (string.IsNullOrEmpty(cValue) ? "" : ", " + cValue) + ");");
+                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + (string.IsNullOrEmpty(cValue) || cValue == "null" ? "" : ", " + cValue) + ");");
                         }
                     });
                 });
