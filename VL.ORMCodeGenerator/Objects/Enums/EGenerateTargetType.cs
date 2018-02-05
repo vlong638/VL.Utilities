@@ -81,11 +81,12 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.EntityProperties:
                 case EGenerateTargetType.References:
                 case EGenerateTargetType.Enums:
-                    return RootCommonNamespace + "." + rootNamespace;
+                    //return RootCommonNamespace + "." + rootNamespace;
                 case EGenerateTargetType.DomainEntities:
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return rootNamespace + "." + "Business";
+                    return rootNamespace + ".DomainModel";
+                    //return rootNamespace + "." + "Business";
                 //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Entities.ToString();
                 //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Enums.ToString();
                 default:

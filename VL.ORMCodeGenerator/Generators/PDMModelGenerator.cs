@@ -640,7 +640,10 @@ namespace VL.ORMCodeGenerator.Generators
                         sb.AppendLine(CGenerate.ContentLS + "}");
                     }
                 });
-                sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
+                if (config.IsSupportWCF)
+                {
+                    sb.AppendLine(CGenerate.MethodLS + CGenerate.WCFPropertyContract);
+                }
                 sb.AppendLine(CGenerate.MethodLS + "public override string TableName");
                 sb.AppendLine(CGenerate.MethodLS + "{");
                 sb.AppendLine(CGenerate.ContentLS + "get");
