@@ -84,8 +84,13 @@ namespace VL.ORMCodeGenerator
             if (CurrentGenerateConfig == null)
             {
                 CurrentGenerateConfig = new GenerateConfig();
+                //新pdm地址 保留
+                CurrentGenerateConfig.RootPath = tb_target.Text;
+                CurrentGenerateConfig.RootNamespace = tb_namespace.Text;
+                CurrentGenerateConfig.DatabaseType = (EDatabaseType)Enum.Parse(typeof(EDatabaseType), cb_dbType.Text);
+                CurrentGenerateConfig.IsSupportWCF = cb_wcf.Checked;
             }
-            //cb_source.Text = GenerateConfig.PDMFilePath;
+            //新pdm地址 清空
             tb_target.Text = CurrentGenerateConfig.RootPath;
             tb_namespace.Text = CurrentGenerateConfig.RootNamespace;
             cb_dbType.Text = CurrentGenerateConfig.DatabaseType.ToString();

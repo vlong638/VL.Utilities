@@ -433,6 +433,7 @@ namespace VL.ORMCodeGenerator.Generators
         }
         bool GenerateEntity(GenerateConfig config, Table table)
         {
+            #region 基本Entity代码
             //代码生成
             string targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath, table.Name);
             string targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
@@ -453,6 +454,29 @@ namespace VL.ORMCodeGenerator.Generators
                 Directory.CreateDirectory(targetDirectoryPath);
             }
             File.WriteAllText(targetFilePath, sb.ToString());
+            #endregion
+
+            #region Manual扩展
+            //代码生成
+            targetDirectoryPath = EGenerateTargetType.Manual.GetDirectoryPath(config.RootPath, table.Name);
+            targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
+            sb = new StringBuilder();
+            sb.AppendUsings(EGenerateTargetType.Entities.GetReferences(config));
+            sb.AppendLine();
+            CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
+            {
+                sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(IPDMTBase), () =>
+                {
+                    AppendClassManual(config, table, sb);
+                });
+            });
+            //输出代码
+            if (!Directory.Exists(targetDirectoryPath))
+            {
+                Directory.CreateDirectory(targetDirectoryPath);
+            }
+            File.WriteAllText(targetFilePath, sb.ToString());
+            #endregion
             return true;
         }
         bool GenerateDomainEntity(GenerateConfig config, Table table)
@@ -653,6 +677,12 @@ namespace VL.ORMCodeGenerator.Generators
                 sb.AppendLine(CGenerate.MethodLS + "}");
             });
             sb.AppendLine();
+            sb.AppendRegion("Manual", () =>
+            {
+            });
+        }
+        private static void AppendClassManual(GenerateConfig config, Table table, StringBuilder sb)
+        {
             sb.AppendRegion("Manual", () =>
             {
             });

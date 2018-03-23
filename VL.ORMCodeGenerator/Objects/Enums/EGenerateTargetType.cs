@@ -19,6 +19,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
         References,
         ReferenceFetchers,
         Enums,
+        Manual,
     }
     public static class EGenerateTargetTypeEx
     {
@@ -37,6 +38,8 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Entities.ToString(), tableName);
                 case EGenerateTargetType.Enums:
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Enums.ToString());
+                case EGenerateTargetType.Manual:
+                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Manual.ToString(), tableName);
                 default:
                     throw new NotImplementedException();
             }
