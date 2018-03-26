@@ -80,7 +80,7 @@ namespace VL.ORMCodeGenerator.Generators
                 sb.AppendLine();
                 sb.AppendNameSpace(targetNamespace, () =>
                 {
-                    sb.AppendClass(false, "public partial", tableName, " : " + nameof(IPDMTBase), () =>
+                    sb.AppendClass(false, "public partial", tableName, " : " + nameof(VLModel_DB), () =>
                     {
                         foreach (Reference reference in references)
                         {
@@ -443,7 +443,7 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
              {
-                 sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(IPDMTBase), () =>
+                 sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(VLModel_DB), () =>
                  {
                      AppendClassContent(config, table, sb);
                  });
@@ -465,7 +465,7 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
             {
-                sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(IPDMTBase), () =>
+                sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(VLModel_DB), () =>
                 {
                     AppendClassManual(config, table, sb);
                 });
