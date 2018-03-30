@@ -113,9 +113,9 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
                     result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
-                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
-                    result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
+                    //result.Add(NamespaceOfProtocol);
+                    //result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    //result.Add(GetNamespace(EGenerateTargetType.Enums, config.RootNamespace));
                     break;
                 case EGenerateTargetType.Entities:
                     result.Add("System");
@@ -138,8 +138,8 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Linq");
                     result.Add(NamespaceOfDAS);
                     result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
-                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    //result.Add(NamespaceOfProtocol);
+                    //result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
                     break;
                 case EGenerateTargetType.References:
                     result.Add("System");
@@ -151,8 +151,8 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                     result.Add("System.Collections.Generic");
                     result.Add(NamespaceOfDAS);
                     result.Add(NamespaceOfORM);
-                    result.Add(NamespaceOfProtocol);
-                    result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
+                    //result.Add(NamespaceOfProtocol);
+                    //result.Add(EGenerateTargetType.Entities.GetNamespace(config.RootNamespace));
                     break;
                 case EGenerateTargetType.Enums:
                     if (config.IsSupportWCF)
