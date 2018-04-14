@@ -160,6 +160,8 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                         result.Add("System.Runtime.Serialization");
                     }
                     break;
+                case EGenerateTargetType.Manual:
+                    break;
                 default:
                     throw new NotImplementedException();
             } 

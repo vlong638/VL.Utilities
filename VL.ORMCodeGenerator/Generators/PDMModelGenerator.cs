@@ -416,6 +416,7 @@ namespace VL.ORMCodeGenerator.Generators
                     || table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
+                    result = result && GenerateManual(config, table);
                     result = result && GenerateDomainEntity(config, table);
                     result = result && GenerateEntityOperator(config, table, LocateType.C | LocateType.R | LocateType.U | LocateType.D);
                     result = result && GenerateEntityProperties(config, table);
@@ -433,12 +434,11 @@ namespace VL.ORMCodeGenerator.Generators
         }
         bool GenerateEntity(GenerateConfig config, Table table)
         {
-            #region 基本Entity代码
             //代码生成
-            string targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath, table.Name);
-            string targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
-            string targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
-            StringBuilder sb = new StringBuilder();
+            var targetDirectoryPath = EGenerateTargetType.Entities.GetDirectoryPath(config.RootPath, table.Name);
+            var targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
+            var targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
+            var sb = new StringBuilder();
             sb.AppendUsings(EGenerateTargetType.Entities.GetReferences(config));
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
@@ -454,18 +454,20 @@ namespace VL.ORMCodeGenerator.Generators
                 Directory.CreateDirectory(targetDirectoryPath);
             }
             File.WriteAllText(targetFilePath, sb.ToString());
-            #endregion
-
-            #region Manual扩展
+            return true;
+        }
+        bool GenerateManual(GenerateConfig config, Table table)
+        {
             //代码生成
-            targetDirectoryPath = EGenerateTargetType.Manual.GetDirectoryPath(config.RootPath, table.Name);
-            targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
-            sb = new StringBuilder();
-            sb.AppendUsings(EGenerateTargetType.Entities.GetReferences(config));
+            var targetDirectoryPath = EGenerateTargetType.Manual.GetDirectoryPath(config.RootPath, table.Name);
+            var targetFilePath = EGenerateTargetType.Entities.GetFilePath(targetDirectoryPath, table.Name);
+            var targetNamespace = EGenerateTargetType.Entities.GetNamespace(config.RootNamespace);
+            var sb = new StringBuilder();
+            sb.AppendUsings(EGenerateTargetType.Manual.GetReferences(config));
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
             {
-                sb.AppendClass(config.IsSupportWCF, "public partial", table.Name, " : " + nameof(VLModel_DB), () =>
+                sb.AppendClass(config.IsSupportWCF, "public static ", table.Name, "Ex", () =>
                 {
                     AppendClassManual(config, table, sb);
                 });
@@ -476,7 +478,6 @@ namespace VL.ORMCodeGenerator.Generators
                 Directory.CreateDirectory(targetDirectoryPath);
             }
             File.WriteAllText(targetFilePath, sb.ToString());
-            #endregion
             return true;
         }
         bool GenerateDomainEntity(GenerateConfig config, Table table)
@@ -1108,7 +1109,8 @@ namespace VL.ORMCodeGenerator.Generators
                             var cValue = column.GetCSharpValue();
                             sb.AppendLine(CGenerate.MethodLS + "public static " + pClass + " " + column.Name + " { get; set; } = new " + pClass + "(nameof(" + column.Name + "), \"" + column.Code
                                 + "\", \"" + column.Comment + "\", " + column.Primary.ToString().ToLower() + ", " + nameof(PDMDataType) + "." + column.GetPDMDataType() + ", " + column.Length
-                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + (string.IsNullOrEmpty(cValue) || cValue == "null" ? "" : ", " + cValue) + ");");
+                                + ", " + column.Precision + ", " + column.Mandatory.ToString().ToLower() + ", " + IsKeyword(config, column.Name).ToString().ToLower()
+                                + (string.IsNullOrEmpty(cValue) || cValue == "null" ? "" : ", " + cValue) + ");");
                         }
                     });
                 });
@@ -1120,6 +1122,26 @@ namespace VL.ORMCodeGenerator.Generators
             }
             File.WriteAllText(targetFilePath, sb.ToString());
             return true;
+        }
+
+        static List<string> SQLiteKeyword = new List<string>()
+        {
+            "abort","action","add","after","all","alter","analyze","and","as","asc","attach","autoincrement","before","begin","between","by","cascade","case","cast","check","collate","column","commit","conflict","constraint", "create","cross","current_date","current_time","current_timestamp","database","default","deferrable","deferred","delete","desc","detach","distinct","drop","each","else","end","escape","except","exclusive","exists","explain","fail","for","foreign", "from","full","glob","group","having","if","ignore","immediate","in","index","indexed","initially","inner","insert","instead","intersect","into","is","isnull","join","key","left","like","limit","match",   "natural","no","not","notnull","null","of","offset","on","or","order","outer","plan","pragma","primary","query","raise","recursive","references","regexp","reindex","release","rename","replace","restrict","right",   "rollback","row","savepoint","select","set","table","temp","temporary","then","to","transaction","trigger","union","unique","update","using","vacuum","values","view","virtual","when","where","with","withou"
+        };
+
+        private bool IsKeyword(GenerateConfig config, string name)
+        {
+            switch (config.DatabaseType)
+            {
+                case Common.Core.DAS.EDatabaseType.SQLite:
+                    return SQLiteKeyword.Contains(name.ToLower());
+                case Common.Core.DAS.EDatabaseType.None:
+                case Common.Core.DAS.EDatabaseType.Oracle:
+                case Common.Core.DAS.EDatabaseType.MSSQL:
+                case Common.Core.DAS.EDatabaseType.MySQL:
+                default:
+                    return false;
+            }
         }
         #endregion
 
@@ -1134,6 +1156,7 @@ namespace VL.ORMCodeGenerator.Generators
                     continue;
                 }
                 result = result && GenerateEnum(config, table);
+                result = result && GenerateManual(config, table);
             }
             return result;
         }
