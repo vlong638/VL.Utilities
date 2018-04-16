@@ -39,7 +39,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.Enums:
                     return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Enums.ToString());
                 case EGenerateTargetType.Manual:
-                    return Path.Combine(rootPath, EDirectoryNames.Objects.ToString(), EGenerateTargetType.Manual.ToString(), tableName);
+                    return Path.Combine(rootPath, EGenerateTargetType.Manual.ToString(), tableName);
                 default:
                     throw new NotImplementedException();
             }
@@ -88,7 +88,7 @@ namespace VL.ORMCodeGenerator.Objects.Enums
                 case EGenerateTargetType.DomainEntities:
                 case EGenerateTargetType.EntityOperators:
                 case EGenerateTargetType.ReferenceFetchers:
-                    return rootNamespace + ".DomainModel";
+                    return rootNamespace;//+ ".DomainModel";
                     //return rootNamespace + "." + "Business";
                 //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Entities.ToString();
                 //return rootNamespace + "." + EGenerateTargetType.Objects.ToString() + "." + EGenerateTargetType.Enums.ToString();

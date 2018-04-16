@@ -467,9 +467,13 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
             {
+                sb.AppendClass(config.IsSupportWCF, "public partial ", table.Name, "", () =>
+                {
+                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
+                });
                 sb.AppendClass(config.IsSupportWCF, "public static ", table.Name, "Ex", () =>
                 {
-                    AppendClassManual(config, table, sb);
+                    //AppendClassManual(config, table, sb);
                 });
             });
             //输出代码
@@ -549,6 +553,7 @@ namespace VL.ORMCodeGenerator.Generators
             {
                 sb.AppendConstructor("public", table.Name, "", "", () =>
                 {
+                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
                 });
                 List<string> parameters = new List<string>();
                 foreach (Column column in table.Columns)
@@ -576,9 +581,11 @@ namespace VL.ORMCodeGenerator.Generators
                             sb.AppendLine(CGenerate.ContentLS + column.Name + " = " + column.Name.ToParameterFormat() + ";");
                         }
                     }
+                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
                 });
                 sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
                 {
+                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
                 });
             });
             sb.AppendLine();
@@ -722,21 +729,21 @@ namespace VL.ORMCodeGenerator.Generators
                                     }
                                     sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(query);");
                                 });
-                                sb.AppendMethod("public static bool", "DbDelete", "this List<" + table.Name + "> entities, DbSession session", () =>
-                                {
-                                    sb.AppendLine(CGenerate.ContentLS + "var query = session.GetDbQueryBuilder();");
-                                    foreach (Column column in table.Columns)
-                                    {
-                                        if (column.Primary)
-                                        {
-                                            //TODO 这里应该支持多键主键
-                                            sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
-                                            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
-                                            break;
-                                        }
-                                    }
-                                    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(query);");
-                                });
+                                //sb.AppendMethod("public static bool", "DbDelete", "this List<" + table.Name + "> entities, DbSession session", () =>
+                                //{
+                                //    sb.AppendLine(CGenerate.ContentLS + "var query = session.GetDbQueryBuilder();");
+                                //    foreach (Column column in table.Columns)
+                                //    {
+                                //        if (column.Primary)
+                                //        {
+                                //            //TODO 这里应该支持多键主键
+                                //            sb.AppendLine(CGenerate.ContentLS + "var Ids = entities.Select(c =>c." + column.Name + " );");
+                                //            sb.AppendLine(CGenerate.ContentLS + "query.DeleteBuilder.ComponentWhere.Add(new ComponentValueOfWhere(" + table.Name + "Properties." + column.Name + ", Ids, LocateType.In));");
+                                //            break;
+                                //        }
+                                //    }
+                                //    sb.AppendLine(CGenerate.ContentLS + "return session.GetQueryOperator().Delete<" + table.Name + ">(query);");
+                                //});
                             }
                             #endregion
 
