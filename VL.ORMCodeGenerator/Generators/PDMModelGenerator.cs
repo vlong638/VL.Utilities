@@ -416,7 +416,7 @@ namespace VL.ORMCodeGenerator.Generators
                     || table.Name.StartsWith(CGenerate.PDMNameNotationOfTable))
                 {
                     result = result && GenerateEntity(config, table);
-                    result = result && GenerateManual(config, table);
+                    result = result && GenerateManual(config, table, false);
                     result = result && GenerateDomainEntity(config, table);
                     result = result && GenerateEntityOperator(config, table, LocateType.C | LocateType.R | LocateType.U | LocateType.D);
                     result = result && GenerateEntityProperties(config, table);
@@ -456,7 +456,7 @@ namespace VL.ORMCodeGenerator.Generators
             File.WriteAllText(targetFilePath, sb.ToString());
             return true;
         }
-        bool GenerateManual(GenerateConfig config, Table table)
+        bool GenerateManual(GenerateConfig config, Table table, bool isEnum)
         {
             //代码生成
             var targetDirectoryPath = EGenerateTargetType.Manual.GetDirectoryPath(config.RootPath, table.Name);
@@ -467,10 +467,16 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             CodeBuilder.AppendNameSpace(sb, targetNamespace, () =>
             {
-                sb.AppendClass(config.IsSupportWCF, "public partial ", table.Name, "", () =>
+                if (!isEnum)
                 {
-                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
-                });
+                    sb.AppendClass(config.IsSupportWCF, "public partial ", table.Name, "", () =>
+                    {
+                        sb.AppendMethod("public override void", "PreInit", "", () =>
+                        {
+
+                        });
+                    });
+                }
                 sb.AppendClass(config.IsSupportWCF, "public static ", table.Name, "Ex", () =>
                 {
                     //AppendClassManual(config, table, sb);
@@ -551,9 +557,9 @@ namespace VL.ORMCodeGenerator.Generators
             sb.AppendLine();
             sb.AppendConstructors(() =>
             {
-                sb.AppendConstructor("public", table.Name, "", "", () =>
+                sb.AppendConstructor("public", table.Name, "", " : base()", () =>
                 {
-                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
+                    sb.AppendLine(CGenerate.ContentLS + "PreInit();");
                 });
                 List<string> parameters = new List<string>();
                 foreach (Column column in table.Columns)
@@ -572,20 +578,20 @@ namespace VL.ORMCodeGenerator.Generators
                         parameters.Add(dataType + " " + column.Name.ToParameterFormat());
                     }
                 }
-                sb.AppendConstructor("public", table.Name, string.Join(", ", parameters), "", () =>
-                {
-                    foreach (Column column in table.Columns)
+                sb.AppendConstructor("public", table.Name, string.Join(", ", parameters), " : base()", () =>
+            {
+                sb.AppendLine(CGenerate.ContentLS + "PreInit();");
+                foreach (Column column in table.Columns)
                     {
                         if (column.Primary)
                         {
                             sb.AppendLine(CGenerate.ContentLS + column.Name + " = " + column.Name.ToParameterFormat() + ";");
                         }
                     }
-                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
                 });
                 sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
                 {
-                    sb.AppendLine(CGenerate.ContentLS + "InitEx();");
+                    sb.AppendLine(CGenerate.ContentLS + "PreInit();");
                 });
             });
             sb.AppendLine();
@@ -1163,7 +1169,7 @@ namespace VL.ORMCodeGenerator.Generators
                     continue;
                 }
                 result = result && GenerateEnum(config, table);
-                result = result && GenerateManual(config, table);
+                result = result && GenerateManual(config, table, true);
             }
             return result;
         }
