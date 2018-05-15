@@ -559,7 +559,6 @@ namespace VL.ORMCodeGenerator.Generators
             {
                 sb.AppendConstructor("public", table.Name, "", " : base()", () =>
                 {
-                    sb.AppendLine(CGenerate.ContentLS + "PreInit();");
                 });
                 List<string> parameters = new List<string>();
                 foreach (Column column in table.Columns)
@@ -579,9 +578,8 @@ namespace VL.ORMCodeGenerator.Generators
                     }
                 }
                 sb.AppendConstructor("public", table.Name, string.Join(", ", parameters), " : base()", () =>
-            {
-                sb.AppendLine(CGenerate.ContentLS + "PreInit();");
-                foreach (Column column in table.Columns)
+                {
+                    foreach (Column column in table.Columns)
                     {
                         if (column.Primary)
                         {
@@ -591,7 +589,9 @@ namespace VL.ORMCodeGenerator.Generators
                 });
                 sb.AppendConstructor("public", table.Name, "IDataReader reader", " : base(reader)", () =>
                 {
-                    sb.AppendLine(CGenerate.ContentLS + "PreInit();");
+                });
+                sb.AppendConstructor("public", table.Name, "IDataReader reader, List<string> fields", " : base(reader, fields)", () =>
+                {
                 });
             });
             sb.AppendLine();
