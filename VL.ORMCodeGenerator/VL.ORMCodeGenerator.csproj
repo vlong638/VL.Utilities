@@ -113,6 +113,8 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="PDM\VL.OnlineShop.pdm" />
+    <None Include="PDM\VL.Sample.pdm" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Form1.resx">
